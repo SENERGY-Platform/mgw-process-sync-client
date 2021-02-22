@@ -1,0 +1,10 @@
+{
+    "camunda_db": "postgres://user:password@host/dbname?sslmode=disable",
+    "vid_db": "postgres://user:password@host/dbname?sslmode=disable",
+    "camunda_url": "http://camunda:8080",
+    "debug": true,
+    "mqtt_broker": "tcp://broker:1883",
+    "mqtt_client_id": "client-id",
+    "mqtt_user": "",
+    "mqtt_pw": ""
+}

@@ -1,0 +1,76 @@
+/*
+ * Copyright 2021 InfAI (CC SES)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package backend
+
+import (
+	"encoding/json"
+	paho "github.com/eclipse/paho.mqtt.golang"
+	model "mgw-process-sync/pkg/model/camundamodel"
+	"mgw-process-sync/pkg/model/deploymentmodel"
+)
+
+const deploymentTopic = "deployment"
+
+func (this *Client) getDeploymentTopic() string {
+	return this.getCommandTopic(deploymentTopic)
+}
+
+func (this *Client) handleDeploymentCommand(message paho.Message) {
+	deployment := deploymentmodel.Deployment{}
+	err := json.Unmarshal(message.Payload(), &deployment)
+	if err != nil {
+		this.error(err)
+	}
+	err = this.handler.CreateDeployment(deployment)
+	if err != nil {
+		this.error(err)
+	}
+}
+
+func (this *Client) getProcessDeploymentStartTopic() string {
+	return this.getCommandTopic(deploymentTopic, "start")
+}
+
+func (this *Client) handleDeploymentStartCommand(message paho.Message) {
+	err := this.handler.StartDeployment(string(message.Payload()))
+	if err != nil {
+		this.error(err)
+	}
+}
+
+func (this *Client) getDeploymentDeleteTopic() string {
+	return this.getCommandTopic(deploymentTopic, "delete")
+}
+
+func (this *Client) handleDeploymentDeleteCommand(message paho.Message) {
+	err := this.handler.DeleteDeployment(string(message.Payload()))
+	if err != nil {
+		this.error(err)
+	}
+}
+
+func (this *Client) SendDeploymentKnownIds(ids []string) error {
+	return this.send(this.getStateTopic(deploymentTopic, "known"), ids)
+}
+
+func (this *Client) SendDeploymentUpdate(instance model.Deployment) error {
+	return this.send(this.getStateTopic(deploymentTopic), instance)
+}
+
+func (this *Client) SendDeploymentDelete(id string) error {
+	return this.send(this.getStateTopic(deploymentTopic, "delete"), id)
+}
