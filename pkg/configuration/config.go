@@ -33,6 +33,8 @@ type Config struct {
 	VidDb      string `json:"vid_db"`
 	CamundaUrl string `json:"camunda_url"`
 
+	InitialWaitDuration string `json:"initial_wait_duration"`
+
 	Debug bool `json:"debug"`
 
 	MqttBroker   string `json:"mqtt_broker"`

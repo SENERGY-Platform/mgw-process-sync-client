@@ -58,7 +58,7 @@ func New(config configuration.Config, ctx context.Context, handler Handler) (*Cl
 			log.Println("connection to mqtt broker lost")
 		}).
 		SetOnConnectHandler(func(m paho.Client) {
-			log.Println("connected to mgw broker")
+			log.Println("connected to mqtt broker")
 			client.subscribe()
 		})
 

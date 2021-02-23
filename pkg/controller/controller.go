@@ -18,6 +18,7 @@ package controller
 
 import (
 	"context"
+	"log"
 	"mgw-process-sync/pkg/backend"
 	"mgw-process-sync/pkg/camunda"
 	"mgw-process-sync/pkg/camunda/shards"
@@ -43,6 +44,13 @@ func New(config configuration.Config, ctx context.Context) (ctrl *Controller, er
 	if err != nil {
 		return ctrl, err
 	}
+
+	wait, err := time.ParseDuration(config.InitialWaitDuration)
+	if err != nil {
+		log.Println("WARNING: unable to parse initial wait duration", config.InitialWaitDuration, err)
+	} else {
+		time.Sleep(wait) //wait for outstanding commands
+	}
 	return ctrl, ctrl.SendCurrentStates()
 }
 
@@ -54,7 +62,6 @@ type Controller struct {
 }
 
 func (this *Controller) SendCurrentStates() (err error) {
-	time.Sleep(time.Minute) //wait for outstanding commands
 	err = this.SendCurrentDeployments()
 	if err != nil {
 		return err

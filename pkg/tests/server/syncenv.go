@@ -23,18 +23,21 @@ import (
 	"sync"
 )
 
-func CreateCamundaEnv(ctx context.Context, wg *sync.WaitGroup, initConf configuration.Config) (config configuration.Config, camundaUrl string, err error) {
-	config = initConf
-	var camundaPgIp string
-	config.CamundaDb, camundaPgIp, _, err = docker.PostgresWithNetwork(ctx, wg, "camunda")
+func CreateSyncEnv(ctx context.Context, wg *sync.WaitGroup, initConf configuration.Config) (config configuration.Config, err error) {
+	config, _, err = CreateCamundaEnv(ctx, wg, initConf)
 	if err != nil {
-		return config, camundaUrl, err
+		return config, err
+	}
+	config.VidDb, _, _, err = docker.PostgresWithNetwork(ctx, wg, "vid")
+	if err != nil {
+		return config, err
 	}
 
-	config.CamundaUrl, err = docker.Camunda(ctx, wg, camundaPgIp, "5432")
+	mqttport, _, err := docker.Mqtt(ctx, wg)
 	if err != nil {
-		return config, camundaUrl, err
+		return config, err
 	}
-
-	return config, config.CamundaUrl, nil
+	config.MqttBroker = "tcp://localhost:" + mqttport
+	config.MqttClientId = "test-sync-client"
+	return config, nil
 }

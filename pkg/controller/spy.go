@@ -21,6 +21,7 @@ import (
 	"github.com/lib/pq"
 	"log"
 	"mgw-process-sync/pkg/pglistener"
+	"runtime/debug"
 )
 
 func (this *Controller) spyOnCamundaDb(ctx context.Context) (err error) {
@@ -51,7 +52,10 @@ func (this *Controller) spyOn(ctx context.Context, channelName string, table str
 		return err
 	}
 	notifySetChan, err := pglistener.Listen(ctx, this.config.CamundaDb, setChannel, func(event pq.ListenerEventType, err error) {
-		log.Fatal(err)
+		if err != nil {
+			debug.PrintStack()
+			log.Fatal("FATAL:", err)
+		}
 	})
 	if err != nil {
 		return err
@@ -63,7 +67,10 @@ func (this *Controller) spyOn(ctx context.Context, channelName string, table str
 	}()
 
 	notifyDeleteChan, err := pglistener.Listen(ctx, this.config.CamundaDb, deleteChannel, func(event pq.ListenerEventType, err error) {
-		log.Fatal(err)
+		if err != nil {
+			debug.PrintStack()
+			log.Fatal("FATAL:", err)
+		}
 	})
 	if err != nil {
 		return err

@@ -24,6 +24,7 @@ import (
 	"mgw-process-sync/pkg/controller"
 	"os"
 	"os/signal"
+	"runtime/debug"
 	"syscall"
 	"time"
 )
@@ -43,7 +44,8 @@ func main() {
 
 	_, err = controller.New(config, ctx)
 	if err != nil {
-		log.Fatal(err)
+		debug.PrintStack()
+		log.Fatal("FATAL:", err)
 	}
 
 	shutdown := make(chan os.Signal, 1)
