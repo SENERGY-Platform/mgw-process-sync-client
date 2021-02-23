@@ -21,7 +21,6 @@ import (
 	"io/ioutil"
 	"mgw-process-sync/pkg/camunda/request"
 	"mgw-process-sync/pkg/camunda/shards"
-	"mgw-process-sync/pkg/camunda/vid"
 	model "mgw-process-sync/pkg/model/camundamodel"
 	"net/url"
 	"strconv"
@@ -38,11 +37,10 @@ import (
 
 type Camunda struct {
 	shards shards.Shards
-	vid    *vid.Vid
 }
 
-func New(vid *vid.Vid, shards shards.Shards) *Camunda {
-	return &Camunda{vid: vid, shards: shards}
+func New(shards shards.Shards) *Camunda {
+	return &Camunda{shards: shards}
 }
 
 func (this *Camunda) StartProcess(processDefinitionId string, userId string, parameter map[string]interface{}) (err error) {
@@ -157,17 +155,10 @@ func (this *Camunda) CheckProcessDefinitionAccess(id string, userId string) (err
 	return
 }
 
-func (this *Camunda) CheckDeploymentAccess(vid string, userId string) (err error) {
+func (this *Camunda) CheckDeploymentAccess(id string, userId string) (err error) {
 	shard, err := this.shards.EnsureShardForUser(userId)
 	if err != nil {
 		return err
-	}
-	id, exists, err := this.vid.GetDeploymentId(vid)
-	if err != nil {
-		return err
-	}
-	if !exists {
-		return UnknownVid
 	}
 	wrapper := model.Deployment{}
 	err = request.Get(shard+"/engine-rest/deployment/"+url.QueryEscape(id), &wrapper)
@@ -350,7 +341,6 @@ func (this *Camunda) GetProcessDefinition(id string, userId string) (result mode
 	if err != nil {
 		return
 	}
-	err = this.vid.SetVid(&result)
 	return
 }
 
@@ -361,19 +351,6 @@ func (this *Camunda) GetProcessDefinitionList(userId string) (result model.Proce
 	}
 	//"/engine-rest/process-definition/" + processDefinitionId
 	err = request.Get(shard+"/engine-rest/process-definition", &result)
-	if err != nil {
-		return
-	}
-	for index, element := range result {
-		err = this.vid.SetVid(&element)
-		if err != nil {
-			log.Println("WARNING: unable to set deployment-id for definition", element)
-			err = nil
-		} else {
-			result[index] = element
-		}
-	}
-
 	return
 }
 
@@ -392,22 +369,9 @@ func (this *Camunda) GetDeploymentList(userId string, params url.Values) (result
 		return result, err
 	}
 	// "/engine-rest/deployment?tenantIdIn="+userId
-	temp := model.Deployments{}
 	params.Del("tenantIdIn")
 	path := shard + "/engine-rest/deployment?tenantIdIn=" + url.QueryEscape(userId) + "&" + params.Encode()
-	err = request.Get(path, &temp)
-	if err != nil {
-		return
-	}
-	for i := 0; i < len(temp); i++ {
-		err = this.vid.SetVid(&temp[i])
-		if err != nil {
-			log.Println("WARNING: unable to find virtual id for process; ignore process", temp[i].Id, temp[i].Name, err)
-			err = nil
-		} else {
-			result = append(result, temp[i])
-		}
-	}
+	err = request.Get(path, &result)
 	return
 }
 
@@ -415,25 +379,9 @@ var UnknownVid = errors.New("unknown vid")
 var CamundaDeploymentUnknown = errors.New("deployment unknown in camunda")
 var AccessDenied = errors.New("access denied")
 
-func (this *Camunda) GetDefinitionByDeploymentVid(vid string, userId string) (result model.ProcessDefinitions, err error) {
-	id, exists, err := this.vid.GetDeploymentId(vid)
-	if err != nil {
-		return result, err
-	}
-	if !exists {
-		return result, UnknownVid
-	}
+func (this *Camunda) GetDefinitionByDeploymentVid(id string, userId string) (result model.ProcessDefinitions, err error) {
 	//"/engine-rest/process-definition?deploymentId=
 	result, err = this.GetRawDefinitionsByDeployment(id, userId)
-	if err != nil {
-		return
-	}
-	for i := 0; i < len(result); i++ {
-		err = this.vid.SetVid(&result[i])
-		if err != nil {
-			return
-		}
-	}
 	return
 }
 
@@ -446,24 +394,13 @@ func (this *Camunda) GetRawDefinitionsByDeployment(deploymentId string, userId s
 	return
 }
 
-func (this *Camunda) GetDeployment(vid string, userId string) (result model.Deployment, err error) {
+func (this *Camunda) GetDeployment(deploymentId string, userId string) (result model.Deployment, err error) {
 	shard, err := this.shards.EnsureShardForUser(userId)
 	if err != nil {
 		return result, err
 	}
-	deploymentId, exists, err := this.vid.GetDeploymentId(vid)
-	if err != nil {
-		return result, err
-	}
-	if !exists {
-		return result, UnknownVid
-	}
 	//"/engine-rest/deployment/" + id
 	err = request.Get(shard+"/engine-rest/deployment/"+url.QueryEscape(deploymentId), &result)
-	if err != nil {
-		return
-	}
-	err = this.vid.SetVid(&result)
 	return
 }
 

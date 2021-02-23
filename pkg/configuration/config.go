@@ -30,7 +30,6 @@ var LogEnvConfig = true
 
 type Config struct {
 	CamundaDb  string `json:"camunda_db"`
-	VidDb      string `json:"vid_db"`
 	CamundaUrl string `json:"camunda_url"`
 
 	InitialWaitDuration string `json:"initial_wait_duration"`

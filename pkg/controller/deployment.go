@@ -42,35 +42,15 @@ func (this *Controller) CreateDeployment(deployment deploymentmodel.Deployment) 
 	if this.config.Debug {
 		log.Println("deploy process", deployment.Id, deployment.Name, xml)
 	}
-	deploymentId, err := this.camunda.DeployProcess(deployment.Name, xml, svg, UserId, "senergy")
+	_, err = this.camunda.DeployProcess(deployment.Name, xml, svg, UserId, "senergy")
 	if err != nil {
 		log.Println("WARNING: unable to deploy process to camunda ", err)
-		return err
-	}
-	if this.config.Debug {
-		log.Println("save vid relation", deployment.Id, deploymentId)
-	}
-	err = this.vid.SaveVidRelation(deployment.Id, deploymentId)
-	if err != nil {
-		log.Println("WARNING: unable to publish deployment saga \n", err, "\nremove deployed process")
-		removeErr := this.camunda.RemoveProcess(deploymentId, UserId)
-		if removeErr != nil {
-			log.Println("ERROR: unable to remove deployed process", deploymentId, err)
-		}
 		return err
 	}
 	return nil
 }
 
-func (this *Controller) DeleteDeployment(vid string) error {
-	id, exists, err := this.vid.GetDeploymentId(vid)
-	if err != nil {
-		return err
-	}
-	if !exists {
-		log.Println("WARNING: try to delete unknown deployment", id, vid)
-		return nil
-	}
+func (this *Controller) DeleteDeployment(id string) error {
 	return this.camunda.RemoveProcess(id, UserId)
 }
 
@@ -82,7 +62,6 @@ func (this *Controller) StartDeployment(id string) error {
 	if len(definitions) == 0 {
 		return errors.New("no definition for deployment found")
 	}
-
 	return this.camunda.StartProcess(definitions[0].Id, "", map[string]interface{}{})
 }
 
@@ -145,15 +124,8 @@ func (this *Controller) NotifyDeploymentDelete(extra string) {
 	}
 }
 
-func (this *Controller) cleanupExistingDeployment(vid string) error {
-	exists, err := this.vid.VidExists(vid)
-	if err != nil {
-		return err
-	}
-	if exists {
-		return this.DeleteDeployment(vid)
-	}
-	return nil
+func (this *Controller) cleanupExistingDeployment(id string) error {
+	return this.DeleteDeployment(id)
 }
 
 func validateXml(xmlStr string) bool {

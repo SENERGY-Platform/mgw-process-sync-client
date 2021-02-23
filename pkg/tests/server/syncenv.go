@@ -28,11 +28,6 @@ func CreateSyncEnv(ctx context.Context, wg *sync.WaitGroup, initConf configurati
 	if err != nil {
 		return config, err
 	}
-	config.VidDb, _, _, err = docker.PostgresWithNetwork(ctx, wg, "vid")
-	if err != nil {
-		return config, err
-	}
-
 	mqttport, _, err := docker.Mqtt(ctx, wg)
 	if err != nil {
 		return config, err

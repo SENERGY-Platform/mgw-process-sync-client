@@ -69,25 +69,46 @@ func TestSync(t *testing.T) {
 		return
 	}
 
-	t.Run("create deployment 1", createTestDeployment(conf, mqtt, "urn:infai:ses:deployment:1", "d1", helper.BpmnExample, helper.SvgExample))
-	t.Run("create deployment 2", createTestDeployment(conf, mqtt, "urn:infai:ses:deployment:2", "d2", helper.BpmnExample, helper.SvgExample))
-	t.Run("create deployment 3", createTestDeployment(conf, mqtt, "urn:infai:ses:deployment:3", "d3", helper.BpmnExample, helper.SvgExample))
+	t.Run("create deployment 1", createTestDeployment(conf, mqtt, "d1", helper.BpmnExample, helper.SvgExample))
+	t.Run("create deployment 2", createTestDeployment(conf, mqtt, "d2", helper.BpmnExample, helper.SvgExample))
+	t.Run("create deployment 3", createTestDeployment(conf, mqtt, "d3", helper.BpmnExample, helper.SvgExample))
 
-	t.Run("wait", func(t *testing.T) { time.Sleep(1 * time.Second) })
+	t.Run("wait", func(t *testing.T) { time.Sleep(2 * time.Second) })
 
-	t.Run("start deployment 1", startTestDeployment(conf, mqtt, "urn:infai:ses:deployment:1"))
+	deploymentId := ""
+	t.Run("get deploymentId", func(t *testing.T) {
+		mqttmux.Lock()
+		defer mqttmux.Unlock()
+		deploymentstopic := "processes/" + conf.MqttClientId + "/deployment"
+		deployments := mqttMessages[deploymentstopic]
+		if len(deployments) == 0 {
+			t.Error("expect deployments")
+			return
+		}
+		depl := deploymentmodel.Deployment{}
+		err := json.Unmarshal([]byte(deployments[0]), &depl)
+		if err != nil {
+			t.Error(err)
+			return
+		}
+		deploymentId = depl.Id
+	})
 
-	t.Run("wait", func(t *testing.T) { time.Sleep(1 * time.Second) })
+	t.Run("start deployment 1", startTestDeployment(conf, mqtt, &deploymentId))
+
+	t.Run("wait", func(t *testing.T) { time.Sleep(2 * time.Second) })
 
 	t.Run("send all known", testSendAllKnown(ctrl))
 
-	t.Run("wait", func(t *testing.T) { time.Sleep(1 * time.Second) })
+	t.Run("wait", func(t *testing.T) { time.Sleep(2 * time.Second) })
 
-	t.Run("delete deployment 2", deleteTestDeployment(conf, mqtt, "urn:infai:ses:deployment:2"))
+	t.Run("delete deployment 1", deleteTestDeployment(conf, mqtt, &deploymentId))
+
+	t.Run("wait", func(t *testing.T) { time.Sleep(2 * time.Second) })
 
 	t.Run("send all known", testSendAllKnown(ctrl))
 
-	t.Run("wait", func(t *testing.T) { time.Sleep(1 * time.Second) })
+	t.Run("wait", func(t *testing.T) { time.Sleep(2 * time.Second) })
 
 	t.Run("check mqtt messages", func(t *testing.T) {
 		temp, err := json.Marshal(mqttMessages)
@@ -100,9 +121,9 @@ func TestSync(t *testing.T) {
 
 }
 
-func deleteTestDeployment(conf configuration.Config, mqtt paho.Client, id string) func(t *testing.T) {
+func deleteTestDeployment(conf configuration.Config, mqtt paho.Client, id *string) func(t *testing.T) {
 	return func(t *testing.T) {
-		token := mqtt.Publish("processes/"+conf.MqttClientId+"/deployment/cmd/delete", 2, false, id)
+		token := mqtt.Publish("processes/"+conf.MqttClientId+"/deployment/cmd/delete", 2, false, *id)
 		if token.Wait(); token.Error() != nil {
 			t.Error(token.Error())
 		}
@@ -119,19 +140,18 @@ func testSendAllKnown(ctrl *controller.Controller) func(t *testing.T) {
 	}
 }
 
-func startTestDeployment(conf configuration.Config, mqtt paho.Client, id string) func(t *testing.T) {
+func startTestDeployment(conf configuration.Config, mqtt paho.Client, id *string) func(t *testing.T) {
 	return func(t *testing.T) {
-		token := mqtt.Publish("processes/"+conf.MqttClientId+"/deployment/cmd/start", 2, false, id)
+		token := mqtt.Publish("processes/"+conf.MqttClientId+"/deployment/cmd/start", 2, false, *id)
 		if token.Wait(); token.Error() != nil {
 			t.Error(token.Error())
 		}
 	}
 }
 
-func createTestDeployment(conf configuration.Config, mqtt paho.Client, id, name, bpmn string, svg string) func(t *testing.T) {
+func createTestDeployment(conf configuration.Config, mqtt paho.Client, name string, bpmn string, svg string) func(t *testing.T) {
 	return func(t *testing.T) {
 		msg, err := json.Marshal(deploymentmodel.Deployment{
-			Id:   id,
 			Name: name,
 			Diagram: deploymentmodel.Diagram{
 				XmlDeployed: bpmn,

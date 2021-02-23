@@ -22,7 +22,6 @@ import (
 	"mgw-process-sync/pkg/backend"
 	"mgw-process-sync/pkg/camunda"
 	"mgw-process-sync/pkg/camunda/shards"
-	"mgw-process-sync/pkg/camunda/vid"
 	"mgw-process-sync/pkg/configuration"
 	"time"
 )
@@ -31,11 +30,10 @@ const UserId = "senergy"
 
 func New(config configuration.Config, ctx context.Context) (ctrl *Controller, err error) {
 	ctrl = &Controller{config: config}
-	ctrl.vid, err = vid.New(config.VidDb)
 	if err != nil {
 		return ctrl, err
 	}
-	ctrl.camunda = camunda.New(ctrl.vid, shards.Shards(config.CamundaUrl))
+	ctrl.camunda = camunda.New(shards.Shards(config.CamundaUrl))
 	ctrl.backend, err = backend.New(config, ctx, ctrl)
 	if err != nil {
 		return ctrl, err
@@ -58,7 +56,6 @@ type Controller struct {
 	config  configuration.Config
 	backend *backend.Client
 	camunda *camunda.Camunda
-	vid     *vid.Vid
 }
 
 func (this *Controller) SendCurrentStates() (err error) {
