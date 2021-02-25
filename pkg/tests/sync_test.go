@@ -79,7 +79,7 @@ func TestSync(t *testing.T) {
 	t.Run("get deploymentId", func(t *testing.T) {
 		mqttmux.Lock()
 		defer mqttmux.Unlock()
-		deploymentstopic := "processes/" + conf.MqttClientId + "/deployment"
+		deploymentstopic := "processes/" + conf.NetworkId + "/deployment"
 		deployments := mqttMessages[deploymentstopic]
 		if len(deployments) == 0 {
 			t.Error("expect deployments")
@@ -123,7 +123,7 @@ func TestSync(t *testing.T) {
 
 func deleteTestDeployment(conf configuration.Config, mqtt paho.Client, id *string) func(t *testing.T) {
 	return func(t *testing.T) {
-		token := mqtt.Publish("processes/"+conf.MqttClientId+"/deployment/cmd/delete", 2, false, *id)
+		token := mqtt.Publish("processes/"+conf.NetworkId+"/deployment/cmd/delete", 2, false, *id)
 		if token.Wait(); token.Error() != nil {
 			t.Error(token.Error())
 		}
@@ -142,7 +142,7 @@ func testSendAllKnown(ctrl *controller.Controller) func(t *testing.T) {
 
 func startTestDeployment(conf configuration.Config, mqtt paho.Client, id *string) func(t *testing.T) {
 	return func(t *testing.T) {
-		token := mqtt.Publish("processes/"+conf.MqttClientId+"/deployment/cmd/start", 2, false, *id)
+		token := mqtt.Publish("processes/"+conf.NetworkId+"/deployment/cmd/start", 2, false, *id)
 		if token.Wait(); token.Error() != nil {
 			t.Error(token.Error())
 		}
@@ -162,7 +162,7 @@ func createTestDeployment(conf configuration.Config, mqtt paho.Client, name stri
 			t.Error(err)
 			return
 		}
-		token := mqtt.Publish("processes/"+conf.MqttClientId+"/deployment/cmd", 2, false, msg)
+		token := mqtt.Publish("processes/"+conf.NetworkId+"/deployment/cmd", 2, false, msg)
 		if token.Wait(); token.Error() != nil {
 			t.Error(token.Error())
 		}

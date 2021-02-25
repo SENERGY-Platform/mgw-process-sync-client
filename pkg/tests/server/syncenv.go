@@ -34,5 +34,6 @@ func CreateSyncEnv(ctx context.Context, wg *sync.WaitGroup, initConf configurati
 	}
 	config.MqttBroker = "tcp://localhost:" + mqttport
 	config.MqttClientId = "test-sync-client"
+	config.NetworkId = "test-network-id"
 	return config, nil
 }

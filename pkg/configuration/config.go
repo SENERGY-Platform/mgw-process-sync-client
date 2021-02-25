@@ -40,6 +40,7 @@ type Config struct {
 	MqttClientId string `json:"mqtt_client_id"`
 	MqttUser     string `json:"mqtt_user"`
 	MqttPw       string `json:"mqtt_pw"`
+	NetworkId    string `json:"network_id"`
 }
 
 //loads config from json in location and used environment variables (e.g ZookeeperUrl --> ZOOKEEPER_URL)

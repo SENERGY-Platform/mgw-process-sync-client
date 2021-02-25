@@ -4,6 +4,7 @@
     "debug": true,
     "mqtt_broker": "tcp://broker:1883",
     "mqtt_client_id": "client-id",
+    "network_id": "",
     "mqtt_user": "",
     "mqtt_pw": "",
     "initial_wait_duration": "1m"

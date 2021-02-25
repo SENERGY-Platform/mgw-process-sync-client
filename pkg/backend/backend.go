@@ -95,7 +95,7 @@ func (this *Client) subscribe() {
 }
 
 func (this *Client) getBaseTopic() string {
-	return "processes/" + this.config.MqttClientId
+	return "processes/" + this.config.NetworkId
 }
 
 func (this *Client) getCommandTopic(entity string, subcommand ...string) (topic string) {
