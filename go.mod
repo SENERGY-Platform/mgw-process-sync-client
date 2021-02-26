@@ -1,4 +1,4 @@
-module mgw-process-sync
+module mgw-process-sync-client
 
 go 1.16
 

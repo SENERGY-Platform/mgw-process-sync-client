@@ -19,10 +19,10 @@ package controller
 import (
 	"context"
 	"log"
-	"mgw-process-sync/pkg/backend"
-	"mgw-process-sync/pkg/camunda"
-	"mgw-process-sync/pkg/camunda/shards"
-	"mgw-process-sync/pkg/configuration"
+	"mgw-process-sync-client/pkg/backend"
+	"mgw-process-sync-client/pkg/camunda"
+	"mgw-process-sync-client/pkg/camunda/shards"
+	"mgw-process-sync-client/pkg/configuration"
 	"time"
 )
 

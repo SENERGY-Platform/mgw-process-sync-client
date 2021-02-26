@@ -19,7 +19,7 @@ package controller
 import (
 	"encoding/json"
 	"log"
-	"mgw-process-sync/pkg/model/camundamodel"
+	"mgw-process-sync-client/pkg/model/camundamodel"
 )
 
 func (this *Controller) DeleteProcessInstanceHistory(id string) error {

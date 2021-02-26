@@ -19,8 +19,8 @@ package backend
 import (
 	"encoding/json"
 	paho "github.com/eclipse/paho.mqtt.golang"
-	model "mgw-process-sync/pkg/model/camundamodel"
-	"mgw-process-sync/pkg/model/deploymentmodel"
+	model "mgw-process-sync-client/pkg/model/camundamodel"
+	"mgw-process-sync-client/pkg/model/deploymentmodel"
 )
 
 const deploymentTopic = "deployment"

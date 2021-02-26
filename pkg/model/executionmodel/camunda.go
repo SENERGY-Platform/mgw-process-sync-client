@@ -17,7 +17,7 @@
 package executionmodel
 
 import (
-	"mgw-process-sync/pkg/model/devicemodel"
+	"mgw-process-sync-client/pkg/model/devicemodel"
 )
 
 type Task struct {

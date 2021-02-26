@@ -21,10 +21,10 @@ import (
 	"encoding/xml"
 	"errors"
 	"log"
-	"mgw-process-sync/pkg/camunda"
-	"mgw-process-sync/pkg/controller/etree"
-	model "mgw-process-sync/pkg/model/camundamodel"
-	"mgw-process-sync/pkg/model/deploymentmodel"
+	"mgw-process-sync-client/pkg/camunda"
+	"mgw-process-sync-client/pkg/controller/etree"
+	model "mgw-process-sync-client/pkg/model/camundamodel"
+	"mgw-process-sync-client/pkg/model/deploymentmodel"
 )
 
 func (this *Controller) CreateDeployment(deployment deploymentmodel.Deployment) (err error) {

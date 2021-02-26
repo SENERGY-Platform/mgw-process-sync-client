@@ -20,7 +20,7 @@ import (
 	"context"
 	"github.com/lib/pq"
 	"log"
-	"mgw-process-sync/pkg/pglistener"
+	"mgw-process-sync-client/pkg/pglistener"
 	"runtime/debug"
 )
 

@@ -19,9 +19,9 @@ package camunda
 import (
 	"bytes"
 	"io/ioutil"
-	"mgw-process-sync/pkg/camunda/request"
-	"mgw-process-sync/pkg/camunda/shards"
-	model "mgw-process-sync/pkg/model/camundamodel"
+	"mgw-process-sync-client/pkg/camunda/request"
+	"mgw-process-sync-client/pkg/camunda/shards"
+	model "mgw-process-sync-client/pkg/model/camundamodel"
 	"net/url"
 	"strconv"
 	"strings"

@@ -21,8 +21,8 @@ import (
 	"encoding/json"
 	paho "github.com/eclipse/paho.mqtt.golang"
 	"log"
-	"mgw-process-sync/pkg/configuration"
-	"mgw-process-sync/pkg/model/deploymentmodel"
+	"mgw-process-sync-client/pkg/configuration"
+	"mgw-process-sync-client/pkg/model/deploymentmodel"
 )
 
 type Client struct {

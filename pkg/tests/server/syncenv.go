@@ -18,8 +18,8 @@ package server
 
 import (
 	"context"
-	"mgw-process-sync/pkg/configuration"
-	"mgw-process-sync/pkg/tests/docker"
+	"mgw-process-sync-client/pkg/configuration"
+	"mgw-process-sync-client/pkg/tests/docker"
 	"sync"
 )
 

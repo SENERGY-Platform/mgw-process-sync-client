@@ -16,7 +16,7 @@
 
 package backend
 
-import "mgw-process-sync/pkg/model/camundamodel"
+import "mgw-process-sync-client/pkg/model/camundamodel"
 
 const incidentTopic = "incident"
 

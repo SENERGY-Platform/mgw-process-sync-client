@@ -18,7 +18,7 @@ package backend
 
 import (
 	paho "github.com/eclipse/paho.mqtt.golang"
-	model "mgw-process-sync/pkg/model/camundamodel"
+	model "mgw-process-sync-client/pkg/model/camundamodel"
 )
 
 const processInstanceTopic = "process-instance"
