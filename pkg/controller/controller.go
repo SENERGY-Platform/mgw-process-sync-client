@@ -49,6 +49,25 @@ func New(config configuration.Config, ctx context.Context) (ctrl *Controller, er
 	} else {
 		time.Sleep(wait) //wait for outstanding commands
 	}
+	if config.FullUpdateInterval != "" {
+		interval, err := time.ParseDuration(config.FullUpdateInterval)
+		if err != nil {
+			log.Println("WARNING: unable to parse full update interval duration", config.FullUpdateInterval, err)
+		} else {
+			ticker := time.NewTicker(interval)
+			go func() {
+				done := ctx.Done()
+				for {
+					select {
+					case <-done:
+						return
+					case <-ticker.C:
+						log.Println("do full update", ctrl.SendCurrentStates())
+					}
+				}
+			}()
+		}
+	}
 	return ctrl, ctrl.SendCurrentStates()
 }
 
