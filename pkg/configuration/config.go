@@ -42,6 +42,12 @@ type Config struct {
 	MqttPw             string `json:"mqtt_pw"`
 	NetworkId          string `json:"network_id"`
 	FullUpdateInterval string `json:"full_update_interval"`
+
+	HistoryCleanupInterval      string `json:"history_cleanup_interval"`
+	HistoryCleanupMaxAge        string `json:"history_cleanup_max_age"`
+	HistoryCleanupBatchSize     int    `json:"history_cleanup_batch_size"`
+	HistoryCleanupFilterLocally bool   `json:"history_cleanup_filter_locally"`
+	HistoryCleanupLocation      string `json:"history_cleanup_location"`
 }
 
 //loads config from json in location and used environment variables (e.g ZookeeperUrl --> ZOOKEEPER_URL)

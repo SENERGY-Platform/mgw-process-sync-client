@@ -19,6 +19,8 @@ package main
 import (
 	"context"
 	"flag"
+	cleanup "github.com/SENERGY-Platform/process-history-cleanup/pkg"
+	cleanupconfig "github.com/SENERGY-Platform/process-history-cleanup/pkg/configuration"
 	"log"
 	"mgw-process-sync-client/pkg/configuration"
 	"mgw-process-sync-client/pkg/controller"
@@ -48,10 +50,44 @@ func main() {
 		log.Fatal("FATAL:", err)
 	}
 
+	historyCleanup(ctx, config)
+
 	shutdown := make(chan os.Signal, 1)
 	signal.Notify(shutdown, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL)
 	sig := <-shutdown
 	log.Println("received shutdown signal", sig)
 	cancel()
 	time.Sleep(1 * time.Second) //give connections time to close gracefully
+}
+
+func historyCleanup(ctx context.Context, config configuration.Config) {
+	if config.HistoryCleanupInterval != "" {
+		interval, err := time.ParseDuration(config.HistoryCleanupInterval)
+		if err != nil {
+			log.Println("WARNING: unable to parse history cleanup interval duration", config.HistoryCleanupInterval, err)
+		} else {
+			ticker := time.NewTicker(interval)
+			go func() {
+				done := ctx.Done()
+				for {
+					select {
+					case <-done:
+						return
+					case <-ticker.C:
+						log.Println("start history cleanup")
+						err := cleanup.RunCleanup(&cleanupconfig.ConfigStruct{
+							EngineUrl:     config.CamundaUrl,
+							MaxAge:        config.HistoryCleanupMaxAge,
+							BatchSize:     config.HistoryCleanupBatchSize,
+							FilterLocally: config.HistoryCleanupFilterLocally,
+							Location:      config.HistoryCleanupLocation,
+						})
+						if err != nil {
+							log.Println("ERROR: in history cleanup:", err)
+						}
+					}
+				}
+			}()
+		}
+	}
 }

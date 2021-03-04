@@ -8,5 +8,11 @@
     "mqtt_user": "",
     "mqtt_pw": "",
     "initial_wait_duration": "1m",
-    "full_update_interval": "3h"
+    "full_update_interval": "3h",
+
+    "history_cleanup_interval": "24h",
+    "history_cleanup_max_age": "7d",
+    "history_cleanup_batch_size": 100,
+    "history_cleanup_filter_locally": false,
+    "history_cleanup_location": "Europe/Berlin"
 }
