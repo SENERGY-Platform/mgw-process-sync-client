@@ -1,0 +1,1 @@
+synchronises process states of the local camunda instance to a cloud service by communicating with a github.com/SENERGY-Platform/process-sync service via mqtt 
