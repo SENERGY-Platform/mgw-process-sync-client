@@ -18,8 +18,8 @@ package controller
 
 import (
 	"encoding/json"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
 	"log"
-	"mgw-process-sync-client/pkg/model/camundamodel"
 )
 
 func (this *Controller) DeleteProcessInstance(id string) error {

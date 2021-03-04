@@ -19,10 +19,10 @@ package backend
 import (
 	"context"
 	"encoding/json"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/deploymentmodel"
 	paho "github.com/eclipse/paho.mqtt.golang"
 	"log"
-	"mgw-process-sync-client/pkg/configuration"
-	"mgw-process-sync-client/pkg/model/deploymentmodel"
 )
 
 type Client struct {

@@ -1,4 +1,4 @@
-module mgw-process-sync-client
+module github.com/SENERGY-Platform/mgw-process-sync-client
 
 go 1.16
 

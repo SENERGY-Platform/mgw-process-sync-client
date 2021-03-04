@@ -20,11 +20,11 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"errors"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/camunda"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/controller/etree"
+	model "github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/deploymentmodel"
 	"log"
-	"mgw-process-sync-client/pkg/camunda"
-	"mgw-process-sync-client/pkg/controller/etree"
-	model "mgw-process-sync-client/pkg/model/camundamodel"
-	"mgw-process-sync-client/pkg/model/deploymentmodel"
 )
 
 func (this *Controller) CreateDeployment(deployment deploymentmodel.Deployment) (err error) {

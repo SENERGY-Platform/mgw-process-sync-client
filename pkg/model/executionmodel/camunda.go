@@ -17,7 +17,7 @@
 package executionmodel
 
 import (
-	"mgw-process-sync-client/pkg/model/devicemodel"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/devicemodel"
 )
 
 type Task struct {

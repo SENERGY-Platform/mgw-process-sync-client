@@ -17,7 +17,7 @@
 package backend
 
 import (
-	model "mgw-process-sync-client/pkg/model/camundamodel"
+	model "github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
 )
 
 const processProcessDefinitionTopic = "process-definition"

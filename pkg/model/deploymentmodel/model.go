@@ -16,7 +16,7 @@
 
 package deploymentmodel
 
-import "mgw-process-sync-client/pkg/model/executionmodel"
+import "github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/executionmodel"
 
 type Deployment struct {
 	Id          string    `json:"id"`

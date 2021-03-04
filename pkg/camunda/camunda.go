@@ -18,10 +18,10 @@ package camunda
 
 import (
 	"bytes"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/camunda/request"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/camunda/shards"
+	model "github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
 	"io/ioutil"
-	"mgw-process-sync-client/pkg/camunda/request"
-	"mgw-process-sync-client/pkg/camunda/shards"
-	model "mgw-process-sync-client/pkg/model/camundamodel"
 	"net/url"
 	"strconv"
 	"strings"

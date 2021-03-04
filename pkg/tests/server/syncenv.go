@@ -18,8 +18,8 @@ package server
 
 import (
 	"context"
-	"mgw-process-sync-client/pkg/configuration"
-	"mgw-process-sync-client/pkg/tests/docker"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/tests/docker"
 	"sync"
 )
 

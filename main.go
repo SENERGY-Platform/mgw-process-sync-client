@@ -19,11 +19,11 @@ package main
 import (
 	"context"
 	"flag"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/controller"
 	cleanup "github.com/SENERGY-Platform/process-history-cleanup/pkg"
 	cleanupconfig "github.com/SENERGY-Platform/process-history-cleanup/pkg/configuration"
 	"log"
-	"mgw-process-sync-client/pkg/configuration"
-	"mgw-process-sync-client/pkg/controller"
 	"os"
 	"os/signal"
 	"runtime/debug"

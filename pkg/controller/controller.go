@@ -18,11 +18,11 @@ package controller
 
 import (
 	"context"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/backend"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/camunda"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/camunda/shards"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
 	"log"
-	"mgw-process-sync-client/pkg/backend"
-	"mgw-process-sync-client/pkg/camunda"
-	"mgw-process-sync-client/pkg/camunda/shards"
-	"mgw-process-sync-client/pkg/configuration"
 	"time"
 )
 

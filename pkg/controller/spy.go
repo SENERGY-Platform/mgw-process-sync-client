@@ -18,9 +18,9 @@ package controller
 
 import (
 	"context"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/pglistener"
 	"github.com/lib/pq"
 	"log"
-	"mgw-process-sync-client/pkg/pglistener"
 	"runtime/debug"
 )
 
