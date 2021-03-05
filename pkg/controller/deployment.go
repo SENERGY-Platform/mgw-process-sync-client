@@ -60,7 +60,7 @@ func (this *Controller) StartDeployment(id string) error {
 		return err
 	}
 	if len(definitions) == 0 {
-		return errors.New("no definition for deployment found")
+		return errors.New("no definition for deployment found: " + id)
 	}
 	return this.camunda.StartProcess(definitions[0].Id, "", map[string]interface{}{})
 }

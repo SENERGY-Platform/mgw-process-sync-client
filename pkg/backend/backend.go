@@ -78,18 +78,33 @@ func New(config configuration.Config, ctx context.Context, handler Handler) (*Cl
 
 func (this *Client) subscribe() {
 	this.mqtt.Subscribe(this.getDeploymentTopic(), 2, func(client paho.Client, message paho.Message) {
+		if this.debug {
+			log.Println("DEBUG: receive", message.Topic(), string(message.Payload()))
+		}
 		this.handleDeploymentCommand(message)
 	})
 	this.mqtt.Subscribe(this.getDeploymentDeleteTopic(), 2, func(client paho.Client, message paho.Message) {
+		if this.debug {
+			log.Println("DEBUG: receive", message.Topic(), string(message.Payload()))
+		}
 		this.handleDeploymentDeleteCommand(message)
 	})
 	this.mqtt.Subscribe(this.getProcessDeploymentStartTopic(), 2, func(client paho.Client, message paho.Message) {
+		if this.debug {
+			log.Println("DEBUG: receive", message.Topic(), string(message.Payload()))
+		}
 		this.handleDeploymentStartCommand(message)
 	})
 	this.mqtt.Subscribe(this.getProcessStopTopic(), 2, func(client paho.Client, message paho.Message) {
+		if this.debug {
+			log.Println("DEBUG: receive", message.Topic(), string(message.Payload()))
+		}
 		this.handleProcessStopCommand(message)
 	})
 	this.mqtt.Subscribe(this.getProcessHistoryDeleteTopic(), 2, func(client paho.Client, message paho.Message) {
+		if this.debug {
+			log.Println("DEBUG: receive", message.Topic(), string(message.Payload()))
+		}
 		this.handleProcessHistoryDeleteCommand(message)
 	})
 }
@@ -118,6 +133,9 @@ func (this *Client) send(topic string, message interface{}) error {
 	msg, err := json.Marshal(message)
 	if err != nil {
 		return err
+	}
+	if this.debug {
+		log.Println("DEBUG: send", topic, string(msg))
 	}
 	token := this.mqtt.Publish(topic, 2, false, msg)
 	token.Wait()
