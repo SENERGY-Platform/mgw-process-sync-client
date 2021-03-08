@@ -35,13 +35,13 @@ func (this *Client) handleProcessHistoryDeleteCommand(message paho.Message) {
 }
 
 func (this *Client) SendProcessHistoryUpdate(instance model.HistoricProcessInstance) error {
-	return this.send(this.getStateTopic(processInstanceHistoryTopic), instance)
+	return this.sendObj(this.getStateTopic(processInstanceHistoryTopic), instance)
 }
 
 func (this *Client) SendProcessHistoryDelete(id string) error {
-	return this.send(this.getStateTopic(processInstanceHistoryTopic, "delete"), id)
+	return this.sendStr(this.getStateTopic(processInstanceHistoryTopic, "delete"), id)
 }
 
 func (this *Client) SendProcessHistoryKnownIds(ids []string) error {
-	return this.send(this.getStateTopic(processInstanceHistoryTopic, "known"), ids)
+	return this.sendObj(this.getStateTopic(processInstanceHistoryTopic, "known"), ids)
 }

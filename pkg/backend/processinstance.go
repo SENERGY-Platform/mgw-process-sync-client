@@ -24,11 +24,11 @@ import (
 const processInstanceTopic = "process-instance"
 
 func (this *Client) SendProcessInstanceUpdate(instance model.ProcessInstance) error {
-	return this.send(this.getStateTopic(processInstanceTopic), instance)
+	return this.sendObj(this.getStateTopic(processInstanceTopic), instance)
 }
 
 func (this *Client) SendProcessInstanceDelete(id string) error {
-	return this.send(this.getStateTopic(processInstanceTopic, "delete"), id)
+	return this.sendStr(this.getStateTopic(processInstanceTopic, "delete"), id)
 }
 
 func (this *Client) getProcessStopTopic() string {
@@ -43,5 +43,5 @@ func (this *Client) handleProcessStopCommand(message paho.Message) {
 }
 
 func (this *Client) SendProcessInstanceKnownIds(ids []string) error {
-	return this.send(this.getStateTopic(processInstanceTopic, "known"), ids)
+	return this.sendObj(this.getStateTopic(processInstanceTopic, "known"), ids)
 }

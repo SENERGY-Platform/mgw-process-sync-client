@@ -64,13 +64,13 @@ func (this *Client) handleDeploymentDeleteCommand(message paho.Message) {
 }
 
 func (this *Client) SendDeploymentKnownIds(ids []string) error {
-	return this.send(this.getStateTopic(deploymentTopic, "known"), ids)
+	return this.sendObj(this.getStateTopic(deploymentTopic, "known"), ids)
 }
 
 func (this *Client) SendDeploymentUpdate(instance model.Deployment) error {
-	return this.send(this.getStateTopic(deploymentTopic), instance)
+	return this.sendObj(this.getStateTopic(deploymentTopic), instance)
 }
 
 func (this *Client) SendDeploymentDelete(id string) error {
-	return this.send(this.getStateTopic(deploymentTopic, "delete"), id)
+	return this.sendStr(this.getStateTopic(deploymentTopic, "delete"), id)
 }

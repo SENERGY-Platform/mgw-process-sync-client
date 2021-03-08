@@ -23,13 +23,13 @@ import (
 const processProcessDefinitionTopic = "process-definition"
 
 func (this *Client) SendProcessDefinitionUpdate(instance model.ProcessDefinition) error {
-	return this.send(this.getStateTopic(processProcessDefinitionTopic), instance)
+	return this.sendObj(this.getStateTopic(processProcessDefinitionTopic), instance)
 }
 
 func (this *Client) SendProcessDefinitionDelete(id string) error {
-	return this.send(this.getStateTopic(processProcessDefinitionTopic, "delete"), id)
+	return this.sendStr(this.getStateTopic(processProcessDefinitionTopic, "delete"), id)
 }
 
 func (this *Client) SendProcessDefinitionKnownIds(ids []string) error {
-	return this.send(this.getStateTopic(processProcessDefinitionTopic, "known"), ids)
+	return this.sendObj(this.getStateTopic(processProcessDefinitionTopic, "known"), ids)
 }

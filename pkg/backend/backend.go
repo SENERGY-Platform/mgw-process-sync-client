@@ -129,15 +129,24 @@ func (this *Client) getStateTopic(entity string, substate ...string) (topic stri
 	return
 }
 
-func (this *Client) send(topic string, message interface{}) error {
+func (this *Client) sendObj(topic string, message interface{}) error {
 	msg, err := json.Marshal(message)
 	if err != nil {
 		return err
 	}
 	if this.debug {
-		log.Println("DEBUG: send", topic, string(msg))
+		log.Println("DEBUG: sendObj", topic, string(msg))
 	}
 	token := this.mqtt.Publish(topic, 2, false, msg)
+	token.Wait()
+	return token.Error()
+}
+
+func (this *Client) sendStr(topic string, message string) error {
+	if this.debug {
+		log.Println("DEBUG: sendObj", topic, message)
+	}
+	token := this.mqtt.Publish(topic, 2, false, message)
 	token.Wait()
 	return token.Error()
 }

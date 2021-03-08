@@ -21,5 +21,5 @@ import (
 )
 
 func (this *Client) error(err error) {
-	log.Println("ERROR:", err, "\n", this.send(this.getStateTopic("error"), err))
+	log.Println("ERROR:", err, "\n", this.sendObj(this.getStateTopic("error"), err))
 }

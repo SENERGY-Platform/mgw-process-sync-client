@@ -21,5 +21,5 @@ import "github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamod
 const incidentTopic = "incident"
 
 func (this *Client) SendIncident(incident camundamodel.Incident) error {
-	return this.send(this.getStateTopic(incidentTopic), incident)
+	return this.sendObj(this.getStateTopic(incidentTopic), incident)
 }
