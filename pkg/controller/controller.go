@@ -33,7 +33,7 @@ func New(config configuration.Config, ctx context.Context) (ctrl *Controller, er
 	if err != nil {
 		return ctrl, err
 	}
-	ctrl.camunda = camunda.New(shards.Shards(config.CamundaUrl))
+	ctrl.camunda = camunda.New(config, shards.Shards(config.CamundaUrl))
 	ctrl.backend, err = backend.New(config, ctx, ctrl)
 	if err != nil {
 		return ctrl, err

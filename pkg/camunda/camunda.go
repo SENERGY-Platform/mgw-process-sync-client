@@ -20,6 +20,7 @@ import (
 	"bytes"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/camunda/request"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/camunda/shards"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
 	model "github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
 	"io/ioutil"
 	"net/url"
@@ -37,10 +38,11 @@ import (
 
 type Camunda struct {
 	shards shards.Shards
+	config configuration.Config
 }
 
-func New(shards shards.Shards) *Camunda {
-	return &Camunda{shards: shards}
+func New(config configuration.Config, shards shards.Shards) *Camunda {
+	return &Camunda{shards: shards, config: config}
 }
 
 func (this *Camunda) StartProcess(processDefinitionId string, userId string, parameter map[string]interface{}) (err error) {
@@ -55,6 +57,9 @@ func (this *Camunda) StartProcess(processDefinitionId string, userId string, par
 	err = json.NewEncoder(b).Encode(message)
 	if err != nil {
 		return
+	}
+	if this.config.Debug == true {
+		log.Println("DEBUG: start process definition at camunda:", processDefinitionId)
 	}
 	req, err := http.NewRequest("POST", shard+"/engine-rest/process-definition/"+url.QueryEscape(processDefinitionId)+"/submit-form", b)
 	if err != nil {
@@ -122,6 +127,9 @@ func (this *Camunda) StartProcessGetId(processDefinitionId string, userId string
 	err = json.NewEncoder(b).Encode(message)
 	if err != nil {
 		return
+	}
+	if this.config.Debug == true {
+		log.Println("DEBUG: start process definition at camunda:", processDefinitionId)
 	}
 	req, err := http.NewRequest("POST", shard+"/engine-rest/process-definition/"+url.QueryEscape(processDefinitionId)+"/submit-form", b)
 	if err != nil {
@@ -464,6 +472,9 @@ func (this *Camunda) deployProcess(name string, xml string, svg string, owner st
 	result = map[string]interface{}{}
 	boundary := "---------------------------" + time.Now().String()
 	b := strings.NewReader(buildPayLoad(name, xml, svg, boundary, owner, source))
+	if this.config.Debug == true {
+		log.Println("DEBUG: deploy process to camunda:", name)
+	}
 	resp, err := http.Post(shard+"/engine-rest/deployment/create", "multipart/form-data; boundary="+boundary, b)
 	if err != nil {
 		log.Println("ERROR: request to processengine ", err)
