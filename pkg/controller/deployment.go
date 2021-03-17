@@ -22,6 +22,7 @@ import (
 	"errors"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/camunda"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/controller/etree"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/metadata"
 	model "github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/deploymentmodel"
 	"log"
@@ -42,12 +43,38 @@ func (this *Controller) CreateDeployment(deployment deploymentmodel.Deployment) 
 	if this.config.Debug {
 		log.Println("deploy process", deployment.Id, deployment.Name, xml)
 	}
-	_, err = this.camunda.DeployProcess(deployment.Name, xml, svg, UserId, "senergy")
+	var id string
+	id, err = this.camunda.DeployProcess(deployment.Name, xml, svg, UserId, "senergy")
 	if err != nil {
 		log.Println("WARNING: unable to deploy process to camunda ", err)
 		return err
 	}
-	return nil
+
+	//metadata
+	metadata := metadata.Metadata{
+		DeploymentModel:     deployment,
+		ProcessParameter:    nil,
+		CamundaDeploymentId: id,
+	}
+
+	metadata.ProcessParameter, err = this.getProcessParameter(id)
+	if err != nil {
+		log.Println("WARNING: unable to get process parameter", err)
+	}
+
+	err = this.metadata.Store(metadata)
+	if err != nil {
+		log.Println("WARNING: unable to store deployment metadata ", err)
+	}
+	return this.backend.SendDeploymentMetadata(metadata)
+}
+
+func (this *Controller) getProcessParameter(deploymentId string) (result map[string]model.Variable, err error) {
+	definition, err := this.camunda.GetDefinitionByDeploymentVid(deploymentId, UserId)
+	if err != nil {
+		return nil, err
+	}
+	return this.camunda.GetProcessParameters(definition[0].Id, UserId)
 }
 
 func (this *Controller) DeleteDeployment(id string) error {
@@ -78,7 +105,25 @@ func (this *Controller) SendCurrentDeployments() error {
 			return err
 		}
 	}
-	return this.backend.SendDeploymentKnownIds(ids)
+	err = this.backend.SendDeploymentKnownIds(ids)
+	if err != nil {
+		return err
+	}
+	knownmetadata, err := this.metadata.EnsureKnownDeployments(ids)
+	if err != nil {
+		return err
+	}
+	return this.sendKnownDeploymentMetadata(knownmetadata)
+}
+
+func (this *Controller) sendKnownDeploymentMetadata(knownmetadata []metadata.Metadata) error {
+	for _, metadata := range knownmetadata {
+		err := this.backend.SendDeploymentMetadata(metadata)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // {"id_":"1b3e90fe-750a-11eb-8c7e-0242ac110006","name_":"test","deploy_time_":"2021-02-22T12:33:03.214","source_":"test","tenant_id_":"user"}}
@@ -120,7 +165,10 @@ func (this *Controller) NotifyDeploymentDelete(extra string) {
 	err = this.backend.SendDeploymentDelete(deployment.Id)
 	if err != nil {
 		log.Println("ERROR: unable to send deployment delete in NotifyDeploymentDelete(): ", err)
-		return
+	}
+	err = this.metadata.Remove(deployment.Id)
+	if err != nil {
+		log.Println("WARNING: unable to remove deployment metadata", err)
 	}
 }
 

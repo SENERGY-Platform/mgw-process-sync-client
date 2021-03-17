@@ -18,6 +18,7 @@ package backend
 
 import (
 	"encoding/json"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/metadata"
 	model "github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/deploymentmodel"
 	paho "github.com/eclipse/paho.mqtt.golang"
@@ -73,4 +74,8 @@ func (this *Client) SendDeploymentUpdate(instance model.Deployment) error {
 
 func (this *Client) SendDeploymentDelete(id string) error {
 	return this.sendStr(this.getStateTopic(deploymentTopic, "delete"), id)
+}
+
+func (this *Client) SendDeploymentMetadata(metadata metadata.Metadata) error {
+	return this.sendObj(this.getStateTopic(deploymentTopic, "metadata"), metadata)
 }

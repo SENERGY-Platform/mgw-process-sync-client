@@ -22,6 +22,7 @@ import (
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/camunda"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/camunda/shards"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/metadata"
 	"log"
 	"time"
 )
@@ -30,9 +31,12 @@ const UserId = "senergy"
 
 func New(config configuration.Config, ctx context.Context) (ctrl *Controller, err error) {
 	ctrl = &Controller{config: config}
+
+	ctrl.metadata, err = metadata.NewStorage(config)
 	if err != nil {
 		return ctrl, err
 	}
+
 	ctrl.camunda = camunda.New(config, shards.Shards(config.CamundaUrl))
 	ctrl.backend, err = backend.New(config, ctx, ctrl)
 	if err != nil {
@@ -72,9 +76,10 @@ func New(config configuration.Config, ctx context.Context) (ctrl *Controller, er
 }
 
 type Controller struct {
-	config  configuration.Config
-	backend *backend.Client
-	camunda *camunda.Camunda
+	config   configuration.Config
+	backend  *backend.Client
+	camunda  *camunda.Camunda
+	metadata metadata.Storage
 }
 
 func (this *Controller) SendCurrentStates() (err error) {
@@ -96,3 +101,5 @@ func (this *Controller) SendCurrentStates() (err error) {
 	}
 	return nil
 }
+
+type CamundaDeploymentId = string

@@ -81,31 +81,31 @@ func (this *Client) subscribe() {
 		if this.debug {
 			log.Println("DEBUG: receive", message.Topic(), string(message.Payload()))
 		}
-		this.handleDeploymentCommand(message)
+		go this.handleDeploymentCommand(message)
 	})
 	this.mqtt.Subscribe(this.getDeploymentDeleteTopic(), 2, func(client paho.Client, message paho.Message) {
 		if this.debug {
 			log.Println("DEBUG: receive", message.Topic(), string(message.Payload()))
 		}
-		this.handleDeploymentDeleteCommand(message)
+		go this.handleDeploymentDeleteCommand(message)
 	})
 	this.mqtt.Subscribe(this.getProcessDeploymentStartTopic(), 2, func(client paho.Client, message paho.Message) {
 		if this.debug {
 			log.Println("DEBUG: receive", message.Topic(), string(message.Payload()))
 		}
-		this.handleDeploymentStartCommand(message)
+		go this.handleDeploymentStartCommand(message)
 	})
 	this.mqtt.Subscribe(this.getProcessStopTopic(), 2, func(client paho.Client, message paho.Message) {
 		if this.debug {
 			log.Println("DEBUG: receive", message.Topic(), string(message.Payload()))
 		}
-		this.handleProcessStopCommand(message)
+		go this.handleProcessStopCommand(message)
 	})
 	this.mqtt.Subscribe(this.getProcessHistoryDeleteTopic(), 2, func(client paho.Client, message paho.Message) {
 		if this.debug {
 			log.Println("DEBUG: receive", message.Topic(), string(message.Payload()))
 		}
-		this.handleProcessHistoryDeleteCommand(message)
+		go this.handleProcessHistoryDeleteCommand(message)
 	})
 }
 

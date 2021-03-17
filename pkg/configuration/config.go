@@ -32,6 +32,8 @@ type Config struct {
 	CamundaDb  string `json:"camunda_db"`
 	CamundaUrl string `json:"camunda_url"`
 
+	DeploymentMetadataStorage string `json:"deployment_metadata_storage"`
+
 	InitialWaitDuration string `json:"initial_wait_duration"`
 
 	Debug bool `json:"debug"`
