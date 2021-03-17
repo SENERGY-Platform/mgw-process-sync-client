@@ -22,9 +22,9 @@ import (
 )
 
 type Metadata struct {
-	DeploymentModel     deploymentmodel.Deployment
-	ProcessParameter    map[string]model.Variable
-	CamundaDeploymentId string
+	CamundaDeploymentId string                     `json:"camunda_deployment_id"`
+	ProcessParameter    map[string]model.Variable  `json:"process_parameter"`
+	DeploymentModel     deploymentmodel.Deployment `json:"deployment_model"`
 }
 
 type Storage interface {
