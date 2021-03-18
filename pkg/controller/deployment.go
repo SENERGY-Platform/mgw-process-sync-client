@@ -81,7 +81,7 @@ func (this *Controller) DeleteDeployment(id string) error {
 	return this.camunda.RemoveProcess(id, UserId)
 }
 
-func (this *Controller) StartDeployment(id string) error {
+func (this *Controller) StartDeployment(id string, parameter map[string]interface{}) error {
 	definitions, err := this.camunda.GetDefinitionByDeploymentVid(id, UserId)
 	if err != nil {
 		return err
@@ -89,7 +89,7 @@ func (this *Controller) StartDeployment(id string) error {
 	if len(definitions) == 0 {
 		return errors.New("no definition for deployment found: " + id)
 	}
-	return this.camunda.StartProcess(definitions[0].Id, "", map[string]interface{}{})
+	return this.camunda.StartProcess(definitions[0].Id, UserId, parameter)
 }
 
 func (this *Controller) SendCurrentDeployments() error {

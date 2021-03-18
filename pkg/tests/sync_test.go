@@ -21,6 +21,7 @@ import (
 	"encoding/json"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/controller"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/deploymentmodel"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/tests/helper"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/tests/server"
@@ -142,7 +143,11 @@ func testSendAllKnown(ctrl *controller.Controller) func(t *testing.T) {
 
 func startTestDeployment(conf configuration.Config, mqtt paho.Client, id *string) func(t *testing.T) {
 	return func(t *testing.T) {
-		token := mqtt.Publish("processes/"+conf.NetworkId+"/deployment/cmd/start", 2, false, *id)
+		payload, _ := json.Marshal(model.StartMessage{
+			DeploymentId: *id,
+			Parameter:    nil,
+		})
+		token := mqtt.Publish("processes/"+conf.NetworkId+"/deployment/cmd/start", 2, false, payload)
 		if token.Wait(); token.Error() != nil {
 			t.Error(token.Error())
 		}

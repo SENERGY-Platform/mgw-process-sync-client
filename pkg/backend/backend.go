@@ -36,7 +36,7 @@ type Handler interface {
 	DeleteProcessInstanceHistory(id string) error
 	DeleteProcessInstance(id string) error
 	DeleteDeployment(id string) error
-	StartDeployment(id string) error
+	StartDeployment(id string, parameter map[string]interface{}) error
 	CreateDeployment(payload deploymentmodel.Deployment) error
 }
 

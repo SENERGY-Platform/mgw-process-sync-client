@@ -19,7 +19,8 @@ package backend
 import (
 	"encoding/json"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/metadata"
-	model "github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/deploymentmodel"
 	paho "github.com/eclipse/paho.mqtt.golang"
 )
@@ -47,7 +48,12 @@ func (this *Client) getProcessDeploymentStartTopic() string {
 }
 
 func (this *Client) handleDeploymentStartCommand(message paho.Message) {
-	err := this.handler.StartDeployment(string(message.Payload()))
+	msg := model.StartMessage{}
+	err := json.Unmarshal(message.Payload(), &msg)
+	if err != nil {
+		this.error(err)
+	}
+	err = this.handler.StartDeployment(msg.DeploymentId, msg.Parameter)
 	if err != nil {
 		this.error(err)
 	}
@@ -68,7 +74,7 @@ func (this *Client) SendDeploymentKnownIds(ids []string) error {
 	return this.sendObj(this.getStateTopic(deploymentTopic, "known"), ids)
 }
 
-func (this *Client) SendDeploymentUpdate(instance model.Deployment) error {
+func (this *Client) SendDeploymentUpdate(instance camundamodel.Deployment) error {
 	return this.sendObj(this.getStateTopic(deploymentTopic), instance)
 }
 
