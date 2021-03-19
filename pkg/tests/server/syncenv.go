@@ -32,8 +32,16 @@ func CreateSyncEnv(ctx context.Context, wg *sync.WaitGroup, initConf configurati
 	if err != nil {
 		return config, err
 	}
+
+	mongoPort, _, err := docker.Mongo(ctx, wg)
+	if err != nil {
+		return config, err
+	}
+
 	config.MqttBroker = "tcp://localhost:" + mqttport
 	config.MqttClientId = "test-sync-client"
 	config.NetworkId = "test-network-id"
+	config.DeploymentMetadataStorage = "mongodb://localhost:" + mongoPort + "/metadata"
+
 	return config, nil
 }

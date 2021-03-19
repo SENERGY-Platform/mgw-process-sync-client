@@ -1,6 +1,7 @@
 {
     "camunda_db": "postgres://user:password@host/dbname?sslmode=disable",
     "camunda_url": "http://camunda:8080",
+    "deployment_metadata_storage": "mongodb://user:pw@localhost:27017/metadata",
     "debug": true,
     "mqtt_broker": "tcp://broker:1883",
     "mqtt_client_id": "client-id",
