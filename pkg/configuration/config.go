@@ -50,6 +50,8 @@ type Config struct {
 	HistoryCleanupBatchSize     int    `json:"history_cleanup_batch_size"`
 	HistoryCleanupFilterLocally bool   `json:"history_cleanup_filter_locally"`
 	HistoryCleanupLocation      string `json:"history_cleanup_location"`
+	NotificationUrlPlaceholder  string `json:"notification_url_placeholder"`
+	NotificationUrl             string `json:"notification_url"`
 }
 
 //loads config from json in location and used environment variables (e.g ZookeeperUrl --> ZOOKEEPER_URL)

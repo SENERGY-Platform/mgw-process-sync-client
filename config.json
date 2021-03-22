@@ -1,6 +1,7 @@
 {
     "camunda_db": "postgres://user:password@host/dbname?sslmode=disable",
     "camunda_url": "http://camunda:8080",
+    "notification_url": "http://localhost:8080",
     "__EXAMPLE:deployment_metadata_storage": "mongodb://user:pw@localhost:27017/metadata",
     "deployment_metadata_storage": "",
     "debug": true,
@@ -16,5 +17,7 @@
     "history_cleanup_max_age": "7d",
     "history_cleanup_batch_size": 100,
     "history_cleanup_filter_locally": false,
-    "history_cleanup_location": "Europe/Berlin"
+    "history_cleanup_location": "Europe/Berlin",
+
+    "notification_url_placeholder": "{{__SENERGY_NOTIFICATION_URL_PLACEHOLDER}}"
 }

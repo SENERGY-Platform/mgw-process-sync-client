@@ -26,6 +26,7 @@ import (
 	model "github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/deploymentmodel"
 	"log"
+	"strings"
 )
 
 func (this *Controller) CreateDeployment(deployment deploymentmodel.Deployment) (err error) {
@@ -34,6 +35,9 @@ func (this *Controller) CreateDeployment(deployment deploymentmodel.Deployment) 
 		return err
 	}
 	xml := deployment.Diagram.XmlDeployed
+
+	xml = this.replaceNotificationUrl(xml)
+
 	svg := deployment.Diagram.Svg
 	if !validateXml(xml) {
 		log.Println("ERROR: got invalid xml, replace with default")
@@ -67,6 +71,10 @@ func (this *Controller) CreateDeployment(deployment deploymentmodel.Deployment) 
 		log.Println("WARNING: unable to store deployment metadata ", err)
 	}
 	return this.backend.SendDeploymentMetadata(metadata)
+}
+
+func (this *Controller) replaceNotificationUrl(xml string) string {
+	return strings.ReplaceAll(xml, this.config.NotificationUrlPlaceholder, this.config.NotificationUrl)
 }
 
 func (this *Controller) getProcessParameter(deploymentId string) (result map[string]model.Variable, err error) {
