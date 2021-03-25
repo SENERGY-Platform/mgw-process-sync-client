@@ -38,12 +38,13 @@ type Config struct {
 
 	Debug bool `json:"debug"`
 
-	MqttBroker         string `json:"mqtt_broker"`
-	MqttClientId       string `json:"mqtt_client_id"`
-	MqttUser           string `json:"mqtt_user"`
-	MqttPw             string `json:"mqtt_pw"`
-	NetworkId          string `json:"network_id"`
-	FullUpdateInterval string `json:"full_update_interval"`
+	MqttBroker            string `json:"mqtt_broker"`
+	MqttClientId          string `json:"mqtt_client_id"`
+	MqttUser              string `json:"mqtt_user"`
+	MqttPw                string `json:"mqtt_pw"`
+	MqttFileStoreLocation string `json:"mqtt_file_store_location"`
+	NetworkId             string `json:"network_id"`
+	FullUpdateInterval    string `json:"full_update_interval"`
 
 	HistoryCleanupInterval      string `json:"history_cleanup_interval"`
 	HistoryCleanupMaxAge        string `json:"history_cleanup_max_age"`

@@ -62,6 +62,10 @@ func New(config configuration.Config, ctx context.Context, handler Handler) (*Cl
 			client.subscribe()
 		})
 
+	if config.MqttFileStoreLocation != "" {
+		options = options.SetStore(paho.NewFileStore(config.MqttFileStoreLocation))
+	}
+
 	client.mqtt = paho.NewClient(options)
 	if token := client.mqtt.Connect(); token.Wait() && token.Error() != nil {
 		log.Println("Error on MqttStart.Connect(): ", token.Error())

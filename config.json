@@ -7,6 +7,7 @@
     "debug": true,
     "mqtt_broker": "tcp://broker:1883",
     "mqtt_client_id": "client-id",
+    "mqtt_file_store_location": "",
     "network_id": "",
     "mqtt_user": "",
     "mqtt_pw": "",
