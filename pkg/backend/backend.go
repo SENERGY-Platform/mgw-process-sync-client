@@ -114,7 +114,11 @@ func (this *Client) subscribe() {
 }
 
 func (this *Client) getBaseTopic() string {
-	return "processes/" + this.config.NetworkId
+	if this.config.NetworkId != "" {
+		return "processes/" + this.config.NetworkId
+	} else {
+		return "processes"
+	}
 }
 
 func (this *Client) getCommandTopic(entity string, subcommand ...string) (topic string) {
