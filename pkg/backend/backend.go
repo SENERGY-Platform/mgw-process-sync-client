@@ -122,7 +122,7 @@ func (this *Client) getBaseTopic() string {
 }
 
 func (this *Client) getCommandTopic(entity string, subcommand ...string) (topic string) {
-	topic = this.getBaseTopic() + "/" + entity + "/cmd"
+	topic = this.getBaseTopic() + "/cmd/" + entity
 	for _, sub := range subcommand {
 		topic = topic + "/" + sub
 	}
@@ -130,7 +130,7 @@ func (this *Client) getCommandTopic(entity string, subcommand ...string) (topic 
 }
 
 func (this *Client) getStateTopic(entity string, substate ...string) (topic string) {
-	topic = this.getBaseTopic() + "/" + entity
+	topic = this.getBaseTopic() + "/state/" + entity
 	for _, sub := range substate {
 		topic = topic + "/" + sub
 	}
