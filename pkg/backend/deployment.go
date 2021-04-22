@@ -21,7 +21,6 @@ import (
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/metadata"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
-	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/deploymentmodel"
 	paho "github.com/eclipse/paho.mqtt.golang"
 )
 
@@ -32,7 +31,7 @@ func (this *Client) getDeploymentTopic() string {
 }
 
 func (this *Client) handleDeploymentCommand(message paho.Message) {
-	deployment := deploymentmodel.Deployment{}
+	deployment := model.FogDeploymentMessage{}
 	err := json.Unmarshal(message.Payload(), &deployment)
 	if err != nil {
 		this.error(err)

@@ -23,13 +23,13 @@ import (
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/camunda"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/controller/etree"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/metadata"
-	model "github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
-	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/deploymentmodel"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
 	"log"
 	"strings"
 )
 
-func (this *Controller) CreateDeployment(deployment deploymentmodel.Deployment) (err error) {
+func (this *Controller) CreateDeployment(deployment model.FogDeploymentMessage) (err error) {
 	err = this.cleanupExistingDeployment(deployment.Id)
 	if err != nil {
 		return err
@@ -70,6 +70,9 @@ func (this *Controller) CreateDeployment(deployment deploymentmodel.Deployment) 
 	if err != nil {
 		log.Println("WARNING: unable to store deployment metadata ", err)
 	}
+
+	this.DeployMessageEventOperators(metadata)
+
 	return this.backend.SendDeploymentMetadata(metadata)
 }
 
@@ -77,7 +80,7 @@ func (this *Controller) replaceNotificationUrl(xml string) string {
 	return strings.ReplaceAll(xml, this.config.NotificationUrlPlaceholder, this.config.NotificationUrl)
 }
 
-func (this *Controller) getProcessParameter(deploymentId string) (result map[string]model.Variable, err error) {
+func (this *Controller) getProcessParameter(deploymentId string) (result map[string]camundamodel.Variable, err error) {
 	definition, err := this.camunda.GetDefinitionByDeploymentVid(deploymentId, UserId)
 	if err != nil {
 		return nil, err
@@ -150,7 +153,7 @@ func (this *Controller) NotifyDeploymentUpdate(extra string) {
 		log.Println("ERROR: unable to unmarshal deployment in NotifyDeploymentUpdate(): ", err)
 		return
 	}
-	err = this.backend.SendDeploymentUpdate(model.Deployment{
+	err = this.backend.SendDeploymentUpdate(camundamodel.Deployment{
 		Id:             deployment.Id,
 		Name:           deployment.Name,
 		Source:         deployment.Source,
@@ -174,6 +177,7 @@ func (this *Controller) NotifyDeploymentDelete(extra string) {
 	if err != nil {
 		log.Println("ERROR: unable to send deployment delete in NotifyDeploymentDelete(): ", err)
 	}
+	this.RemoveMessageEventOperators(deployment.Id)
 	err = this.metadata.Remove(deployment.Id)
 	if err != nil {
 		log.Println("WARNING: unable to remove deployment metadata", err)

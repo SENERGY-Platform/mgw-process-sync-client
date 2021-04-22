@@ -23,12 +23,14 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/x/mongo/driver/connstring"
+	"log"
 	"strings"
 	"time"
 )
 
 func NewStorage(config configuration.Config) (storage Storage, err error) {
 	if config.DeploymentMetadataStorage == "" {
+		log.Println("WARNING: metadata storage not used -> disable deployment of message-events")
 		return VoidStorage{Debug: config.Debug}, nil
 	}
 	if strings.HasPrefix(config.DeploymentMetadataStorage, "mongodb://") {

@@ -20,7 +20,7 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
-	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/deploymentmodel"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model"
 	paho "github.com/eclipse/paho.mqtt.golang"
 	"log"
 )
@@ -37,7 +37,7 @@ type Handler interface {
 	DeleteProcessInstance(id string) error
 	DeleteDeployment(id string) error
 	StartDeployment(id string, parameter map[string]interface{}) error
-	CreateDeployment(payload deploymentmodel.Deployment) error
+	CreateDeployment(payload model.FogDeploymentMessage) error
 }
 
 func New(config configuration.Config, ctx context.Context, handler Handler) (*Client, error) {
@@ -157,4 +157,8 @@ func (this *Client) sendStr(topic string, message string) error {
 	token := this.mqtt.Publish(topic, 2, false, message)
 	token.Wait()
 	return token.Error()
+}
+
+func (this *Client) GetMqttClient() paho.Client {
+	return this.mqtt
 }

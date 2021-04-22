@@ -18,6 +18,7 @@ package controller
 
 import (
 	"context"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/analytics"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/backend"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/camunda"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/camunda/shards"
@@ -42,6 +43,8 @@ func New(config configuration.Config, ctx context.Context) (ctrl *Controller, er
 	if err != nil {
 		return ctrl, err
 	}
+	ctrl.analytics = analytics.NewWithClient(ctrl.backend.GetMqttClient()) // yes it is a race with incoming process deployments that use msg-events, but one this assignment cant lose
+
 	err = ctrl.spyOnCamundaDb(ctx)
 	if err != nil {
 		return ctrl, err
@@ -75,11 +78,16 @@ func New(config configuration.Config, ctx context.Context) (ctrl *Controller, er
 	return ctrl, ctrl.SendCurrentStates()
 }
 
+type Analytics interface {
+	Send(command analytics.ControlCommand)
+}
+
 type Controller struct {
-	config   configuration.Config
-	backend  *backend.Client
-	camunda  *camunda.Camunda
-	metadata metadata.Storage
+	config    configuration.Config
+	backend   *backend.Client
+	camunda   *camunda.Camunda
+	metadata  metadata.Storage
+	analytics Analytics
 }
 
 func (this *Controller) SendCurrentStates() (err error) {

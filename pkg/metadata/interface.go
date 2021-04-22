@@ -17,14 +17,14 @@
 package metadata
 
 import (
-	model "github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
-	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/deploymentmodel"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
 )
 
 type Metadata struct {
-	CamundaDeploymentId string                     `json:"camunda_deployment_id"`
-	ProcessParameter    map[string]model.Variable  `json:"process_parameter"`
-	DeploymentModel     deploymentmodel.Deployment `json:"deployment_model"`
+	CamundaDeploymentId string                           `json:"camunda_deployment_id"`
+	ProcessParameter    map[string]camundamodel.Variable `json:"process_parameter"`
+	DeploymentModel     model.FogDeploymentMessage       `json:"deployment_model"`
 }
 
 type Storage interface {
@@ -34,4 +34,8 @@ type Storage interface {
 	//removes unknown deployments
 	//returns all all known deployment metadata
 	EnsureKnownDeployments(knownCamundaDeploymentIds []string) (known []Metadata, err error)
+
+	Read(deploymentId string) (Metadata, error)
+
+	IsPlaceholder() bool
 }

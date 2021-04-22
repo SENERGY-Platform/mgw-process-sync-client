@@ -37,6 +37,16 @@ type MongoStorage struct {
 	idFieldName string
 }
 
+func (this *MongoStorage) Read(deploymentId string) (result Metadata, err error) {
+	ctx, _ := getTimeoutContext()
+	err = this.getCollection().FindOne(ctx, bson.M{this.idFieldName: deploymentId}).Decode(&result)
+	return
+}
+
+func (this *MongoStorage) IsPlaceholder() bool {
+	return false
+}
+
 func (this *MongoStorage) Init() (err error) {
 	this.idFieldName, err = this.initCollectionIndex(this.getCollection(), "camunda_deployment_id_index", Metadata{}, "CamundaDeploymentId")
 	return err

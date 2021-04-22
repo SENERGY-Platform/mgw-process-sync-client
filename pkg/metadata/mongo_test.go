@@ -19,7 +19,8 @@ package metadata
 import (
 	"context"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
-	model "github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/deploymentmodel"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/tests/docker"
 	"reflect"
@@ -52,30 +53,30 @@ func TestMongoStorage(t *testing.T) {
 	}
 
 	md1 := Metadata{
-		DeploymentModel: deploymentmodel.Deployment{
+		DeploymentModel: model.FogDeploymentMessage{Deployment: deploymentmodel.Deployment{
 			Name: "dpl1",
-		},
-		ProcessParameter: map[string]model.Variable{
+		}},
+		ProcessParameter: map[string]camundamodel.Variable{
 			"var_1": {Type: "string"},
 		},
 		CamundaDeploymentId: "cdid1",
 	}
 
 	md2 := Metadata{
-		DeploymentModel: deploymentmodel.Deployment{
+		DeploymentModel: model.FogDeploymentMessage{Deployment: deploymentmodel.Deployment{
 			Name: "dpl2",
-		},
-		ProcessParameter: map[string]model.Variable{
+		}},
+		ProcessParameter: map[string]camundamodel.Variable{
 			"var_1": {Type: "string"},
 		},
 		CamundaDeploymentId: "cdid2",
 	}
 
 	md3 := Metadata{
-		DeploymentModel: deploymentmodel.Deployment{
+		DeploymentModel: model.FogDeploymentMessage{Deployment: deploymentmodel.Deployment{
 			Name: "dpl3",
-		},
-		ProcessParameter: map[string]model.Variable{
+		}},
+		ProcessParameter: map[string]camundamodel.Variable{
 			"var_1": {Type: "string"},
 		},
 		CamundaDeploymentId: "cdid3",

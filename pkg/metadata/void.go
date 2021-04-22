@@ -16,10 +16,21 @@
 
 package metadata
 
-import "log"
+import (
+	"errors"
+	"log"
+)
 
 type VoidStorage struct {
 	Debug bool
+}
+
+func (this VoidStorage) Read(deploymentId string) (Metadata, error) {
+	return Metadata{}, errors.New("metadata storage disabled")
+}
+
+func (this VoidStorage) IsPlaceholder() bool {
+	return true
 }
 
 func (this VoidStorage) Store(metadata Metadata) error {

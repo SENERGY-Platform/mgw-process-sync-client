@@ -2,7 +2,7 @@
     "camunda_db": "postgres://user:password@host/dbname?sslmode=disable",
     "camunda_url": "http://camunda:8080",
     "notification_url": "http://localhost:8080",
-    "__COMMENT:deployment_metadata_storage": "optional; example: mongodb://user:pw@localhost:27017/metadata",
+    "__COMMENT:deployment_metadata_storage": "optional; enables event-message handling; example: mongodb://user:pw@localhost:27017/metadata",
     "deployment_metadata_storage": "",
     "debug": true,
     "mqtt_broker": "tcp://broker:1883",
