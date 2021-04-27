@@ -48,6 +48,11 @@ func (this *Controller) DeployMessageEventOperators(metadata metadata.Metadata) 
 					InputTopics: []analytics.InputTopic{
 						{
 							Name: "event/" + localDeviceId + "/" + localServiceId,
+							//operator lib checks if topic.filter_type == "OperatorId";
+							//but if this field is empty the python code throws: object has no attribute 'filter_type'
+							//other known values dont really match so we use a placeholder
+							FilterType:  "filtertype_placeholder",
+							FilterValue: "filtervalue_placeholder",
 							Mappings: []analytics.Mapping{
 								{
 									Dest:   "value",
@@ -86,6 +91,11 @@ func (this *Controller) DeployMessageEventOperators(metadata metadata.Metadata) 
 
 					inputTopics = append(inputTopics, analytics.InputTopic{
 						Name: "event/" + localDeviceId + "/" + localServiceId,
+						//operator lib checks if topic.filter_type == "OperatorId";
+						//but if this field is empty the python code throws: object has no attribute 'filter_type'
+						//other known values dont really match so we use a placeholder
+						FilterType:  "filtertype_placeholder",
+						FilterValue: "filtervalue_placeholder",
 						Mappings: []analytics.Mapping{
 							{
 								Dest:   "value",

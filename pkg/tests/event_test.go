@@ -25,6 +25,7 @@ import (
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/tests/server"
 	paho "github.com/eclipse/paho.mqtt.golang"
 	"reflect"
+	"sort"
 	"strings"
 	"sync"
 	"testing"
@@ -104,15 +105,18 @@ func TestMsgEventDeployment(t *testing.T) {
 	})
 
 	t.Run("check mqtt messages", func(t *testing.T) {
-		list := []string{}
+		actual := []string{}
 		for _, msg := range mqttMessages["fog/control"] {
 			value := strings.ReplaceAll(msg, conf.CamundaUrl, "http://camundaurl")
 			value = strings.ReplaceAll(value, deploymentId, "deploymentid")
-			list = append(list, value)
+			actual = append(actual, value)
 		}
-		if !reflect.DeepEqual(list, []string{`{"command":"startOperator","data":{"imageId":"1","agent":{"updated":"0001-01-01T00:00:00Z"},"operatorConfig":{"convertFrom":"cid2","convertTo":"cid1","eventId":"1","url":"http://camundaurl/engine-rest/message","value":"1"},"inputTopics":[{"name":"event/ldid1/lsid1","mappings":[{"dest":"value","source":"path.to.chid2"}]}],"config":{"pipelineId":"deploymentid","outputTopic":"event-trigger","operatorId":"deploymentid_1"}}}`,
-			`{"command":"startOperator","data":{"imageId":"1-group","agent":{"updated":"0001-01-01T00:00:00Z"},"operatorConfig":{"convertFrom":"","convertTo":"","eventId":"1-group","url":"http://camundaurl/engine-rest/message","value":"1-group"},"inputTopics":[{"name":"event/ldid1/lsid1","mappings":[{"dest":"value","source":"path.to.chid2"}]},{"name":"event/ldid2/lsid1","mappings":[{"dest":"value","source":"path.to.chid2"}]},{"name":"event/ldid1/lsid2","mappings":[{"dest":"value","source":"path.to.chid3"}]},{"name":"event/ldid2/lsid2","mappings":[{"dest":"value","source":"path.to.chid3"}]}],"config":{"pipelineId":"deploymentid","outputTopic":"event-trigger","operatorId":"deploymentid_1-group"}}}`}) {
-			t.Error(list)
+		expected := []string{`{"command":"startOperator","data":{"imageId":"1","agent":{"updated":"0001-01-01T00:00:00Z"},"operatorConfig":{"convertFrom":"cid2","convertTo":"cid1","eventId":"1","url":"http://camundaurl/engine-rest/message","value":"1"},"inputTopics":[{"name":"event/ldid1/lsid1","filterType":"filtertype_placeholder","filterValue":"filtervalue_placeholder","mappings":[{"dest":"value","source":"path.to.chid2"}]}],"config":{"pipelineId":"deploymentid","outputTopic":"event-trigger","operatorId":"deploymentid_1"}}}`,
+			`{"command":"startOperator","data":{"imageId":"1-group","agent":{"updated":"0001-01-01T00:00:00Z"},"operatorConfig":{"convertFrom":"","convertTo":"","eventId":"1-group","url":"http://camundaurl/engine-rest/message","value":"1-group"},"inputTopics":[{"name":"event/ldid1/lsid1","filterType":"filtertype_placeholder","filterValue":"filtervalue_placeholder","mappings":[{"dest":"value","source":"path.to.chid2"}]},{"name":"event/ldid2/lsid1","filterType":"filtertype_placeholder","filterValue":"filtervalue_placeholder","mappings":[{"dest":"value","source":"path.to.chid2"}]},{"name":"event/ldid1/lsid2","filterType":"filtertype_placeholder","filterValue":"filtervalue_placeholder","mappings":[{"dest":"value","source":"path.to.chid3"}]},{"name":"event/ldid2/lsid2","filterType":"filtertype_placeholder","filterValue":"filtervalue_placeholder","mappings":[{"dest":"value","source":"path.to.chid3"}]}],"config":{"pipelineId":"deploymentid","outputTopic":"event-trigger","operatorId":"deploymentid_1-group"}}}`}
+		sort.Strings(actual)
+		sort.Strings(expected)
+		if !reflect.DeepEqual(actual, expected) {
+			t.Error(actual)
 			return
 		}
 	})
