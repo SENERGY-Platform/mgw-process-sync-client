@@ -46,24 +46,31 @@ type DeviceEventAnalyticsRecord struct {
 }
 
 type GroupEventAnalyticsRecord struct {
-	Label                     string                `json:"label"`
-	Desc                      GroupEventDescription `json:"desc"`
-	ServiceIds                []string              `json:"service_ids"`
-	ServiceToDeviceIdsMapping map[string][]string   `json:"service_to_device_ids_mapping"`
-	ServiceToPathMapping      map[string]string     `json:"service_to_path_mapping"`
+	Label                          string                             `json:"label"`
+	Desc                           GroupEventDescription              `json:"desc"`
+	ServiceIds                     []string                           `json:"service_ids"`
+	ServiceToDeviceIdsMapping      map[string][]string                `json:"service_to_device_ids_mapping"`
+	ServiceToPathMapping           map[string]string                  `json:"service_to_path_mapping"`
+	ServiceToPathAndCharacteristic map[string][]PathAndCharacteristic `json:"service_to_path_and_characteristic"`
+}
+
+type PathAndCharacteristic struct {
+	JsonPath         string `json:"json_path"`
+	CharacteristicId string `json:"characteristic_id"`
 }
 
 type GroupEventDescription struct {
-	ImportId      string
-	Path          string
-	DeviceGroupId string
-	DeviceIds     []string //optional
-	EventId       string
-	DeploymentId  string
-	FunctionId    string
-	AspectId      string
-	FlowId        string
-	OperatorValue string
+	ImportId         string
+	Path             string
+	DeviceGroupId    string
+	DeviceIds        []string //optional
+	EventId          string
+	DeploymentId     string
+	FunctionId       string
+	AspectId         string
+	FlowId           string
+	OperatorValue    string
+	CharacteristicId string
 }
 
 type AnalyticsRecord struct {

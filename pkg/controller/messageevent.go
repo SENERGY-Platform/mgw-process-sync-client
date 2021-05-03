@@ -17,13 +17,17 @@
 package controller
 
 import (
+	"encoding/json"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/analytics"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/metadata"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model"
 	"log"
 	"runtime/debug"
 	"strings"
 	"time"
 )
+
+const envelopePrefix = "value."
 
 func (this *Controller) DeployMessageEventOperators(metadata metadata.Metadata) {
 	if this.metadata.IsPlaceholder() {
@@ -32,7 +36,6 @@ func (this *Controller) DeployMessageEventOperators(metadata metadata.Metadata) 
 		}
 		return
 	}
-	const envelopePrefix = "value."
 	for _, record := range metadata.DeploymentModel.AnalyticsRecords {
 		if record.DeviceEvent != nil {
 			localDeviceId := metadata.DeploymentModel.DeviceIdToLocalId[record.DeviceEvent.DeviceId]
@@ -65,7 +68,8 @@ func (this *Controller) DeployMessageEventOperators(metadata metadata.Metadata) 
 						record.DeviceEvent.EventId,
 						record.DeviceEvent.Value,
 						record.DeviceEvent.CastFrom,
-						record.DeviceEvent.CastTo),
+						record.DeviceEvent.CastTo,
+						nil),
 					Config: analytics.FogConfig{
 						PipelineId:  metadata.CamundaDeploymentId,
 						OutputTopic: "event-trigger",
@@ -76,6 +80,7 @@ func (this *Controller) DeployMessageEventOperators(metadata metadata.Metadata) 
 		}
 		if record.GroupEvent != nil {
 			inputTopics := []analytics.InputTopic{}
+			groupConvertFrom := map[string]string{} //topic::path -> charateristic
 			for _, serviceId := range record.GroupEvent.ServiceIds {
 				path := record.GroupEvent.ServiceToPathMapping[serviceId]
 				if path == "" {
@@ -88,7 +93,10 @@ func (this *Controller) DeployMessageEventOperators(metadata metadata.Metadata) 
 				for _, deviceId := range record.GroupEvent.ServiceToDeviceIdsMapping[serviceId] {
 					localDeviceId := metadata.DeploymentModel.DeviceIdToLocalId[deviceId]
 					localServiceId := metadata.DeploymentModel.ServiceIdToLocalId[serviceId]
-
+					groupConvertFromElement := getCharacteristicIdFromMapping(record.GroupEvent.ServiceToPathAndCharacteristic, serviceId, path)
+					if groupConvertFromElement != "" {
+						groupConvertFrom["event/"+localDeviceId+"/"+localServiceId+"::"+path] = groupConvertFromElement
+					}
 					inputTopics = append(inputTopics, analytics.InputTopic{
 						Name: "event/" + localDeviceId + "/" + localServiceId,
 						//operator lib checks if topic.filter_type == "OperatorId";
@@ -115,7 +123,8 @@ func (this *Controller) DeployMessageEventOperators(metadata metadata.Metadata) 
 						record.GroupEvent.Desc.EventId,
 						record.GroupEvent.Desc.OperatorValue,
 						"",
-						""),
+						record.GroupEvent.Desc.CharacteristicId,
+						groupConvertFrom),
 					Config: analytics.FogConfig{
 						PipelineId:  metadata.CamundaDeploymentId,
 						OutputTopic: "event-trigger",
@@ -126,6 +135,22 @@ func (this *Controller) DeployMessageEventOperators(metadata metadata.Metadata) 
 			this.sendAnalyticsCommand(command)
 		}
 	}
+}
+
+func getCharacteristicIdFromMapping(characteristicMapping map[string][]model.PathAndCharacteristic, serviceId string, path string) string {
+	if characteristicMapping == nil {
+		return ""
+	}
+	for _, element := range characteristicMapping[serviceId] {
+		jsonPath := element.JsonPath
+		if strings.HasPrefix(jsonPath, envelopePrefix) {
+			jsonPath = jsonPath[len(envelopePrefix):]
+		}
+		if jsonPath == path {
+			return element.CharacteristicId
+		}
+	}
+	return ""
 }
 
 func (this *Controller) RemoveMessageEventOperators(deploymentId string) {
@@ -154,13 +179,25 @@ func (this *Controller) RemoveMessageEventOperators(deploymentId string) {
 	}
 }
 
-func (this *Controller) getOperatorConfig(eventId string, value string, from string, to string) map[string]string {
+//groupConvertFrom = topic::path -> charateristic
+func (this *Controller) getOperatorConfig(eventId string, value string, from string, to string, groupConvertFrom map[string]string) map[string]string {
+	groupConvertFromStr := ""
+	if groupConvertFrom != nil && len(groupConvertFrom) != 0 {
+		temp, err := json.Marshal(groupConvertFrom)
+		if err != nil {
+			log.Println("ERROR: unable to marshal groupConvertFrom")
+			debug.PrintStack()
+		} else {
+			groupConvertFromStr = string(temp)
+		}
+	}
 	return map[string]string{
-		"value":       value,
-		"url":         this.config.CamundaUrl + "/engine-rest/message",
-		"eventId":     eventId,
-		"convertFrom": from,
-		"convertTo":   to,
+		"value":            value,
+		"url":              this.config.CamundaUrl + "/engine-rest/message",
+		"eventId":          eventId,
+		"convertFrom":      from,
+		"convertTo":        to,
+		"groupConvertFrom": groupConvertFromStr,
 	}
 }
 
