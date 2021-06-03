@@ -8,5 +8,6 @@ require (
 	github.com/eclipse/paho.mqtt.golang v1.3.2
 	github.com/lib/pq v1.9.0
 	github.com/ory/dockertest/v3 v3.6.3
+	go.etcd.io/bbolt v1.3.6 // indirect
 	go.mongodb.org/mongo-driver v1.5.0
 )
