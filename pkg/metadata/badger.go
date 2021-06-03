@@ -29,7 +29,9 @@ var BADGER_PREFETCH = true
 
 func NewBadgerStorage(ctx context.Context, config configuration.Config) (storage *Badger, err error) {
 	storage = &Badger{}
-	storage.db, err = badger.Open(badger.DefaultOptions(config.DeploymentMetadataStorage))
+	opt := badger.DefaultOptions(config.DeploymentMetadataStorage)
+	opt.ValueLogFileSize = 1 << 20
+	storage.db, err = badger.Open(opt)
 	if err == nil {
 		go func() {
 			<-ctx.Done()
