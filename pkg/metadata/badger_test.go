@@ -19,28 +19,17 @@ package metadata
 import (
 	"context"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
-	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/tests/docker"
-	"sync"
 	"testing"
 )
 
-func TestMongoStorage(t *testing.T) {
-	wg := &sync.WaitGroup{}
-	defer wg.Wait()
+func TestBadgerStorage(t *testing.T) {
+	config := configuration.Config{
+		DeploymentMetadataStorage: t.TempDir(),
+		Debug:                     true,
+	}
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-
-	mongoPort, _, err := docker.Mongo(ctx, wg)
-	if err != nil {
-		t.Error(err)
-		return
-	}
-
-	config := configuration.Config{
-		DeploymentMetadataStorage: "mongodb://localhost:" + mongoPort + "/metadata",
-		Debug:                     true,
-	}
 
 	storage, err := NewStorage(ctx, config)
 	if err != nil {

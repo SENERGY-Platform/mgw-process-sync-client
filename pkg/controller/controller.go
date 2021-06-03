@@ -33,7 +33,7 @@ const UserId = "senergy"
 func New(config configuration.Config, ctx context.Context) (ctrl *Controller, err error) {
 	ctrl = &Controller{config: config}
 
-	ctrl.metadata, err = metadata.NewStorage(config)
+	ctrl.metadata, err = metadata.NewStorage(ctx, config)
 	if err != nil {
 		return ctrl, err
 	}

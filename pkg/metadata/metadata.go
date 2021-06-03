@@ -18,46 +18,19 @@ package metadata
 
 import (
 	"context"
-	"errors"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-	"go.mongodb.org/mongo-driver/x/mongo/driver/connstring"
 	"log"
 	"strings"
-	"time"
 )
 
-func NewStorage(config configuration.Config) (storage Storage, err error) {
+func NewStorage(ctx context.Context, config configuration.Config) (storage Storage, err error) {
 	if config.DeploymentMetadataStorage == "" {
 		log.Println("WARNING: metadata storage not used -> disable deployment of message-events")
 		return VoidStorage{Debug: config.Debug}, nil
 	}
 	if strings.HasPrefix(config.DeploymentMetadataStorage, "mongodb://") {
-		return NewMongoStorage(config)
+		return NewMongoStorage(ctx, config)
 	}
-	return nil, errors.New("unknown storage connection string type")
-}
 
-func NewMongoStorage(config configuration.Config) (storage Storage, err error) {
-	connStr := config.DeploymentMetadataStorage
-	connStrObj, err := connstring.ParseAndValidate(connStr)
-	if err != nil {
-		return storage, err
-	}
-	ctx, _ := getTimeoutContext()
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(connStr))
-	if err != nil {
-		return nil, err
-	}
-	m := &MongoStorage{
-		config:   config,
-		client:   client,
-		database: connStrObj.Database,
-	}
-	return m, m.Init()
-}
-
-func getTimeoutContext() (context.Context, context.CancelFunc) {
-	return context.WithTimeout(context.Background(), 10*time.Second)
+	return NewBadgerStorage(ctx, config)
 }

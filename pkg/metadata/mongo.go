@@ -17,6 +17,7 @@
 package metadata
 
 import (
+	"context"
 	"errors"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
 	"go.mongodb.org/mongo-driver/bson"
@@ -24,11 +25,42 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/x/bsonx"
+	"go.mongodb.org/mongo-driver/x/mongo/driver/connstring"
+	"log"
 	"reflect"
 	"strings"
+	"time"
 )
 
 const DeploymentMetadataMongoCollection = "deployment_metadata"
+
+func NewMongoStorage(ctx context.Context, config configuration.Config) (storage Storage, err error) {
+	connStr := config.DeploymentMetadataStorage
+	connStrObj, err := connstring.ParseAndValidate(connStr)
+	if err != nil {
+		return storage, err
+	}
+	timeout, _ := context.WithTimeout(ctx, 10*time.Second)
+	client, err := mongo.Connect(timeout, options.Client().ApplyURI(connStr))
+	if err != nil {
+		return nil, err
+	}
+	go func() {
+		<-ctx.Done()
+		timeout, _ := getTimeoutContext()
+		log.Println("close mongo connection", client.Disconnect(timeout))
+	}()
+	m := &MongoStorage{
+		config:   config,
+		client:   client,
+		database: connStrObj.Database,
+	}
+	return m, m.Init()
+}
+
+func getTimeoutContext() (context.Context, context.CancelFunc) {
+	return context.WithTimeout(context.Background(), 10*time.Second)
+}
 
 type MongoStorage struct {
 	client      *mongo.Client
