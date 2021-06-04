@@ -15,6 +15,8 @@ COPY --from=builder /go/src/app/app .
 COPY --from=builder /go/src/app/config.json .
 COPY --from=builder /go/src/app/version.txt .
 
+RUN mkdir db
+
 EXPOSE 8080
 
 ENTRYPOINT ["./app"]
