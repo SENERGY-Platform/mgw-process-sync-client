@@ -23,11 +23,8 @@ import (
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model"
 	"log"
 	"runtime/debug"
-	"strings"
 	"time"
 )
-
-const envelopePrefix = "value."
 
 func (this *Controller) DeployMessageEventOperators(metadata metadata.Metadata) {
 	if this.metadata.IsPlaceholder() {
@@ -41,9 +38,6 @@ func (this *Controller) DeployMessageEventOperators(metadata metadata.Metadata) 
 			localDeviceId := metadata.DeploymentModel.DeviceIdToLocalId[record.DeviceEvent.DeviceId]
 			localServiceId := metadata.DeploymentModel.ServiceIdToLocalId[record.DeviceEvent.ServiceId]
 			path := record.DeviceEvent.Path
-			if strings.HasPrefix(path, envelopePrefix) {
-				path = path[len(envelopePrefix):]
-			}
 			this.sendAnalyticsCommand(analytics.ControlCommand{
 				Command: "startOperator",
 				Data: analytics.OperatorJob{
@@ -86,9 +80,6 @@ func (this *Controller) DeployMessageEventOperators(metadata metadata.Metadata) 
 				if path == "" {
 					log.Println("WARNING: missing path for service in DeployGroup()", serviceId, " --> skip service for group event deployment")
 					continue
-				}
-				if strings.HasPrefix(path, envelopePrefix) {
-					path = path[len(envelopePrefix):]
 				}
 				for _, deviceId := range record.GroupEvent.ServiceToDeviceIdsMapping[serviceId] {
 					localDeviceId := metadata.DeploymentModel.DeviceIdToLocalId[deviceId]
@@ -142,11 +133,7 @@ func getCharacteristicIdFromMapping(characteristicMapping map[string][]model.Pat
 		return ""
 	}
 	for _, element := range characteristicMapping[serviceId] {
-		jsonPath := element.JsonPath
-		if strings.HasPrefix(jsonPath, envelopePrefix) {
-			jsonPath = jsonPath[len(envelopePrefix):]
-		}
-		if jsonPath == path {
+		if element.JsonPath == path {
 			return element.CharacteristicId
 		}
 	}
