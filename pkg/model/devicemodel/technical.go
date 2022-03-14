@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 InfAI (CC SES)
+ * Copyright 2019 InfAI (CC SES)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,4 +51,6 @@ type ContentVariable struct {
 	Value                interface{}       `json:"value"`
 	SerializationOptions []string          `json:"serialization_options"`
 	UnitReference        string            `json:"unit_reference,omitempty"`
+	FunctionId           string            `json:"function_id,omitempty"`
+	AspectId             string            `json:"aspect_id,omitempty"`
 }

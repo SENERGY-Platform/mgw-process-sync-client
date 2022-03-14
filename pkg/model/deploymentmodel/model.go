@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 InfAI (CC SES)
+ * Copyright 2020 InfAI (CC SES)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,10 @@
 
 package deploymentmodel
 
-import "github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/executionmodel"
+const CurrentVersion int64 = 3
 
 type Deployment struct {
+	Version     int64     `json:"version"`
 	Id          string    `json:"id"`
 	Name        string    `json:"name"`
 	Description string    `json:"description"`
@@ -62,8 +63,7 @@ type MessageEvent struct {
 }
 
 type Task struct {
-	Retries       int64                         `json:"retries"`
-	Parameter     map[string]string             `json:"parameter"`
-	Configurables []executionmodel.Configurable `json:"configurables"`
-	Selection     Selection                     `json:"selection"`
+	Retries   int64             `json:"retries"`
+	Parameter map[string]string `json:"parameter"`
+	Selection Selection         `json:"selection"`
 }
