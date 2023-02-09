@@ -106,8 +106,8 @@ func (this *MongoStorage) Remove(camundaDeploymentId string) (err error) {
 	return err
 }
 
-//removes unknown deployments
-//returns all all known deployment metadata
+// removes unknown deployments
+// returns all all known deployment metadata
 func (this *MongoStorage) EnsureKnownDeployments(knownCamundaDeploymentIds []string) (known []Metadata, err error) {
 	ctx, _ := getTimeoutContext()
 	collection := this.getCollection()
@@ -119,6 +119,25 @@ func (this *MongoStorage) EnsureKnownDeployments(knownCamundaDeploymentIds []str
 	if err != nil {
 		return
 	}
+	cursor, err := collection.Find(ctx, bson.D{})
+	if err != nil {
+		return nil, err
+	}
+	for cursor.Next(ctx) {
+		element := Metadata{}
+		err = cursor.Decode(&element)
+		if err != nil {
+			return nil, err
+		}
+		known = append(known, element)
+	}
+	err = cursor.Err()
+	return
+}
+
+func (this *MongoStorage) List() (known []Metadata, err error) {
+	ctx, _ := getTimeoutContext()
+	collection := this.getCollection()
 	cursor, err := collection.Find(ctx, bson.D{})
 	if err != nil {
 		return nil, err

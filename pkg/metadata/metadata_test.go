@@ -19,7 +19,7 @@ package metadata
 import (
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
-	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/deploymentmodel"
+	"github.com/SENERGY-Platform/process-deployment/lib/model/deploymentmodel"
 	"reflect"
 	"testing"
 )
@@ -72,6 +72,16 @@ func MetadataTest(storage Storage) func(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 			return
+		}
+
+		list, err := storage.List()
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		if !reflect.DeepEqual(list, []Metadata{md1, md2, md3}) {
+			t.Error(list)
 		}
 
 		known, err := storage.EnsureKnownDeployments([]string{"cdid1", "cdid2", "cdid3"})

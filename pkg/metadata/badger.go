@@ -142,6 +142,34 @@ func (this *Badger) EnsureKnownDeployments(knownCamundaDeploymentIds []string) (
 	return
 }
 
+func (this *Badger) List() (known []Metadata, err error) {
+	err = this.db.View(func(tx *badger.Txn) error {
+		opts := badger.DefaultIteratorOptions
+		opts.PrefetchValues = BADGER_PREFETCH
+		it := tx.NewIterator(opts)
+		defer it.Close()
+		for it.Rewind(); it.Valid(); it.Next() {
+			item := it.Item()
+			if BADGER_PREFETCH {
+				err = item.Value(func(v []byte) error {
+					temp := Metadata{}
+					err = json.Unmarshal(v, &temp)
+					if err != nil {
+						return err
+					}
+					known = append(known, temp)
+					return nil
+				})
+				if err != nil {
+					return err
+				}
+			}
+		}
+		return nil
+	})
+	return
+}
+
 func (this *Badger) Read(deploymentId string) (result Metadata, err error) {
 	err = this.db.View(func(tx *badger.Txn) error {
 		item, err := tx.Get([]byte(deploymentId))

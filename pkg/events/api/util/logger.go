@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 InfAI (CC SES)
+ * Copyright (c) 2022 InfAI (CC SES)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,30 @@
  * limitations under the License.
  */
 
-package model
+package util
 
 import (
-	"github.com/SENERGY-Platform/process-sync/pkg/model"
+	"log"
+	"net/http"
 )
 
-type StartMessage struct {
-	DeploymentId string                 `json:"deployment_id"`
-	Parameter    map[string]interface{} `json:"parameter"`
+func NewLogger(handler http.Handler) *LoggerMiddleWare {
+	return &LoggerMiddleWare{handler: handler}
 }
 
-type FogDeploymentMessage = model.DeploymentWithEventDesc
+type LoggerMiddleWare struct {
+	handler http.Handler
+}
 
-type PathAndCharacteristic struct {
-	JsonPath         string `json:"json_path"`
-	CharacteristicId string `json:"characteristic_id"`
+func (this *LoggerMiddleWare) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	this.log(r)
+	if this.handler != nil {
+		this.handler.ServeHTTP(w, r)
+	} else {
+		http.Error(w, "Forbidden", 403)
+	}
+}
+
+func (this *LoggerMiddleWare) log(request *http.Request) {
+	log.Printf("%v [%v] %v \n", request.RemoteAddr, request.Method, request.URL)
 }

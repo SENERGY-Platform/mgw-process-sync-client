@@ -32,7 +32,7 @@ func Camunda(ctx context.Context, wg *sync.WaitGroup, pgIp string, pgPort string
 	if err != nil {
 		return "", err
 	}
-	container, err := pool.Run("fgseitsrancher.wifa.intern.uni-leipzig.de:5000/process-engine", "dev", []string{
+	container, err := pool.Run("ghcr.io/senergy-platform/process-engine", "dev", []string{
 		"DB_PASSWORD=pw",
 		"DB_URL=jdbc:postgresql://" + pgIp + ":" + pgPort + "/" + dbName,
 		"DB_PORT=" + pgPort,

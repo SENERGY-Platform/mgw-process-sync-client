@@ -1,0 +1,152 @@
+definitions:
+  model.EventDesc:
+    properties:
+      aspect_id:
+        type: string
+      characteristic_id:
+        description: marshaller info
+        type: string
+      deployment_id:
+        description: search info
+        type: string
+      device_group_id:
+        type: string
+      device_id:
+        type: string
+      event_id:
+        type: string
+      function_id:
+        type: string
+      import_id:
+        type: string
+      path:
+        type: string
+      qos:
+        type: integer
+      script:
+        description: worker info
+        type: string
+      service_for_marshaller:
+        $ref: '#/definitions/models.Service'
+        description: "set by event-manager\nmay be\n\t- the service from EventDesc.ConditionalEvent.Selection.SelectedServiceId\n\t-
+          or an artificial service for EventDesc.ConditionalEvent.Selection.SelectedImportId"
+      service_id:
+        type: string
+      user_id:
+        type: string
+      value_variable:
+        type: string
+      variables:
+        additionalProperties:
+          type: string
+        type: object
+    type: object
+  models.Attribute:
+    properties:
+      key:
+        type: string
+      origin:
+        type: string
+      value:
+        type: string
+    type: object
+  models.Content:
+    properties:
+      content_variable:
+        $ref: '#/definitions/models.ContentVariable'
+      id:
+        type: string
+      protocol_segment_id:
+        type: string
+      serialization:
+        type: string
+    type: object
+  models.ContentVariable:
+    properties:
+      aspect_id:
+        type: string
+      characteristic_id:
+        type: string
+      function_id:
+        type: string
+      id:
+        type: string
+      is_void:
+        type: boolean
+      name:
+        type: string
+      serialization_options:
+        items:
+          type: string
+        type: array
+      sub_content_variables:
+        items:
+          $ref: '#/definitions/models.ContentVariable'
+        type: array
+      type:
+        type: string
+      unit_reference:
+        type: string
+      value: {}
+    type: object
+  models.Service:
+    properties:
+      attributes:
+        items:
+          $ref: '#/definitions/models.Attribute'
+        type: array
+      description:
+        type: string
+      id:
+        type: string
+      inputs:
+        items:
+          $ref: '#/definitions/models.Content'
+        type: array
+      interaction:
+        type: string
+      local_id:
+        type: string
+      name:
+        type: string
+      outputs:
+        items:
+          $ref: '#/definitions/models.Content'
+        type: array
+      protocol_id:
+        type: string
+      service_group_key:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /event-descriptions:
+    get:
+      description: finds event descriptions for event-worker
+      parameters:
+      - description: search event-descriptions by local device id
+        in: query
+        name: local_device_id
+        type: string
+      - description: search event-descriptions by local service id
+        in: query
+        name: local_service_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/model.EventDesc'
+              type: array
+            type: array
+        "500":
+          description: ""
+      summary: finds event descriptions for event-worker
+      tags:
+      - event-description
+swagger: "2.0"

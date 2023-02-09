@@ -71,7 +71,11 @@ func (this *Controller) CreateDeployment(deployment model.FogDeploymentMessage) 
 		log.Println("WARNING: unable to store deployment metadata ", err)
 	}
 
-	this.DeployMessageEventOperators(metadata)
+	err = this.DeployConditionalEventOperators(metadata)
+	if err != nil {
+		log.Println("ERROR: DeployConditionalEventOperators()", err)
+		return err
+	}
 
 	return this.backend.SendDeploymentMetadata(metadata)
 }
@@ -177,10 +181,13 @@ func (this *Controller) NotifyDeploymentDelete(extra string) {
 	if err != nil {
 		log.Println("ERROR: unable to send deployment delete in NotifyDeploymentDelete(): ", err)
 	}
-	this.RemoveMessageEventOperators(deployment.Id)
 	err = this.metadata.Remove(deployment.Id)
 	if err != nil {
 		log.Println("WARNING: unable to remove deployment metadata", err)
+	}
+	err = this.RemoveConditionalEventOperators(deployment.Id)
+	if err != nil {
+		log.Println("WARNING: unable to remove event operator", err)
 	}
 }
 

@@ -123,6 +123,23 @@ func (this *Bolt) EnsureKnownDeployments(knownCamundaDeploymentIds []string) (kn
 	return
 }
 
+func (this *Bolt) List() (known []Metadata, err error) {
+	err = this.db.View(func(tx *bbolt.Tx) error {
+		bucket := tx.Bucket(BBOLT_BUCKET_NAME)
+		it := bucket.Cursor()
+		for k, v := it.First(); k != nil; k, v = it.Next() {
+			temp := Metadata{}
+			err = json.Unmarshal(v, &temp)
+			if err != nil {
+				return err
+			}
+			known = append(known, temp)
+		}
+		return nil
+	})
+	return
+}
+
 func (this *Bolt) Read(deploymentId string) (result Metadata, err error) {
 	err = this.db.View(func(tx *bbolt.Tx) error {
 		return json.Unmarshal(tx.Bucket(BBOLT_BUCKET_NAME).Get([]byte(deploymentId)), &result)

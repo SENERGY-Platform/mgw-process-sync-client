@@ -42,6 +42,7 @@ func CreateSyncEnv(ctx context.Context, wg *sync.WaitGroup, initConf configurati
 	config.MqttClientId = "test-sync-client"
 	config.NetworkId = "test-network-id"
 	config.DeploymentMetadataStorage = "mongodb://localhost:" + mongoPort + "/metadata"
+	config.EventApiPort = "8080"
 
 	return config, nil
 }

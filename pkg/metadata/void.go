@@ -53,3 +53,10 @@ func (this VoidStorage) EnsureKnownDeployments(knownCamundaDeploymentIds []strin
 	}
 	return []Metadata{}, nil
 }
+
+func (this VoidStorage) List() (known []Metadata, err error) {
+	if this.Debug {
+		log.Println("DEBUG: try to list metadata from storage, no storage is used")
+	}
+	return nil, nil
+}

@@ -37,5 +37,7 @@ type Storage interface {
 
 	Read(deploymentId string) (Metadata, error)
 
+	List() (known []Metadata, err error)
+
 	IsPlaceholder() bool
 }

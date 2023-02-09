@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 InfAI (CC SES)
+ * Copyright 2023 InfAI (CC SES)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package model
+package events
 
 import (
-	"github.com/SENERGY-Platform/process-sync/pkg/model"
+	"context"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/events/api"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/events/repo"
 )
 
-type StartMessage struct {
-	DeploymentId string                 `json:"deployment_id"`
-	Parameter    map[string]interface{} `json:"parameter"`
-}
-
-type FogDeploymentMessage = model.DeploymentWithEventDesc
-
-type PathAndCharacteristic struct {
-	JsonPath         string `json:"json_path"`
-	CharacteristicId string `json:"characteristic_id"`
+func StartApi(ctx context.Context, config configuration.Config) (r *repo.EventRepo, err error) {
+	r, err = repo.New(ctx, config)
+	if err != nil {
+		return r, err
+	}
+	err = api.Start(ctx, config, r)
+	return r, err
 }

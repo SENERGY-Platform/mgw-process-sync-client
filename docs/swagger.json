@@ -1,0 +1,230 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/event-descriptions": {
+            "get": {
+                "description": "finds event descriptions for event-worker",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "event-description"
+                ],
+                "summary": "finds event descriptions for event-worker",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "search event-descriptions by local device id",
+                        "name": "local_device_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search event-descriptions by local service id",
+                        "name": "local_service_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/model.EventDesc"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": ""
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.EventDesc": {
+            "type": "object",
+            "properties": {
+                "aspect_id": {
+                    "type": "string"
+                },
+                "characteristic_id": {
+                    "description": "marshaller info",
+                    "type": "string"
+                },
+                "deployment_id": {
+                    "description": "search info",
+                    "type": "string"
+                },
+                "device_group_id": {
+                    "type": "string"
+                },
+                "device_id": {
+                    "type": "string"
+                },
+                "event_id": {
+                    "type": "string"
+                },
+                "function_id": {
+                    "type": "string"
+                },
+                "import_id": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "qos": {
+                    "type": "integer"
+                },
+                "script": {
+                    "description": "worker info",
+                    "type": "string"
+                },
+                "service_for_marshaller": {
+                    "description": "set by event-manager\nmay be\n\t- the service from EventDesc.ConditionalEvent.Selection.SelectedServiceId\n\t- or an artificial service for EventDesc.ConditionalEvent.Selection.SelectedImportId",
+                    "$ref": "#/definitions/models.Service"
+                },
+                "service_id": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                },
+                "value_variable": {
+                    "type": "string"
+                },
+                "variables": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "models.Attribute": {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "string"
+                },
+                "origin": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Content": {
+            "type": "object",
+            "properties": {
+                "content_variable": {
+                    "$ref": "#/definitions/models.ContentVariable"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "protocol_segment_id": {
+                    "type": "string"
+                },
+                "serialization": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.ContentVariable": {
+            "type": "object",
+            "properties": {
+                "aspect_id": {
+                    "type": "string"
+                },
+                "characteristic_id": {
+                    "type": "string"
+                },
+                "function_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "is_void": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "serialization_options": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "sub_content_variables": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.ContentVariable"
+                    }
+                },
+                "type": {
+                    "type": "string"
+                },
+                "unit_reference": {
+                    "type": "string"
+                },
+                "value": {}
+            }
+        },
+        "models.Service": {
+            "type": "object",
+            "properties": {
+                "attributes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Attribute"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "inputs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Content"
+                    }
+                },
+                "interaction": {
+                    "type": "string"
+                },
+                "local_id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "outputs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Content"
+                    }
+                },
+                "protocol_id": {
+                    "type": "string"
+                },
+                "service_group_key": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

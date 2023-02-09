@@ -29,6 +29,10 @@ import (
 var LogEnvConfig = true
 
 type Config struct {
+	EventApiPort              string `json:"event_api_port"`
+	DisableEventApiHttpLogger bool   `json:"disable_event_api_http_logger"`
+	EnableSwaggerUi           bool   `json:"enable_swagger_ui"`
+
 	CamundaDb  string `json:"camunda_db"`
 	CamundaUrl string `json:"camunda_url"`
 
@@ -55,7 +59,7 @@ type Config struct {
 	NotificationUrl             string `json:"notification_url"`
 }
 
-//loads config from json in location and used environment variables (e.g ZookeeperUrl --> ZOOKEEPER_URL)
+// loads config from json in location and used environment variables (e.g ZookeeperUrl --> ZOOKEEPER_URL)
 func Load(location string) (config Config, err error) {
 	file, err := os.Open(location)
 	if err != nil {

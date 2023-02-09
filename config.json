@@ -1,4 +1,7 @@
 {
+    "event_api_port": "8080",
+    "disable_event_api_http_logger": true,
+    "enable_swagger_ui": false,
     "camunda_db": "postgres://user:password@host/dbname?sslmode=disable",
     "camunda_url": "http://camunda:8080",
     "notification_url": "http://localhost:8080",
