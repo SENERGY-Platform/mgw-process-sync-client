@@ -22,7 +22,7 @@ import (
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/camunda/shards"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
 	model "github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
-	"io/ioutil"
+	"io"
 	"net/url"
 	"strconv"
 	"strings"
@@ -72,7 +72,7 @@ func (this *Camunda) StartProcess(processDefinitionId string, userId string, par
 		return err
 	}
 	if resp.StatusCode != http.StatusOK {
-		temp, _ := ioutil.ReadAll(resp.Body)
+		temp, _ := io.ReadAll(resp.Body)
 		err = errors.New(resp.Status + " " + string(temp))
 		return
 	}
@@ -107,7 +107,7 @@ func (this *Camunda) GetProcessParameters(processDefinitionId string, userId str
 		return result, err
 	}
 	if resp.StatusCode != http.StatusOK {
-		temp, _ := ioutil.ReadAll(resp.Body)
+		temp, _ := io.ReadAll(resp.Body)
 		err = errors.New(resp.Status + " " + string(temp))
 		return
 	}
@@ -142,7 +142,7 @@ func (this *Camunda) StartProcessGetId(processDefinitionId string, userId string
 		return result, err
 	}
 	if resp.StatusCode != http.StatusOK {
-		temp, _ := ioutil.ReadAll(resp.Body)
+		temp, _ := io.ReadAll(resp.Body)
 		err = errors.New(resp.Status + " " + string(temp))
 		return
 	}
@@ -225,7 +225,7 @@ func (this *Camunda) RemoveProcessInstance(id string, userId string) (err error)
 	}
 	defer resp.Body.Close()
 	if !(resp.StatusCode == 200 || resp.StatusCode == 204) {
-		msg, _ := ioutil.ReadAll(resp.Body)
+		msg, _ := io.ReadAll(resp.Body)
 		err = errors.New("error on delete in engine for " + shard + "/engine-rest/process-instance/" + url.QueryEscape(id) + ": " + resp.Status + " " + string(msg))
 	}
 	return
@@ -248,7 +248,7 @@ func (this *Camunda) RemoveProcessInstanceHistory(id string, userId string) (err
 	}
 	defer resp.Body.Close()
 	if err == nil && !(resp.StatusCode == 200 || resp.StatusCode == 204) {
-		msg, _ := ioutil.ReadAll(resp.Body)
+		msg, _ := io.ReadAll(resp.Body)
 		err = errors.New("error on delete in engine for " + shard + "/engine-rest/history/process-instance/" + url.QueryEscape(id) + ": " + resp.Status + " " + string(msg))
 	}
 	return
@@ -432,7 +432,7 @@ func buildPayLoad(name string, xml string, svg string, boundary string, owner st
 	return "--" + boundary + "\r\n" + strings.Join(segments, "--"+boundary+"\r\n") + "--" + boundary + "--\r\n"
 }
 
-//returns original deploymentId (not vid)
+// returns original deploymentId (not vid)
 func (this *Camunda) DeployProcess(name string, xml string, svg string, owner string, source string) (deploymentId string, err error) {
 	responseWrapper, err := this.deployProcess(name, xml, svg, owner, source)
 	if err != nil {
@@ -484,7 +484,7 @@ func (this *Camunda) deployProcess(name string, xml string, svg string, owner st
 	return
 }
 
-//uses original deploymentId (not vid)
+// uses original deploymentId (not vid)
 func (this *Camunda) RemoveProcess(deploymentId string, userId string) (err error) {
 	shard, err := this.shards.EnsureShardForUser(userId)
 	if err != nil {
@@ -554,7 +554,7 @@ func (this *Camunda) GetExtendedDeployment(deployment model.Deployment, userId s
 	if err != nil {
 		return result, err
 	}
-	svg, err := ioutil.ReadAll(svgResp.Body)
+	svg, err := io.ReadAll(svgResp.Body)
 	if err != nil {
 		return result, err
 	}

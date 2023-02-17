@@ -21,6 +21,7 @@ import (
 	eventmodel "github.com/SENERGY-Platform/event-worker/pkg/model"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/metadata"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model"
 	"log"
 	"sync"
 )
@@ -29,6 +30,8 @@ type EventRepo struct {
 	mux    sync.Mutex
 	events EventIndex
 }
+
+const UserId = model.UserId
 
 type EventIndex = map[LocalDeviceId]map[LocalServiceId][]eventmodel.EventDesc
 
@@ -70,6 +73,7 @@ func addEvent(events EventIndex, localDeviceId string, localServiceId string, ev
 	if _, ok := events[localDeviceId]; !ok {
 		events[localDeviceId] = map[LocalServiceId][]eventmodel.EventDesc{}
 	}
+	event.UserId = UserId
 	events[localDeviceId][localServiceId] = append(events[localDeviceId][localServiceId], event)
 	return events
 }

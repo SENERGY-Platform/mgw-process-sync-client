@@ -31,3 +31,5 @@ type PathAndCharacteristic struct {
 	JsonPath         string `json:"json_path"`
 	CharacteristicId string `json:"characteristic_id"`
 }
+
+const UserId = "senergy"

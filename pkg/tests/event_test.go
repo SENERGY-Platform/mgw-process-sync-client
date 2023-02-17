@@ -23,6 +23,7 @@ import (
 	"github.com/SENERGY-Platform/event-worker/pkg/model"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/controller"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/events/repo"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/tests/server"
 	"github.com/SENERGY-Platform/process-deployment/lib/model/deploymentmodel"
 	paho "github.com/eclipse/paho.mqtt.golang"
@@ -131,6 +132,7 @@ func TestMsgEventDeployment(t *testing.T) {
 		}
 		expected := []model.EventDesc{
 			{
+				UserId:        repo.UserId,
 				DeploymentId:  deploymentId,
 				EventId:       "1",
 				DeviceId:      "did1",
@@ -140,6 +142,7 @@ func TestMsgEventDeployment(t *testing.T) {
 				ValueVariable: "x",
 			},
 			{
+				UserId:        repo.UserId,
 				DeploymentId:  deploymentId,
 				EventId:       "1-group",
 				DeviceId:      "did1",

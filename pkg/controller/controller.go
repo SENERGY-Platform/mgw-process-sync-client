@@ -24,11 +24,12 @@ import (
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/events"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/metadata"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model"
 	"log"
 	"time"
 )
 
-const UserId = "senergy"
+const UserId = model.UserId
 
 func New(config configuration.Config, ctx context.Context) (ctrl *Controller, err error) {
 	ctrl = &Controller{config: config}

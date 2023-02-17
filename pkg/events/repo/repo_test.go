@@ -140,6 +140,7 @@ func TestRepo(t *testing.T) {
 
 	expected := []eventmodel.EventDesc{
 		{
+			UserId:        UserId,
 			DeploymentId:  "deplid_1",
 			EventId:       "1",
 			DeviceId:      "did1",
@@ -149,6 +150,7 @@ func TestRepo(t *testing.T) {
 			ValueVariable: "x",
 		},
 		{
+			UserId:        UserId,
 			DeploymentId:  "deplid_1",
 			EventId:       "1-group",
 			DeviceId:      "did1",
