@@ -22,6 +22,7 @@ import (
 	eventmodel "github.com/SENERGY-Platform/event-worker/pkg/model"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
 	paho "github.com/eclipse/paho.mqtt.golang"
 	"log"
 )
@@ -40,6 +41,7 @@ type Handler interface {
 	StartDeployment(id string, parameter map[string]interface{}) error
 	CreateDeployment(payload model.FogDeploymentMessage) error
 	UpdateDeploymentEvents(camundaDeploymentId string, descriptions []eventmodel.EventDesc, id map[string]string, localId map[string]string) error
+	HandleIncident(incident camundamodel.Incident) error
 }
 
 func New(config configuration.Config, ctx context.Context, handler Handler) (*Client, error) {
@@ -118,6 +120,12 @@ func (this *Client) subscribe() {
 			log.Println("DEBUG: receive", message.Topic(), string(message.Payload()))
 		}
 		go this.handleProcessHistoryDeleteCommand(message)
+	})
+	this.mqtt.Subscribe(this.getProcessIncidentTopic(), 2, func(client paho.Client, message paho.Message) {
+		if this.debug {
+			log.Println("DEBUG: receive", message.Topic(), string(message.Payload()))
+		}
+		go this.handleProcessIncident(message)
 	})
 }
 

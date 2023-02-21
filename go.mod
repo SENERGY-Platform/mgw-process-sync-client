@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/SENERGY-Platform/event-worker v0.0.0-20230206101950-c0664a0fa7a4
-	github.com/SENERGY-Platform/process-deployment v0.0.0-20230208100932-a2a0a983c8ba
+	github.com/SENERGY-Platform/process-deployment v0.0.0-20230220144253-c09c2b3cfff5
 	github.com/SENERGY-Platform/process-history-cleanup v0.0.0-20210304073342-ef040ff5da11
 	github.com/SENERGY-Platform/process-sync v0.0.0-20230208130608-454e64b4b0a0
 	github.com/dgraph-io/badger/v3 v3.2103.0
@@ -29,6 +29,7 @@ require (
 	github.com/cenkalti/backoff/v4 v4.1.3 // indirect
 	github.com/cespare/xxhash v1.1.0 // indirect
 	github.com/containerd/continuity v0.3.0 // indirect
+	github.com/coocood/freecache v1.1.0 // indirect
 	github.com/dgraph-io/ristretto v0.0.4-0.20210309073149-3836124cdc5a // indirect
 	github.com/docker/cli v20.10.14+incompatible // indirect
 	github.com/docker/docker v20.10.7+incompatible // indirect
@@ -40,6 +41,7 @@ require (
 	github.com/go-openapi/spec v0.20.6 // indirect
 	github.com/go-openapi/swag v0.19.15 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
+	github.com/golang-jwt/jwt v3.2.1+incompatible // indirect
 	github.com/golang/groupcache v0.0.0-20190702054246-869f871628b6 // indirect
 	github.com/golang/protobuf v1.5.0 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
@@ -57,7 +59,10 @@ require (
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.0.2 // indirect
 	github.com/opencontainers/runc v1.1.4 // indirect
+	github.com/pierrec/lz4/v4 v4.1.15 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/satori/go.uuid v1.2.0 // indirect
+	github.com/segmentio/kafka-go v0.4.38 // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/stretchr/testify v1.8.0 // indirect
 	github.com/swaggo/files v0.0.0-20220610200504-28940afbdbfe // indirect

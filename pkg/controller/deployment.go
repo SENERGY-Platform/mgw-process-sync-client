@@ -54,6 +54,18 @@ func (this *Controller) CreateDeployment(deployment model.FogDeploymentMessage) 
 		return err
 	}
 
+	incidentHandling := deployment.IncidentHandling
+	if incidentHandling != nil {
+		err = this.DeployIncidentsHandlerForDeploymentId(id, *incidentHandling)
+		if err != nil {
+			removeErr := this.camunda.RemoveProcess(id, UserId)
+			if removeErr != nil {
+				log.Println("ERROR: unable to remove deployed process", id, removeErr, err)
+			}
+			return err
+		}
+	}
+
 	//metadata
 	metadata := metadata.Metadata{
 		DeploymentModel:     deployment,

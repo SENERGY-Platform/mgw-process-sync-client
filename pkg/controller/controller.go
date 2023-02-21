@@ -32,7 +32,7 @@ import (
 const UserId = model.UserId
 
 func New(config configuration.Config, ctx context.Context) (ctrl *Controller, err error) {
-	ctrl = &Controller{config: config}
+	ctrl = &Controller{config: config, incidentsHandler: map[string]OnIncident{}}
 
 	ctrl.metadata, err = metadata.NewStorage(ctx, config)
 	if err != nil {
@@ -57,6 +57,12 @@ func New(config configuration.Config, ctx context.Context) (ctrl *Controller, er
 		err = ctrl.events.AddDeployment(depl)
 		if err != nil {
 			return ctrl, err
+		}
+		if depl.DeploymentModel.IncidentHandling != nil {
+			err = ctrl.DeployIncidentsHandlerForDeploymentId(depl.CamundaDeploymentId, *depl.DeploymentModel.IncidentHandling)
+			if err != nil {
+				return ctrl, err
+			}
 		}
 	}
 
@@ -99,11 +105,12 @@ type EventRepo interface {
 }
 
 type Controller struct {
-	config   configuration.Config
-	backend  *backend.Client
-	camunda  *camunda.Camunda
-	metadata metadata.Storage
-	events   EventRepo
+	config           configuration.Config
+	backend          *backend.Client
+	camunda          *camunda.Camunda
+	metadata         metadata.Storage
+	events           EventRepo
+	incidentsHandler map[string]OnIncident
 }
 
 func (this *Controller) SendCurrentStates() (err error) {

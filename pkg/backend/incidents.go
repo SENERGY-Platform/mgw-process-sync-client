@@ -16,10 +16,32 @@
 
 package backend
 
-import "github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
+import (
+	"encoding/json"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
+	paho "github.com/eclipse/paho.mqtt.golang"
+)
 
 const incidentTopic = "incident"
 
+func (this *Client) getProcessIncidentTopic() string {
+	return this.getStateTopic(incidentTopic)
+}
+
 func (this *Client) SendIncident(incident camundamodel.Incident) error {
-	return this.sendObj(this.getStateTopic(incidentTopic), incident)
+	return this.sendObj(this.getProcessIncidentTopic(), incident)
+}
+
+func (this *Client) handleProcessIncident(message paho.Message) {
+	incident := camundamodel.Incident{}
+	err := json.Unmarshal(message.Payload(), &incident)
+	if err != nil {
+		this.error(err)
+		return
+	}
+	err = this.handler.HandleIncident(incident)
+	if err != nil {
+		this.error(err)
+		return
+	}
 }
