@@ -29,6 +29,7 @@ import (
 
 func Send(notificationUrl string, message Message) error {
 	if notificationUrl == "" {
+		log.Println("WARNING: unable to send notification: no url configured")
 		return nil
 	}
 	log.Println("send notification", notificationUrl, message)

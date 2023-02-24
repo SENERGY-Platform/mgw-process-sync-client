@@ -54,8 +54,10 @@ func (this *Controller) DeployIncidentsHandlerForDeploymentId(camundaDeplId stri
 func (this *Controller) HandleIncident(incident camundamodel.Incident) error {
 	handler, ok := this.incidentsHandler[incident.ProcessDefinitionId]
 	if !ok {
+		log.Printf("unhandled incident for %v", incident.DeploymentName)
 		return nil
 	}
+	log.Printf("handle incident for %v: notify: %v, restart: %v", incident.DeploymentName, handler.Notify, handler.Restart)
 	if handler.Notify {
 		msg := notification.Message{
 			Title:   "Fog Process-Incident in " + incident.DeploymentName,
