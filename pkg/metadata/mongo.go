@@ -24,7 +24,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/bsoncodec"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"go.mongodb.org/mongo-driver/x/bsonx"
 	"go.mongodb.org/mongo-driver/x/mongo/driver/connstring"
 	"log"
 	"reflect"
@@ -174,7 +173,7 @@ func (this *MongoStorage) ensureIndex(collection *mongo.Collection, indexname st
 		direction = 1
 	}
 	_, err := collection.Indexes().CreateOne(ctx, mongo.IndexModel{
-		Keys:    bsonx.Doc{{indexKey, bsonx.Int32(direction)}},
+		Keys:    bson.D{{indexKey, direction}},
 		Options: options.Index().SetName(indexname).SetUnique(unique),
 	})
 	return err
