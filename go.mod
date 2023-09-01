@@ -6,15 +6,15 @@ toolchain go1.21.0
 
 require (
 	github.com/SENERGY-Platform/event-worker v0.0.0-20230824110413-f47de68fdd6c
-	github.com/SENERGY-Platform/process-deployment v0.0.0-20230816090614-383f4ed54e16
+	github.com/SENERGY-Platform/process-deployment v0.0.0-20230901093000-6ea610063ac2
 	github.com/SENERGY-Platform/process-history-cleanup v0.0.0-20230828101425-9852e381e6ce
-	github.com/SENERGY-Platform/process-sync v0.0.0-20230612091636-84fa7b66ac64
+	github.com/SENERGY-Platform/process-sync v0.0.0-20230901094303-2b7eee71fc0a
 	github.com/dgraph-io/badger/v3 v3.2103.5
 	github.com/eclipse/paho.mqtt.golang v1.4.3
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/lib/pq v1.10.9
 	github.com/swaggo/http-swagger v1.3.4
-	github.com/swaggo/swag v1.16.1
+	github.com/swaggo/swag v1.16.2
 	github.com/testcontainers/testcontainers-go v0.23.0
 	go.etcd.io/bbolt v1.3.7
 	go.mongodb.org/mongo-driver v1.12.1
