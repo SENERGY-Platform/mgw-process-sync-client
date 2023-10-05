@@ -26,8 +26,6 @@ import (
 	"strings"
 )
 
-var LogEnvConfig = true
-
 type Config struct {
 	EventApiPort              string `json:"event_api_port"`
 	DisableEventApiHttpLogger bool   `json:"disable_event_api_http_logger"`
@@ -44,8 +42,8 @@ type Config struct {
 
 	MqttBroker            string `json:"mqtt_broker"`
 	MqttClientId          string `json:"mqtt_client_id"`
-	MqttUser              string `json:"mqtt_user"`
-	MqttPw                string `json:"mqtt_pw"`
+	MqttUser              string `json:"mqtt_user" config:"secret"`
+	MqttPw                string `json:"mqtt_pw" config:"secret"`
 	MqttFileStoreLocation string `json:"mqtt_file_store_location"`
 	NetworkId             string `json:"network_id"`
 	FullUpdateInterval    string `json:"full_update_interval"`
@@ -94,12 +92,15 @@ func handleEnvironmentVars(config *Config) {
 	configType := configValue.Type()
 	for index := 0; index < configType.NumField(); index++ {
 		fieldName := configType.Field(index).Name
+		fieldConfig := configType.Field(index).Tag.Get("config")
 		envName := fieldNameToEnvName(fieldName)
 		envValue := os.Getenv(envName)
 		if envValue != "" {
-			if LogEnvConfig {
-				fmt.Println("use environment variable: ", envName, " = ", envValue)
+			loggedEnvValue := envValue
+			if strings.Contains(fieldConfig, "secret") {
+				loggedEnvValue = "***"
 			}
+			fmt.Println("use environment variable: ", envName, " = ", loggedEnvValue)
 			if configValue.FieldByName(fieldName).Kind() == reflect.Int64 {
 				i, _ := strconv.ParseInt(envValue, 10, 64)
 				configValue.FieldByName(fieldName).SetInt(i)
