@@ -81,6 +81,7 @@ func historyCleanup(ctx context.Context, config configuration.Config) {
 							BatchSize:     config.HistoryCleanupBatchSize,
 							FilterLocally: config.HistoryCleanupFilterLocally,
 							Location:      config.HistoryCleanupLocation,
+							Debug:         config.Debug,
 						})
 						if err != nil {
 							log.Println("ERROR: in history cleanup:", err)
