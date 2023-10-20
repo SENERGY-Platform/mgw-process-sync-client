@@ -5,10 +5,10 @@ go 1.21
 toolchain go1.21.0
 
 require (
-	github.com/SENERGY-Platform/event-worker v1.0.0
+	github.com/SENERGY-Platform/event-worker v1.0.1
 	github.com/SENERGY-Platform/process-deployment v0.0.0-20230901093000-6ea610063ac2
 	github.com/SENERGY-Platform/process-history-cleanup v1.1.0
-	github.com/SENERGY-Platform/process-sync v0.0.0-20231017080456-2bd9b276d065
+	github.com/SENERGY-Platform/process-sync v0.0.0-20231020093842-14a96ab0a87d
 	github.com/dgraph-io/badger/v3 v3.2103.5
 	github.com/eclipse/paho.mqtt.golang v1.4.3
 	github.com/julienschmidt/httprouter v1.3.0
@@ -25,7 +25,7 @@ require (
 	github.com/Azure/go-ansiterm v0.0.0-20230124172434-306776ec8161 // indirect
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/Microsoft/go-winio v0.6.1 // indirect
-	github.com/Microsoft/hcsshim v0.11.1 // indirect
+	github.com/Microsoft/hcsshim v0.11.2 // indirect
 	github.com/SENERGY-Platform/models/go v0.0.0-20230824080159-16585960df38 // indirect
 	github.com/beevik/etree v1.2.0 // indirect
 	github.com/cenkalti/backoff/v4 v4.2.1 // indirect
@@ -90,7 +90,7 @@ require (
 	golang.org/x/text v0.13.0 // indirect
 	golang.org/x/tools v0.14.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20231016165738-49dd2c1f3d0b // indirect
-	google.golang.org/grpc v1.58.3 // indirect
+	google.golang.org/grpc v1.59.0 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
