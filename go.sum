@@ -15,8 +15,8 @@ github.com/Microsoft/hcsshim v0.11.4/go.mod h1:smjE4dvqPX9Zldna+t5FG3rnoHhaB7QYx
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
 github.com/OneOfOne/xxhash v1.2.8 h1:31czK/TI9sNkxIKfaUfGlU47BAxQ0ztGgd9vPyqimf8=
 github.com/OneOfOne/xxhash v1.2.8/go.mod h1:eZbhyaAYD41SGSSsnmcpxVoRiQ/MPUTjUdIIOT9Um7Q=
-github.com/SENERGY-Platform/event-worker v1.0.3 h1:+ILi9KSporffrnnno3ChvXeUeVWVnkoruJrEojMIHWc=
-github.com/SENERGY-Platform/event-worker v1.0.3/go.mod h1:2J/TRAnTEmMaTSN0YheV8MnQwizif1e4GskRM0OjmO4=
+github.com/SENERGY-Platform/event-worker v1.0.4 h1:L1n/Y1zO/m5WrxyQYa64oNnmbYdz7sOpdPCXw2jI+J4=
+github.com/SENERGY-Platform/event-worker v1.0.4/go.mod h1:T9kxuzFZVpk5bGTGAinl0+QkdhKuYA4M8sJWvBPri48=
 github.com/SENERGY-Platform/models/go v0.0.0-20230824080159-16585960df38 h1:PDvFwIJBnFyKt1KeepkABNIS57+WhVj4vBw7X5JGZJw=
 github.com/SENERGY-Platform/models/go v0.0.0-20230824080159-16585960df38/go.mod h1:bCREPNRN4P8oxLgpC3/ZKK4jXSy4MSPXoiomhohE+aw=
 github.com/SENERGY-Platform/process-deployment v0.0.0-20231127091158-2e8565a65882 h1:2II201g97KMjWngj3Z0m1Ga0qlnoNAjTGm+OzgShbSo=

@@ -5,7 +5,7 @@ go 1.21
 toolchain go1.21.0
 
 require (
-	github.com/SENERGY-Platform/event-worker v1.0.3
+	github.com/SENERGY-Platform/event-worker v1.0.4
 	github.com/SENERGY-Platform/process-deployment v0.0.0-20231127091158-2e8565a65882
 	github.com/SENERGY-Platform/process-history-cleanup v1.1.0
 	github.com/SENERGY-Platform/process-sync v0.0.0-20231128074736-103a8864c04a
