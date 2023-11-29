@@ -8,7 +8,7 @@ require (
 	github.com/SENERGY-Platform/event-worker v1.0.4
 	github.com/SENERGY-Platform/process-deployment v0.0.0-20231127091158-2e8565a65882
 	github.com/SENERGY-Platform/process-history-cleanup v1.1.0
-	github.com/SENERGY-Platform/process-sync v0.0.0-20231128074736-103a8864c04a
+	github.com/SENERGY-Platform/process-sync v0.0.0-20231129083026-c4bb8ebf8275
 	github.com/dgraph-io/badger/v3 v3.2103.5
 	github.com/eclipse/paho.mqtt.golang v1.4.3
 	github.com/julienschmidt/httprouter v1.3.0
