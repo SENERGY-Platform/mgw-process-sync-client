@@ -23,8 +23,8 @@ github.com/SENERGY-Platform/process-deployment v0.0.2 h1:mmlUBuauw/GaqHwb+5ywgTJ
 github.com/SENERGY-Platform/process-deployment v0.0.2/go.mod h1:10dB9zZjlpQcM9E3fkmGBzbfFbFX3XTOORH/5FyRvUI=
 github.com/SENERGY-Platform/process-history-cleanup v1.1.1 h1:8pLi2NUtvKBK6pXPXB70y63Ayz51i2XvxMDjfYb9LEY=
 github.com/SENERGY-Platform/process-history-cleanup v1.1.1/go.mod h1:enCzTp84GoosaomQPri2CkVGAHHb1gB5DD2qi3bUJRE=
-github.com/SENERGY-Platform/process-sync v0.0.2 h1:ATjhTjUm3AG76Uot+6idk48hJU+rtba/hoUSoQkYXf4=
-github.com/SENERGY-Platform/process-sync v0.0.2/go.mod h1:BJcSUJsLjKtmq6aAsXjCmk4aUg0h6+nDHJoJ81QdbkA=
+github.com/SENERGY-Platform/process-sync v0.0.3 h1:cNh/mjbUcw/e2gSy1nIZbsC/zab76P7aeQp9Il9mmvs=
+github.com/SENERGY-Platform/process-sync v0.0.3/go.mod h1:aqRE+7vQhR6IW9obfjoI3H9dG+3N/8lDQHtVgwIsPrE=
 github.com/armon/consul-api v0.0.0-20180202201655-eb2c6b5be1b6/go.mod h1:grANhF5doyWs3UAsr3K4I6qtAmlQcZDesFNEHPZAzj8=
 github.com/beevik/etree v1.3.0 h1:hQTc+pylzIKDb23yYprodCWWTt+ojFfUZyzU09a/hmU=
 github.com/beevik/etree v1.3.0/go.mod h1:aiPf89g/1k3AShMVAzriilpcE4R/Vuor90y83zVZWFc=
