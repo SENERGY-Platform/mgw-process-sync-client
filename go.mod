@@ -3,10 +3,10 @@ module github.com/SENERGY-Platform/mgw-process-sync-client
 go 1.22
 
 require (
-	github.com/SENERGY-Platform/event-worker v1.0.12
-	github.com/SENERGY-Platform/process-deployment v0.0.6
+	github.com/SENERGY-Platform/event-worker v1.0.13
+	github.com/SENERGY-Platform/process-deployment v0.0.7
 	github.com/SENERGY-Platform/process-history-cleanup v1.1.2
-	github.com/SENERGY-Platform/process-sync v0.0.8
+	github.com/SENERGY-Platform/process-sync v0.0.9
 	github.com/dgraph-io/badger/v3 v3.2103.5
 	github.com/eclipse/paho.mqtt.golang v1.4.3
 	github.com/julienschmidt/httprouter v1.3.0
