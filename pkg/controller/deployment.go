@@ -20,12 +20,14 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"errors"
+	"fmt"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/camunda"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/controller/etree"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/metadata"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
 	"log"
+	"runtime/debug"
 	"strings"
 )
 
@@ -37,6 +39,11 @@ func (this *Controller) CreateDeployment(deployment model.FogDeploymentMessage) 
 	xml := deployment.Diagram.XmlDeployed
 
 	xml = this.replaceNotificationUrl(xml)
+
+	xml, err = ReplaceTaskTopics(xml, this.config.TaskTopicReplace)
+	if err != nil {
+		return err
+	}
 
 	svg := deployment.Diagram.Svg
 	if !validateXml(xml) {
@@ -222,4 +229,27 @@ func validateXml(xmlStr string) bool {
 		return false
 	}
 	return true
+}
+
+func ReplaceTaskTopics(xml string, fromToMap map[string]string) (result string, err error) {
+	defer func() {
+		if r := recover(); r != nil && err == nil {
+			log.Printf("%s: %s", r, debug.Stack())
+			err = errors.New(fmt.Sprint("Recovered Error: ", r))
+		}
+	}()
+	doc := etree.NewDocument()
+	err = doc.ReadFromString(xml)
+	if err != nil {
+		return result, err
+	}
+	for from, to := range fromToMap {
+		for _, element := range doc.FindElements("//bpmn:serviceTask[@camunda:topic='" + from + "']") {
+			attr := element.SelectAttr("camunda:topic")
+			if attr != nil {
+				attr.Value = to
+			}
+		}
+	}
+	return doc.WriteToString()
 }

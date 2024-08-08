@@ -55,6 +55,8 @@ type Config struct {
 	HistoryCleanupLocation      string `json:"history_cleanup_location"`
 	NotificationUrlPlaceholder  string `json:"notification_url_placeholder"`
 	NotificationUrl             string `json:"notification_url"`
+
+	TaskTopicReplace map[string]string `json:"task_topic_replace"`
 }
 
 // loads config from json in location and used environment variables (e.g ZookeeperUrl --> ZOOKEEPER_URL)

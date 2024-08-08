@@ -25,5 +25,7 @@
     "history_cleanup_filter_locally": false,
     "history_cleanup_location": "Europe/Berlin",
 
-    "notification_url_placeholder": "{{__SENERGY_NOTIFICATION_URL_PLACEHOLDER}}"
+    "notification_url_placeholder": "{{__SENERGY_NOTIFICATION_URL_PLACEHOLDER}}",
+
+    "task_topic_replace": {"optimistic": "pessimistic"}
 }
