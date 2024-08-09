@@ -626,7 +626,7 @@ func (this *Camunda) GetProcessInstanceHistoryListWithTotal(userId string, searc
 	return
 }
 
-func (this *Camunda) GetIncidents(userId string) (result []model.Incident, err error) {
+func (this *Camunda) GetIncidents(userId string) (result []model.CamundaIncident, err error) {
 	shard, err := this.shards.EnsureShardForUser(userId)
 	if err != nil {
 		return result, err

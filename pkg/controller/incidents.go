@@ -104,8 +104,8 @@ func (this *Controller) SendCurrentIncidents() (count int, err error) {
 	for _, incident := range incidents {
 		this.sendPgIncident(ProcessIncidentInPg{
 			Id:                  incident.Id,
-			Message:             incident.ErrorMessage,
-			ActivityId:          incident.ExternalTaskId,
+			Message:             incident.IncidentMessage,
+			ActivityId:          incident.ActivityId,
 			ProcessInstanceId:   incident.ProcessInstanceId,
 			ProcessDefinitionId: incident.ProcessDefinitionId,
 		})
