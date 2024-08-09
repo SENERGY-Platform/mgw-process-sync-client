@@ -34,7 +34,7 @@ import (
 	"time"
 )
 
-func TestLoadIncidentFromDb(t *testing.T) {
+func TestSendCurrentIncidents(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	wg := sync.WaitGroup{}
 

@@ -626,6 +626,15 @@ func (this *Camunda) GetProcessInstanceHistoryListWithTotal(userId string, searc
 	return
 }
 
+func (this *Camunda) GetIncidents(userId string) (result []model.Incident, err error) {
+	shard, err := this.shards.EnsureShardForUser(userId)
+	if err != nil {
+		return result, err
+	}
+	err = request.Get(shard+"/engine-rest/incident?tenantIdIn="+url.QueryEscape(userId), &result)
+	return
+}
+
 func CreateBlankSvg() string {
 	return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.2" id="Layer_1" x="0px" y="0px" viewBox="0 0 20 16" xml:space="preserve">
 <path fill="#D61F33" d="M10,0L0,16h20L10,0z M11,13.908H9v-2h2V13.908z M9,10.908v-6h2v6H9z"/>

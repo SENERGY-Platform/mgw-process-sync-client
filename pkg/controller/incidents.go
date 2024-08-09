@@ -17,7 +17,6 @@
 package controller
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/controller/notification"
@@ -38,7 +37,6 @@ type OnIncident struct {
 type ProcessIncidentInPg struct {
 	Id                  string `json:"id_"`
 	Message             string `json:"incident_msg_"`
-	ExecutionId         string `json:"execution_id_"`
 	ActivityId          string `json:"activity_id_"`
 	ProcessInstanceId   string `json:"proc_inst_id_"`
 	ProcessDefinitionId string `json:"proc_def_id_"`
@@ -98,28 +96,21 @@ func (this *Controller) sendPgIncident(incident ProcessIncidentInPg) {
 }
 
 func (this *Controller) SendCurrentIncidents() (count int, err error) {
-	db, err := sql.Open("postgres", this.config.CamundaDb)
-	if err != nil {
-		log.Printf("ERROR: unable to load current incidents: Failed to connect to '%s': %s\n", this.config.CamundaDb, err)
-		return count, err
-	}
-	defer db.Close()
-	rows, err := db.Query("SELECT id_, incident_msg_, execution_id_, activity_id_, proc_inst_id_, proc_def_id_  FROM act_ru_incident")
+	incidents, err := this.camunda.GetIncidents(UserId)
 	if err != nil {
 		log.Printf("ERROR: unable to load current incidents: %s\n", err)
 		return count, err
 	}
-	for rows.Next() {
-		element := ProcessIncidentInPg{}
-		err = rows.Scan(&element.Id, &element.Message, &element.ExecutionId, &element.ActivityId, &element.ProcessInstanceId, &element.ProcessDefinitionId)
-		if err != nil {
-			log.Printf("ERROR: unable to scan current incidents: %s\n", err)
-			return count, err
-		}
-		this.sendPgIncident(element)
-		count = count + 1
+	for _, incident := range incidents {
+		this.sendPgIncident(ProcessIncidentInPg{
+			Id:                  incident.Id,
+			Message:             incident.ErrorMessage,
+			ActivityId:          incident.ExternalTaskId,
+			ProcessInstanceId:   incident.ProcessInstanceId,
+			ProcessDefinitionId: incident.ProcessDefinitionId,
+		})
 	}
-	return count, nil
+	return len(incidents), nil
 }
 
 func (this *Controller) DeployIncidentsHandlerForDeploymentId(camundaDeplId string, handling deploymentmodel.IncidentHandling) error {
