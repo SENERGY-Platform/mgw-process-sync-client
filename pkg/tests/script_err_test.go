@@ -61,6 +61,11 @@ func TestScriptError(t *testing.T) {
 		t.Error(err)
 		return
 	}
+	config.EventApiPort, err = docker.GetFreePortStr()
+	if err != nil {
+		t.Error(err)
+		return
+	}
 	config.CamundaUrl = camundaUrl
 	config.CamundaDb = connstr
 

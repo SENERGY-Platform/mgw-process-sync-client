@@ -47,6 +47,12 @@ func TestLoadIncidentFromDb(t *testing.T) {
 		return
 	}
 
+	config.EventApiPort, err = docker.GetFreePortStr()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
 	connstr, camundaPgIp, _, err := docker.PostgresWithNetwork(ctx, &wg, "camunda")
 	if err != nil {
 		t.Error(err)
