@@ -37,7 +37,7 @@ func (this *Client) handleDeploymentCommand(message paho.Message) {
 	if err != nil {
 		this.error(err)
 	}
-	err = this.handler.CreateDeployment(deployment)
+	_, err = this.handler.CreateDeployment(deployment)
 	if err != nil {
 		this.error(err)
 	}

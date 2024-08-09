@@ -17,17 +17,109 @@
 package controller
 
 import (
+	"database/sql"
+	"encoding/json"
 	"fmt"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/controller/notification"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
 	"github.com/SENERGY-Platform/process-deployment/lib/model/deploymentmodel"
+	"github.com/google/uuid"
 	"log"
+	"time"
 )
 
 type OnIncident struct {
 	ProcessDefinitionId string `json:"process_definition_id" bson:"process_definition_id"`
 	Restart             bool   `json:"restart" bson:"restart"`
 	Notify              bool   `json:"notify" bson:"notify"`
+}
+
+// public.act_ru_incident (id_, rev_, incident_timestamp_, incident_msg_, incident_type_, execution_id_, activity_id_, proc_inst_id_, proc_def_id_, cause_incident_id_, root_cause_incident_id_, configuration_, tenant_id_, job_def_id_) VALUES ('6da046d1-5580-11ef-9030-0242ac11000a', 1, '2024-08-08 12:19:15.517000', 'Unable to evaluate script while executing activity ”Task_0fi26gl” in the process definition with id ”script_err:1:631e00d6-5580-11ef-9030-0242ac11000a”:TypeError: Cannot read property "batz" from undefined in <eval> at line number 2', 'failedJob', '6614ab9a-5580-11ef-9030-0242ac11000a', 'IntermediateThrowEvent_1jxyivh', '6613e848-5580-11ef-9030-0242ac11000a', 'script_err:1:631e00d6-5580-11ef-9030-0242ac11000a', '6da046d1-5580-11ef-9030-0242ac11000a', '6da046d1-5580-11ef-9030-0242ac11000a', '66156eec-5580-11ef-9030-0242ac11000a', 'senergy', '631e27e7-5580-11ef-9030-0242ac11000a');
+type ProcessIncidentInPg struct {
+	Id                  string `json:"id_"`
+	Message             string `json:"incident_msg_"`
+	ExecutionId         string `json:"execution_id_"`
+	ActivityId          string `json:"activity_id_"`
+	ProcessInstanceId   string `json:"proc_inst_id_"`
+	ProcessDefinitionId string `json:"proc_def_id_"`
+}
+
+func (this *Controller) NotifyIncident(extra string) {
+	element := ProcessIncidentInPg{}
+	err := json.Unmarshal([]byte(extra), &element)
+	if err != nil {
+		log.Println("ERROR: unable to unmarshal process incident in NotifyIncident(): ", err)
+		return
+	}
+
+	def, err := this.camunda.GetProcessDefinition(element.ProcessDefinitionId, UserId)
+	if err != nil {
+		log.Println("WARNING: unable to get process def in NotifyIncident(): ", err)
+		def = camundamodel.ProcessDefinition{Name: "unknown"}
+	}
+
+	err = this.backend.SendIncident(camundamodel.Incident{
+		Id:                  uuid.NewString(),
+		ExternalTaskId:      element.ActivityId,
+		ProcessInstanceId:   element.ProcessInstanceId,
+		ProcessDefinitionId: element.ProcessDefinitionId,
+		WorkerId:            "mgw-process-sync-client",
+		ErrorMessage:        element.Message,
+		Time:                time.Now(),
+		TenantId:            UserId,
+		DeploymentName:      def.Name,
+	})
+	if err != nil {
+		log.Println("WARNING: unable to send incident:", err)
+	}
+}
+
+func (this *Controller) sendPgIncident(incident ProcessIncidentInPg) {
+	def, err := this.camunda.GetProcessDefinition(incident.ProcessDefinitionId, UserId)
+	if err != nil {
+		log.Println("WARNING: unable to get process def in NotifyIncident(): ", err)
+		def = camundamodel.ProcessDefinition{Name: "unknown"}
+	}
+
+	err = this.backend.SendIncident(camundamodel.Incident{
+		Id:                  uuid.NewString(),
+		ExternalTaskId:      incident.ActivityId,
+		ProcessInstanceId:   incident.ProcessInstanceId,
+		ProcessDefinitionId: incident.ProcessDefinitionId,
+		WorkerId:            "mgw-process-sync-client",
+		ErrorMessage:        incident.Message,
+		Time:                time.Now(),
+		TenantId:            UserId,
+		DeploymentName:      def.Name,
+	})
+	if err != nil {
+		log.Println("WARNING: unable to send incident:", err)
+	}
+}
+
+func (this *Controller) SendCurrentIncidents() (count int, err error) {
+	db, err := sql.Open("postgres", this.config.CamundaDb)
+	if err != nil {
+		log.Printf("ERROR: unable to load current incidents: Failed to connect to '%s': %s\n", this.config.CamundaDb, err)
+		return count, err
+	}
+	defer db.Close()
+	rows, err := db.Query("SELECT id_, incident_msg_, execution_id_, activity_id_, proc_inst_id_, proc_def_id_  FROM act_ru_incident")
+	if err != nil {
+		log.Printf("ERROR: unable to load current incidents: %s\n", err)
+		return count, err
+	}
+	for rows.Next() {
+		element := ProcessIncidentInPg{}
+		err = rows.Scan(&element.Id, &element.Message, &element.ExecutionId, &element.ActivityId, &element.ProcessInstanceId, &element.ProcessDefinitionId)
+		if err != nil {
+			log.Printf("ERROR: unable to scan current incidents: %s\n", err)
+			return count, err
+		}
+		this.sendPgIncident(element)
+		count = count + 1
+	}
+	return count, nil
 }
 
 func (this *Controller) DeployIncidentsHandlerForDeploymentId(camundaDeplId string, handling deploymentmodel.IncidentHandling) error {
@@ -67,6 +159,10 @@ func (this *Controller) HandleIncident(incident camundamodel.Incident) error {
 			msg.Message = msg.Message + "\n\nprocess will be restarted"
 		}
 		_ = notification.Send(this.config.NotificationUrl, msg)
+	}
+	err := this.camunda.StopProcessInstance(incident.ProcessInstanceId)
+	if err != nil {
+		return err
 	}
 	if handler.Restart {
 		err := this.camunda.StartProcess(incident.ProcessDefinitionId, UserId, nil)

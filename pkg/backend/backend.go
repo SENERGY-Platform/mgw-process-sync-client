@@ -39,7 +39,7 @@ type Handler interface {
 	DeleteProcessInstance(id string) error
 	DeleteDeployment(id string) error
 	StartDeployment(id string, parameter map[string]interface{}) error
-	CreateDeployment(payload model.FogDeploymentMessage) error
+	CreateDeployment(payload model.FogDeploymentMessage) (id string, err error)
 	UpdateDeploymentEvents(camundaDeploymentId string, descriptions []eventmodel.EventDesc, id map[string]string, localId map[string]string) error
 	HandleIncident(incident camundamodel.Incident) error
 }

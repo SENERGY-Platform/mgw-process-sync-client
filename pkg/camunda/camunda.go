@@ -150,6 +150,29 @@ func (this *Camunda) StartProcessGetId(processDefinitionId string, userId string
 	return
 }
 
+func (this *Camunda) StopProcessInstance(id string) (err error) {
+	shard := this.config.CamundaUrl
+	client := &http.Client{Timeout: 5 * time.Second}
+	request, err := http.NewRequest("DELETE", shard+"/engine-rest/process-instance/"+url.PathEscape(id)+"?skipIoMappings=true", nil)
+	if err != nil {
+		return err
+	}
+	resp, err := client.Do(request)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode == http.StatusNotFound {
+		return nil
+	}
+	if resp.StatusCode == 200 || resp.StatusCode == 204 {
+		return nil
+	}
+	msg, _ := io.ReadAll(resp.Body)
+	err = errors.New("error on delete in engine for " + shard + "/engine-rest/process-instance/" + url.PathEscape(id) + ": " + resp.Status + " " + string(msg))
+	return err
+}
+
 func (this *Camunda) CheckProcessDefinitionAccess(id string, userId string) (err error) {
 	shard, err := this.shards.EnsureShardForUser(userId)
 	if err != nil {

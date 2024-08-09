@@ -1,0 +1,1539 @@
+{
+    "characteristics.example_brightness": {
+        "id": "example_brightness",
+        "name": "",
+        "display_unit": "",
+        "type": "",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.example_color": {
+        "id": "example_color",
+        "name": "",
+        "display_unit": "",
+        "type": "",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.example_hex": {
+        "id": "example_hex",
+        "name": "",
+        "display_unit": "",
+        "type": "",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.example_lux": {
+        "id": "example_lux",
+        "name": "",
+        "display_unit": "",
+        "type": "",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.example_rgb": {
+        "id": "example_rgb",
+        "name": "",
+        "display_unit": "",
+        "type": "",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:005ca5d3-44da-4fc8-b2b8-a88e3209e9f7": {
+        "id": "urn:infai:ses:characteristic:005ca5d3-44da-4fc8-b2b8-a88e3209e9f7",
+        "name": "degrees",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "max_value": 360,
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:02c7ea52-fc76-470e-b2b2-401653412de6": {
+        "id": "urn:infai:ses:characteristic:02c7ea52-fc76-470e-b2b2-401653412de6",
+        "name": "thunder probability percentage",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "min_value": 0,
+        "max_value": 100,
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:0419856b-d198-480e-9998-bf990f226844": {
+        "id": "urn:infai:ses:characteristic:0419856b-d198-480e-9998-bf990f226844",
+        "name": "lux",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "min_value": 0,
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:04bce19c-839d-45de-8cfb-bd470715f4cd": {
+        "id": "urn:infai:ses:characteristic:04bce19c-839d-45de-8cfb-bd470715f4cd",
+        "name": "meters per second",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:0958edd7-eaae-46fe-b612-0bf4e53400af": {
+        "id": "urn:infai:ses:characteristic:0958edd7-eaae-46fe-b612-0bf4e53400af",
+        "name": "cloud fraction percentage",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "min_value": 0,
+        "max_value": 100,
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:0a61343d-c0d1-4af8-9329-3829c30ba59f": {
+        "id": "urn:infai:ses:characteristic:0a61343d-c0d1-4af8-9329-3829c30ba59f",
+        "name": "uv index",
+        "display_unit": "",
+        "type": "https://schema.org/Integer",
+        "min_value": 0,
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:0bf5bc86-dde2-465f-8a16-687ef9acba3d": {
+        "id": "urn:infai:ses:characteristic:0bf5bc86-dde2-465f-8a16-687ef9acba3d",
+        "name": "hertz",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:0fc343ce-4627-4c88-b1e0-d3ed29754af8": {
+        "id": "urn:infai:ses:characteristic:0fc343ce-4627-4c88-b1e0-d3ed29754af8",
+        "name": "hex",
+        "display_unit": "",
+        "type": "https://schema.org/Text",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:107c29d3-f863-47e1-a1e0-7853a8016213": {
+        "id": "urn:infai:ses:characteristic:107c29d3-f863-47e1-a1e0-7853a8016213",
+        "name": "position percentage",
+        "display_unit": "",
+        "type": "https://schema.org/Integer",
+        "min_value": 0,
+        "max_value": 100,
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:15af5b7b-8b17-4b18-b37e-2e91c839886b": {
+        "id": "urn:infai:ses:characteristic:15af5b7b-8b17-4b18-b37e-2e91c839886b",
+        "name": "",
+        "display_unit": "",
+        "type": "",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:17cfbe28-ce44-4355-bf75-15b6bf39ba1d": {
+        "id": "urn:infai:ses:characteristic:17cfbe28-ce44-4355-bf75-15b6bf39ba1d",
+        "name": "contact state",
+        "display_unit": "",
+        "type": "https://schema.org/Boolean",
+        "allowed_values": null,
+        "value": false,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:182e6bb4-8622-453a-9a4d-bfa9c70d6c9c": {
+        "id": "urn:infai:ses:characteristic:182e6bb4-8622-453a-9a4d-bfa9c70d6c9c",
+        "name": "millisecond",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "min_value": 0,
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:193ff994-60a4-4ed2-90a1-21b82622cb43": {
+        "id": "urn:infai:ses:characteristic:193ff994-60a4-4ed2-90a1-21b82622cb43",
+        "name": "carbon monoxide µg/m³",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:2871c1c4-1c8c-4169-81f6-fb5313df08b1": {
+        "id": "urn:infai:ses:characteristic:2871c1c4-1c8c-4169-81f6-fb5313df08b1",
+        "name": "bar",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:2b4040c4-63b2-497f-8673-96378dcbc4cf": {
+        "id": "urn:infai:ses:characteristic:2b4040c4-63b2-497f-8673-96378dcbc4cf",
+        "name": "revolutions per minute",
+        "display_unit": "",
+        "type": "https://schema.org/Integer",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:2ce5f9c7-3c44-438b-91e6-3e9901b8a3db": {
+        "id": "urn:infai:ses:characteristic:2ce5f9c7-3c44-438b-91e6-3e9901b8a3db",
+        "name": "sulfur dioxide µg/m³",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:2ed0e8ca-e396-4c42-9446-6e6981e87845": {
+        "id": "urn:infai:ses:characteristic:2ed0e8ca-e396-4c42-9446-6e6981e87845",
+        "name": "signal strength percentage",
+        "display_unit": "",
+        "type": "https://schema.org/Integer",
+        "min_value": 0,
+        "max_value": 100,
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:3f0294a9-a53e-4650-b3d1-6a6482cf3b70": {
+        "id": "urn:infai:ses:characteristic:3f0294a9-a53e-4650-b3d1-6a6482cf3b70",
+        "name": "cubic meter per hour",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:3febed55-ba9b-43dc-8709-9c73bae3716e": {
+        "id": "urn:infai:ses:characteristic:3febed55-ba9b-43dc-8709-9c73bae3716e",
+        "name": "kilowatt hour",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:3fec34de-0832-43c7-a071-bf0a858e3292": {
+        "id": "urn:infai:ses:characteristic:3fec34de-0832-43c7-a071-bf0a858e3292",
+        "name": "nitrogen dioxide µg/m³",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:5b4eea52-e8e5-4e80-9455-0382f81a1b43": {
+        "id": "urn:infai:ses:characteristic:5b4eea52-e8e5-4e80-9455-0382f81a1b43",
+        "name": "RGB",
+        "display_unit": "",
+        "type": "https://schema.org/StructuredValue",
+        "allowed_values": null,
+        "sub_characteristics": [
+            {
+                "id": "urn:infai:ses:characteristic:590af9ef-3a5e-4edb-abab-177cb1320b17",
+                "name": "b",
+                "display_unit": "",
+                "type": "https://schema.org/Integer",
+                "allowed_values": null,
+                "sub_characteristics": null
+            },
+            {
+                "id": "urn:infai:ses:characteristic:5ef27837-4aca-43ad-b8f6-4d95cf9ed99e",
+                "name": "g",
+                "display_unit": "",
+                "type": "https://schema.org/Integer",
+                "allowed_values": null,
+                "sub_characteristics": null
+            },
+            {
+                "id": "urn:infai:ses:characteristic:dfe6be4a-650c-4411-8d87-062916b48951",
+                "name": "r",
+                "display_unit": "",
+                "type": "https://schema.org/Integer",
+                "allowed_values": null,
+                "sub_characteristics": null
+            }
+        ]
+    },
+    "characteristics.urn:infai:ses:characteristic:5b5358c4-efd3-48a5-87b5-a8e0a34ce1ab": {
+        "id": "urn:infai:ses:characteristic:5b5358c4-efd3-48a5-87b5-a8e0a34ce1ab",
+        "name": "configuration string",
+        "display_unit": "",
+        "type": "https://schema.org/Text",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:5ba31623-0ccb-4488-bfb7-f73b50e03b5a": {
+        "id": "urn:infai:ses:characteristic:5ba31623-0ccb-4488-bfb7-f73b50e03b5a",
+        "name": "celsius",
+        "display_unit": "°C",
+        "type": "https://schema.org/Float",
+        "min_value": -273.15,
+        "allowed_values": null,
+        "sub_characteristics": []
+    },
+    "characteristics.urn:infai:ses:characteristic:5caa707d-dc08-4f3b-bd9f-f08935c8dd3c": {
+        "id": "urn:infai:ses:characteristic:5caa707d-dc08-4f3b-bd9f-f08935c8dd3c",
+        "name": "lifespan percentage",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "min_value": 0,
+        "max_value": 100,
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:63bb46ea-64f1-4a60-aabb-67b9febdb588": {
+        "id": "urn:infai:ses:characteristic:63bb46ea-64f1-4a60-aabb-67b9febdb588",
+        "name": "latitude EPSG:4326",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:64691f8d-4909-470f-a1fa-e977ebe28684": {
+        "id": "urn:infai:ses:characteristic:64691f8d-4909-470f-a1fa-e977ebe28684",
+        "name": "unix_format_milliseconds",
+        "display_unit": "",
+        "type": "https://schema.org/Integer",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:64928e9f-98ca-42bb-a1e5-adf2a760a2f9": {
+        "id": "urn:infai:ses:characteristic:64928e9f-98ca-42bb-a1e5-adf2a760a2f9",
+        "name": "HSB",
+        "display_unit": "",
+        "type": "https://schema.org/StructuredValue",
+        "allowed_values": null,
+        "sub_characteristics": [
+            {
+                "id": "urn:infai:ses:characteristic:d840607c-c8f9-45d6-b9bd-2c2d444e2899",
+                "name": "b",
+                "display_unit": "",
+                "type": "https://schema.org/Integer",
+                "min_value": 0,
+                "max_value": 100,
+                "allowed_values": null,
+                "sub_characteristics": null
+            },
+            {
+                "id": "urn:infai:ses:characteristic:a66dc568-c0e0-420f-b513-18e8df405538",
+                "name": "s",
+                "display_unit": "",
+                "type": "https://schema.org/Integer",
+                "min_value": 0,
+                "max_value": 100,
+                "allowed_values": null,
+                "sub_characteristics": null
+            },
+            {
+                "id": "urn:infai:ses:characteristic:6ec70e99-8c6a-4909-8d5a-7cc12af76b9a",
+                "name": "h",
+                "display_unit": "",
+                "type": "https://schema.org/Integer",
+                "min_value": 0,
+                "max_value": 360,
+                "allowed_values": null,
+                "sub_characteristics": null
+            }
+        ]
+    },
+    "characteristics.urn:infai:ses:characteristic:65e9a5db-348f-4888-9d95-588741d67dbf": {
+        "id": "urn:infai:ses:characteristic:65e9a5db-348f-4888-9d95-588741d67dbf",
+        "name": "zwave contact state",
+        "display_unit": "",
+        "type": "https://schema.org/Text",
+        "allowed_values": null,
+        "value": "",
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:6bc41b45-a9f3-4d87-9c51-dd3e11257800": {
+        "id": "urn:infai:ses:characteristic:6bc41b45-a9f3-4d87-9c51-dd3e11257800",
+        "name": "iso_format",
+        "display_unit": "",
+        "type": "https://schema.org/Text",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:72b624b5-6edc-4ec4-9ad9-fa00b39915c0": {
+        "id": "urn:infai:ses:characteristic:72b624b5-6edc-4ec4-9ad9-fa00b39915c0",
+        "name": "brightness percentage",
+        "display_unit": "%",
+        "type": "https://schema.org/Integer",
+        "max_value": 100,
+        "allowed_values": null,
+        "sub_characteristics": []
+    },
+    "characteristics.urn:infai:ses:characteristic:7424a147-fb0e-4e71-a666-6c4997928e61": {
+        "id": "urn:infai:ses:characteristic:7424a147-fb0e-4e71-a666-6c4997928e61",
+        "name": "precipitation mm",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:75b2d113-1d03-4ef8-977a-8dbcbb31a683": {
+        "id": "urn:infai:ses:characteristic:75b2d113-1d03-4ef8-977a-8dbcbb31a683",
+        "name": "kelvin",
+        "display_unit": "",
+        "type": "https://schema.org/Integer",
+        "min_value": 0,
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:7621686a-56bc-402d-b4cc-5b266d39736f": {
+        "id": "urn:infai:ses:characteristic:7621686a-56bc-402d-b4cc-5b266d39736f",
+        "name": "on_off",
+        "display_unit": "",
+        "type": "https://schema.org/Text",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:7768d6da-d53f-4afb-aeb3-e0980756ec06": {
+        "id": "urn:infai:ses:characteristic:7768d6da-d53f-4afb-aeb3-e0980756ec06",
+        "name": "CO2 ppm",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:7aaf53b9-6cd3-4e36-b27e-9e77489f6f78": {
+        "id": "urn:infai:ses:characteristic:7aaf53b9-6cd3-4e36-b27e-9e77489f6f78",
+        "name": "fog area fraction percentage",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "min_value": 0,
+        "max_value": 100,
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:7dc1bb7e-b256-408a-a6f9-044dc60fdcf5": {
+        "id": "urn:infai:ses:characteristic:7dc1bb7e-b256-408a-a6f9-044dc60fdcf5",
+        "name": "boolean",
+        "display_unit": "",
+        "type": "https://schema.org/Boolean",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:8b9411f3-bf56-4e57-8fd4-728bdcd451cd": {
+        "id": "urn:infai:ses:characteristic:8b9411f3-bf56-4e57-8fd4-728bdcd451cd",
+        "name": "unix_format_seconds",
+        "display_unit": "",
+        "type": "https://schema.org/Text",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:8e520c73-7ee1-4a4b-954b-1c7c55139e27": {
+        "id": "urn:infai:ses:characteristic:8e520c73-7ee1-4a4b-954b-1c7c55139e27",
+        "name": "any_clear",
+        "display_unit": "",
+        "type": "https://schema.org/Text",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:9673cd38-8adf-48d0-b9ff-54ab56bbdcf0": {
+        "id": "urn:infai:ses:characteristic:9673cd38-8adf-48d0-b9ff-54ab56bbdcf0",
+        "name": "ppm",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:9e1024da-3b60-4531-9f29-464addccb13c": {
+        "id": "urn:infai:ses:characteristic:9e1024da-3b60-4531-9f29-464addccb13c",
+        "name": "second",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "min_value": 0,
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:a3931f28-664d-452f-9370-a641fadd21db": {
+        "id": "urn:infai:ses:characteristic:a3931f28-664d-452f-9370-a641fadd21db",
+        "name": "watt",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:a924efd4-9397-474b-ba01-6de49e0283e3": {
+        "id": "urn:infai:ses:characteristic:a924efd4-9397-474b-ba01-6de49e0283e3",
+        "name": "volt",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:aaf2385d-92a6-4fd0-ba4d-3e8567e733d6": {
+        "id": "urn:infai:ses:characteristic:aaf2385d-92a6-4fd0-ba4d-3e8567e733d6",
+        "name": "humidity percentage",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "min_value": 0,
+        "max_value": 100,
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:ac7ad69f-b82e-454a-8b44-5c0440cba787": {
+        "id": "urn:infai:ses:characteristic:ac7ad69f-b82e-454a-8b44-5c0440cba787",
+        "name": "1 to 10",
+        "display_unit": "",
+        "type": "https://schema.org/Integer",
+        "min_value": 1,
+        "max_value": 10,
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:afb0ebb5-8f10-4c09-b6af-15eb291cacc1": {
+        "id": "urn:infai:ses:characteristic:afb0ebb5-8f10-4c09-b6af-15eb291cacc1",
+        "name": "dew point celsius",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "min_value": -273.15,
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:b060dacf-f198-452b-87cf-740bf139e0c1": {
+        "id": "urn:infai:ses:characteristic:b060dacf-f198-452b-87cf-740bf139e0c1",
+        "name": "dwd pollen level",
+        "display_unit": "",
+        "type": "https://schema.org/Integer",
+        "min_value": 1,
+        "max_value": 7,
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:b36eee5d-52f0-4476-a6f7-6dd03b24e0f8": {
+        "id": "urn:infai:ses:characteristic:b36eee5d-52f0-4476-a6f7-6dd03b24e0f8",
+        "name": "minute",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "min_value": 0,
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:b59c3965-c270-4053-b46a-f58b44cc980c": {
+        "id": "urn:infai:ses:characteristic:b59c3965-c270-4053-b46a-f58b44cc980c",
+        "name": "ampere",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:b6070dc9-0327-47b4-ba27-3287325940e5": {
+        "id": "urn:infai:ses:characteristic:b6070dc9-0327-47b4-ba27-3287325940e5",
+        "name": "water level cm",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:bc03ef2e-51d5-4034-8bec-75df78e3afee": {
+        "id": "urn:infai:ses:characteristic:bc03ef2e-51d5-4034-8bec-75df78e3afee",
+        "name": "online_offline",
+        "display_unit": "",
+        "type": "https://schema.org/Text",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:c0353532-a8fb-4553-a00b-418cb8a80a65": {
+        "id": "urn:infai:ses:characteristic:c0353532-a8fb-4553-a00b-418cb8a80a65",
+        "name": "binary status code",
+        "display_unit": "",
+        "type": "https://schema.org/Integer",
+        "min_value": 0,
+        "max_value": 1,
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:c7dfcb86-2733-4917-a5ca-0a150a458eed": {
+        "id": "urn:infai:ses:characteristic:c7dfcb86-2733-4917-a5ca-0a150a458eed",
+        "name": "unix_format_nanoseconds",
+        "display_unit": "",
+        "type": "https://schema.org/Text",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:ca44269e-ab5a-4ed7-8acb-ce80a6a592a5": {
+        "id": "urn:infai:ses:characteristic:ca44269e-ab5a-4ed7-8acb-ce80a6a592a5",
+        "name": "speed level percentage",
+        "display_unit": "",
+        "type": "https://schema.org/Integer",
+        "min_value": 0,
+        "max_value": 100,
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:d8a73a4d-8745-40b9-87e5-50c5d31f745a": {
+        "id": "urn:infai:ses:characteristic:d8a73a4d-8745-40b9-87e5-50c5d31f745a",
+        "name": "longitude EPSG:4326",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:de1a0d1d-85ae-45d3-844b-56c324c116cd": {
+        "id": "urn:infai:ses:characteristic:de1a0d1d-85ae-45d3-844b-56c324c116cd",
+        "name": "particle amount µg/m³",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:e6874605-80cf-418a-9319-da3b27411af1": {
+        "id": "urn:infai:ses:characteristic:e6874605-80cf-418a-9319-da3b27411af1",
+        "name": "cos Phi",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "min_value": 0,
+        "max_value": 1,
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:eb33cf65-b0a2-413d-891d-cada05be01ed": {
+        "id": "urn:infai:ses:characteristic:eb33cf65-b0a2-413d-891d-cada05be01ed",
+        "name": "hPa",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:ec4ab96e-bfc3-4a80-96c4-b9e12634611f": {
+        "id": "urn:infai:ses:characteristic:ec4ab96e-bfc3-4a80-96c4-b9e12634611f",
+        "name": "precipitation probability percentage",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "min_value": 0,
+        "max_value": 100,
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:f17ed384-82b6-4fba-908a-d146366c9779": {
+        "id": "urn:infai:ses:characteristic:f17ed384-82b6-4fba-908a-d146366c9779",
+        "name": "ozone µg/m³",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:f6b7ee6e-423c-47f1-8b1f-c489461d3039": {
+        "id": "urn:infai:ses:characteristic:f6b7ee6e-423c-47f1-8b1f-c489461d3039",
+        "name": "benzene µg/m³",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "characteristics.urn:infai:ses:characteristic:fbfea6c7-3392-4ec2-9ec5-0d0ef6362b9b": {
+        "id": "urn:infai:ses:characteristic:fbfea6c7-3392-4ec2-9ec5-0d0ef6362b9b",
+        "name": "cubic meter",
+        "display_unit": "",
+        "type": "https://schema.org/Float",
+        "allowed_values": null,
+        "sub_characteristics": null
+    },
+    "concept-ids": [
+        "mock-placeholder-concept",
+        "urn:infai:ses:concept:08cde541-54dc-4d92-b2d9-b07304bd659a",
+        "urn:infai:ses:concept:ebfeabb3-50f0-44bd-b06e-95eb52df484e",
+        "urn:infai:ses:concept:dbe4ad57-aa1d-4d24-9bee-a44a1c670d7f",
+        "urn:infai:ses:concept:55efac99-6e5b-4ef3-8f4a-8576c1fe8614",
+        "urn:infai:ses:concept:bc7a76fc-86d0-470a-a872-00ef211904f9",
+        "urn:infai:ses:concept:64106d72-d5b7-4df3-a1bf-cc369799434e",
+        "urn:infai:ses:concept:8b1161d5-7878-4dd2-a36c-6f98f6b94bf8",
+        "urn:infai:ses:concept:8f4a00c9-061b-41d8-901f-192b15f5a465",
+        "urn:infai:ses:concept:85e11726-620a-4584-96a2-3a6fe4141b2d",
+        "urn:infai:ses:concept:fb85f32b-1864-456d-b99f-1540892ffd02",
+        "urn:infai:ses:concept:7ffc7509-51dc-4a62-bb42-850090996586",
+        "urn:infai:ses:concept:7d28f92e-8836-42bf-bca6-342989059ddf",
+        "urn:infai:ses:concept:76a1082b-7e86-4ba0-b126-7c449e581563",
+        "urn:infai:ses:concept:cedf4396-8e55-491d-b6f8-02ff94679b7d",
+        "urn:infai:ses:concept:f7fae105-b4d9-40c9-8a47-82c377899cd5",
+        "urn:infai:ses:concept:1c9e4d58-28e3-4e65-a0a0-48d8d519b0c9",
+        "urn:infai:ses:concept:67fbf29b-fd77-4c82-b8fa-19a6000c602d",
+        "urn:infai:ses:concept:c6d4cb5b-5ae4-489e-a664-cf02003f1d25",
+        "urn:infai:ses:concept:f917e146-9192-4796-8bbe-6be14292346f",
+        "urn:infai:ses:concept:a570ecaf-2939-4524-8bd3-c5f12b1e6863",
+        "urn:infai:ses:concept:59b02acd-aac2-4415-976e-bd4790963ce4",
+        "urn:infai:ses:concept:1f60e21d-0682-483c-9b0b-0146d8a1618d",
+        "urn:infai:ses:concept:1b926adc-8e35-4c88-bfe1-15f23e67f4f5",
+        "urn:infai:ses:concept:a63a960d-1f36-4d95-ad5b-dfb4a7fe3b5b",
+        "urn:infai:ses:concept:5859621b-f6b3-4430-8b4f-b25a53bae708",
+        "urn:infai:ses:concept:b12151d3-d187-4839-82ac-8cc18fae3dd9",
+        "urn:infai:ses:concept:46de11b9-26ff-4cce-b945-e93b84f04fe6",
+        "urn:infai:ses:concept:3e40dfa7-805d-4732-af15-5207c0a59c47",
+        "urn:infai:ses:concept:0c1eaf2b-ea3d-4ca9-8446-02c55dd5d3f4",
+        "urn:infai:ses:concept:40e8e501-85a0-4406-9aa9-7d5fd6985d1f",
+        "urn:infai:ses:concept:9924ea1a-d96a-4882-88a2-165493956ec3",
+        "urn:infai:ses:concept:2769a588-97e7-4bc3-94f4-b97bef591e95",
+        "urn:infai:ses:concept:95f01a66-f7ea-4c49-9304-29cf065a0c55",
+        "urn:infai:ses:concept:a43e8989-7d4b-4d9c-97d7-766799106499",
+        "urn:infai:ses:concept:c41d2566-aad6-458a-8f21-fee504225b17",
+        "urn:infai:ses:concept:0bc81398-3ed6-4e2b-a6c4-b754583aac37",
+        "urn:infai:ses:concept:6625cc35-a8d0-4d9d-91ef-3c0cb71f0285",
+        "urn:infai:ses:concept:58d23b4f-c315-4d7d-9230-fa989d55640a",
+        "urn:infai:ses:concept:9286d398-f49d-494f-8157-bea17947b1fa",
+        "urn:infai:ses:concept:a7cd1e62-72fc-448c-8492-6a8f0307bbdc",
+        "urn:infai:ses:concept:397de0f8-a79f-484f-aa13-0042e48e5648",
+        "urn:infai:ses:concept:81c003ac-ed79-4b3d-8d49-6d95b61b2863",
+        "urn:infai:ses:concept:cb2608c2-b671-46be-8bad-1539e6c6e2af",
+        "urn:infai:ses:concept:0ec0adad-6873-4baa-931f-6544aa1dd210"
+    ],
+    "concept.mock-placeholder-concept": {
+        "id": "mock-placeholder-concept",
+        "name": "",
+        "characteristic_ids": [
+            "example_brightness",
+            "example_lux",
+            "example_color",
+            "example_rgb",
+            "example_hex"
+        ],
+        "base_characteristic_id": "",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:08cde541-54dc-4d92-b2d9-b07304bd659a": {
+        "id": "urn:infai:ses:concept:08cde541-54dc-4d92-b2d9-b07304bd659a",
+        "name": "benzene",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:f6b7ee6e-423c-47f1-8b1f-c489461d3039"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:f6b7ee6e-423c-47f1-8b1f-c489461d3039",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:0bc81398-3ed6-4e2b-a6c4-b754583aac37": {
+        "id": "urn:infai:ses:concept:0bc81398-3ed6-4e2b-a6c4-b754583aac37",
+        "name": "temperature",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:75b2d113-1d03-4ef8-977a-8dbcbb31a683",
+            "urn:infai:ses:characteristic:5ba31623-0ccb-4488-bfb7-f73b50e03b5a"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:5ba31623-0ccb-4488-bfb7-f73b50e03b5a",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:0c1eaf2b-ea3d-4ca9-8446-02c55dd5d3f4": {
+        "id": "urn:infai:ses:concept:0c1eaf2b-ea3d-4ca9-8446-02c55dd5d3f4",
+        "name": "precipitation",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:7424a147-fb0e-4e71-a666-6c4997928e61"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:7424a147-fb0e-4e71-a666-6c4997928e61",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:0ec0adad-6873-4baa-931f-6544aa1dd210": {
+        "id": "urn:infai:ses:concept:0ec0adad-6873-4baa-931f-6544aa1dd210",
+        "name": "water level",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:b6070dc9-0327-47b4-ba27-3287325940e5"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:b6070dc9-0327-47b4-ba27-3287325940e5",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:1b926adc-8e35-4c88-bfe1-15f23e67f4f5": {
+        "id": "urn:infai:ses:concept:1b926adc-8e35-4c88-bfe1-15f23e67f4f5",
+        "name": "ozone",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:f17ed384-82b6-4fba-908a-d146366c9779"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:f17ed384-82b6-4fba-908a-d146366c9779",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:1c9e4d58-28e3-4e65-a0a0-48d8d519b0c9": {
+        "id": "urn:infai:ses:concept:1c9e4d58-28e3-4e65-a0a0-48d8d519b0c9",
+        "name": "frequency",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:0bf5bc86-dde2-465f-8a16-687ef9acba3d"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:0bf5bc86-dde2-465f-8a16-687ef9acba3d",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:1f60e21d-0682-483c-9b0b-0146d8a1618d": {
+        "id": "urn:infai:ses:concept:1f60e21d-0682-483c-9b0b-0146d8a1618d",
+        "name": "nitrogen dioxide",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:3fec34de-0832-43c7-a071-bf0a858e3292"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:3fec34de-0832-43c7-a071-bf0a858e3292",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:2769a588-97e7-4bc3-94f4-b97bef591e95": {
+        "id": "urn:infai:ses:concept:2769a588-97e7-4bc3-94f4-b97bef591e95",
+        "name": "signal strength",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:2ed0e8ca-e396-4c42-9446-6e6981e87845"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:2ed0e8ca-e396-4c42-9446-6e6981e87845",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:397de0f8-a79f-484f-aa13-0042e48e5648": {
+        "id": "urn:infai:ses:concept:397de0f8-a79f-484f-aa13-0042e48e5648",
+        "name": "voltage",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:a924efd4-9397-474b-ba01-6de49e0283e3"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:a924efd4-9397-474b-ba01-6de49e0283e3",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:3e40dfa7-805d-4732-af15-5207c0a59c47": {
+        "id": "urn:infai:ses:concept:3e40dfa7-805d-4732-af15-5207c0a59c47",
+        "name": "power factor",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:e6874605-80cf-418a-9319-da3b27411af1"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:e6874605-80cf-418a-9319-da3b27411af1",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:40e8e501-85a0-4406-9aa9-7d5fd6985d1f": {
+        "id": "urn:infai:ses:concept:40e8e501-85a0-4406-9aa9-7d5fd6985d1f",
+        "name": "precipitation probability",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:ec4ab96e-bfc3-4a80-96c4-b9e12634611f"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:ec4ab96e-bfc3-4a80-96c4-b9e12634611f",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:46de11b9-26ff-4cce-b945-e93b84f04fe6": {
+        "id": "urn:infai:ses:concept:46de11b9-26ff-4cce-b945-e93b84f04fe6",
+        "name": "power",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:a3931f28-664d-452f-9370-a641fadd21db"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:a3931f28-664d-452f-9370-a641fadd21db",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:55efac99-6e5b-4ef3-8f4a-8576c1fe8614": {
+        "id": "urn:infai:ses:concept:55efac99-6e5b-4ef3-8f4a-8576c1fe8614",
+        "name": "carbon dioxid",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:7768d6da-d53f-4afb-aeb3-e0980756ec06"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:7768d6da-d53f-4afb-aeb3-e0980756ec06",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:5859621b-f6b3-4430-8b4f-b25a53bae708": {
+        "id": "urn:infai:ses:concept:5859621b-f6b3-4430-8b4f-b25a53bae708",
+        "name": "pollen level",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:b060dacf-f198-452b-87cf-740bf139e0c1"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:b060dacf-f198-452b-87cf-740bf139e0c1",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:58d23b4f-c315-4d7d-9230-fa989d55640a": {
+        "id": "urn:infai:ses:concept:58d23b4f-c315-4d7d-9230-fa989d55640a",
+        "name": "time",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:9e1024da-3b60-4531-9f29-464addccb13c",
+            "urn:infai:ses:characteristic:b36eee5d-52f0-4476-a6f7-6dd03b24e0f8",
+            "urn:infai:ses:characteristic:182e6bb4-8622-453a-9a4d-bfa9c70d6c9c"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:9e1024da-3b60-4531-9f29-464addccb13c",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:59b02acd-aac2-4415-976e-bd4790963ce4": {
+        "id": "urn:infai:ses:concept:59b02acd-aac2-4415-976e-bd4790963ce4",
+        "name": "luminiscence",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:0419856b-d198-480e-9998-bf990f226844"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:0419856b-d198-480e-9998-bf990f226844",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:64106d72-d5b7-4df3-a1bf-cc369799434e": {
+        "id": "urn:infai:ses:concept:64106d72-d5b7-4df3-a1bf-cc369799434e",
+        "name": "cloud fraction",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:0958edd7-eaae-46fe-b612-0bf4e53400af"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:0958edd7-eaae-46fe-b612-0bf4e53400af",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:6625cc35-a8d0-4d9d-91ef-3c0cb71f0285": {
+        "id": "urn:infai:ses:concept:6625cc35-a8d0-4d9d-91ef-3c0cb71f0285",
+        "name": "thunder probability",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:02c7ea52-fc76-470e-b2b2-401653412de6"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:02c7ea52-fc76-470e-b2b2-401653412de6",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:67fbf29b-fd77-4c82-b8fa-19a6000c602d": {
+        "id": "urn:infai:ses:concept:67fbf29b-fd77-4c82-b8fa-19a6000c602d",
+        "name": "humidity",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:aaf2385d-92a6-4fd0-ba4d-3e8567e733d6"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:aaf2385d-92a6-4fd0-ba4d-3e8567e733d6",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:76a1082b-7e86-4ba0-b126-7c449e581563": {
+        "id": "urn:infai:ses:concept:76a1082b-7e86-4ba0-b126-7c449e581563",
+        "name": "direction",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:005ca5d3-44da-4fc8-b2b8-a88e3209e9f7"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:005ca5d3-44da-4fc8-b2b8-a88e3209e9f7",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:7d28f92e-8836-42bf-bca6-342989059ddf": {
+        "id": "urn:infai:ses:concept:7d28f92e-8836-42bf-bca6-342989059ddf",
+        "name": "dew point",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:afb0ebb5-8f10-4c09-b6af-15eb291cacc1"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:afb0ebb5-8f10-4c09-b6af-15eb291cacc1",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:7ffc7509-51dc-4a62-bb42-850090996586": {
+        "id": "urn:infai:ses:concept:7ffc7509-51dc-4a62-bb42-850090996586",
+        "name": "current",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:b59c3965-c270-4053-b46a-f58b44cc980c"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:b59c3965-c270-4053-b46a-f58b44cc980c",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:81c003ac-ed79-4b3d-8d49-6d95b61b2863": {
+        "id": "urn:infai:ses:concept:81c003ac-ed79-4b3d-8d49-6d95b61b2863",
+        "name": "volume",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:fbfea6c7-3392-4ec2-9ec5-0d0ef6362b9b"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:fbfea6c7-3392-4ec2-9ec5-0d0ef6362b9b",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:85e11726-620a-4584-96a2-3a6fe4141b2d": {
+        "id": "urn:infai:ses:concept:85e11726-620a-4584-96a2-3a6fe4141b2d",
+        "name": "connection status",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:bc03ef2e-51d5-4034-8bec-75df78e3afee"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:bc03ef2e-51d5-4034-8bec-75df78e3afee",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:8b1161d5-7878-4dd2-a36c-6f98f6b94bf8": {
+        "id": "urn:infai:ses:concept:8b1161d5-7878-4dd2-a36c-6f98f6b94bf8",
+        "name": "color",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:0fc343ce-4627-4c88-b1e0-d3ed29754af8",
+            "urn:infai:ses:characteristic:5b4eea52-e8e5-4e80-9455-0382f81a1b43",
+            "urn:infai:ses:characteristic:64928e9f-98ca-42bb-a1e5-adf2a760a2f9"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:5b4eea52-e8e5-4e80-9455-0382f81a1b43",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:8f4a00c9-061b-41d8-901f-192b15f5a465": {
+        "id": "urn:infai:ses:concept:8f4a00c9-061b-41d8-901f-192b15f5a465",
+        "name": "configuration",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:5b5358c4-efd3-48a5-87b5-a8e0a34ce1ab"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:5b5358c4-efd3-48a5-87b5-a8e0a34ce1ab",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:9286d398-f49d-494f-8157-bea17947b1fa": {
+        "id": "urn:infai:ses:concept:9286d398-f49d-494f-8157-bea17947b1fa",
+        "name": "timestamp",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:6bc41b45-a9f3-4d87-9c51-dd3e11257800",
+            "urn:infai:ses:characteristic:8b9411f3-bf56-4e57-8fd4-728bdcd451cd",
+            "urn:infai:ses:characteristic:c7dfcb86-2733-4917-a5ca-0a150a458eed",
+            "urn:infai:ses:characteristic:64691f8d-4909-470f-a1fa-e977ebe28684"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:6bc41b45-a9f3-4d87-9c51-dd3e11257800",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:95f01a66-f7ea-4c49-9304-29cf065a0c55": {
+        "id": "urn:infai:ses:concept:95f01a66-f7ea-4c49-9304-29cf065a0c55",
+        "name": "speed",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:04bce19c-839d-45de-8cfb-bd470715f4cd"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:04bce19c-839d-45de-8cfb-bd470715f4cd",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:9924ea1a-d96a-4882-88a2-165493956ec3": {
+        "id": "urn:infai:ses:concept:9924ea1a-d96a-4882-88a2-165493956ec3",
+        "name": "pressure",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:2871c1c4-1c8c-4169-81f6-fb5313df08b1",
+            "urn:infai:ses:characteristic:eb33cf65-b0a2-413d-891d-cada05be01ed"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:eb33cf65-b0a2-413d-891d-cada05be01ed",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:a43e8989-7d4b-4d9c-97d7-766799106499": {
+        "id": "urn:infai:ses:concept:a43e8989-7d4b-4d9c-97d7-766799106499",
+        "name": "speed level",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:ca44269e-ab5a-4ed7-8acb-ce80a6a592a5",
+            "urn:infai:ses:characteristic:2b4040c4-63b2-497f-8673-96378dcbc4cf",
+            "urn:infai:ses:characteristic:ac7ad69f-b82e-454a-8b44-5c0440cba787"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:2b4040c4-63b2-497f-8673-96378dcbc4cf",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:a570ecaf-2939-4524-8bd3-c5f12b1e6863": {
+        "id": "urn:infai:ses:concept:a570ecaf-2939-4524-8bd3-c5f12b1e6863",
+        "name": "longitude",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:d8a73a4d-8745-40b9-87e5-50c5d31f745a"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:d8a73a4d-8745-40b9-87e5-50c5d31f745a",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:a63a960d-1f36-4d95-ad5b-dfb4a7fe3b5b": {
+        "id": "urn:infai:ses:concept:a63a960d-1f36-4d95-ad5b-dfb4a7fe3b5b",
+        "name": "particle amount",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:de1a0d1d-85ae-45d3-844b-56c324c116cd",
+            "urn:infai:ses:characteristic:9673cd38-8adf-48d0-b9ff-54ab56bbdcf0"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:9673cd38-8adf-48d0-b9ff-54ab56bbdcf0",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:a7cd1e62-72fc-448c-8492-6a8f0307bbdc": {
+        "id": "urn:infai:ses:concept:a7cd1e62-72fc-448c-8492-6a8f0307bbdc",
+        "name": "ultraviolet",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:0a61343d-c0d1-4af8-9329-3829c30ba59f"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:0a61343d-c0d1-4af8-9329-3829c30ba59f",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:b12151d3-d187-4839-82ac-8cc18fae3dd9": {
+        "id": "urn:infai:ses:concept:b12151d3-d187-4839-82ac-8cc18fae3dd9",
+        "name": "position",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:107c29d3-f863-47e1-a1e0-7853a8016213"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:107c29d3-f863-47e1-a1e0-7853a8016213",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:bc7a76fc-86d0-470a-a872-00ef211904f9": {
+        "id": "urn:infai:ses:concept:bc7a76fc-86d0-470a-a872-00ef211904f9",
+        "name": "carbon monoxide",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:15af5b7b-8b17-4b18-b37e-2e91c839886b",
+            "urn:infai:ses:characteristic:193ff994-60a4-4ed2-90a1-21b82622cb43"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:193ff994-60a4-4ed2-90a1-21b82622cb43",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:c41d2566-aad6-458a-8f21-fee504225b17": {
+        "id": "urn:infai:ses:concept:c41d2566-aad6-458a-8f21-fee504225b17",
+        "name": "sulfur dioxide",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:2ce5f9c7-3c44-438b-91e6-3e9901b8a3db"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:2ce5f9c7-3c44-438b-91e6-3e9901b8a3db",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:c6d4cb5b-5ae4-489e-a664-cf02003f1d25": {
+        "id": "urn:infai:ses:concept:c6d4cb5b-5ae4-489e-a664-cf02003f1d25",
+        "name": "latitude",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:63bb46ea-64f1-4a60-aabb-67b9febdb588"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:63bb46ea-64f1-4a60-aabb-67b9febdb588",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:cb2608c2-b671-46be-8bad-1539e6c6e2af": {
+        "id": "urn:infai:ses:concept:cb2608c2-b671-46be-8bad-1539e6c6e2af",
+        "name": "volume flow",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:3f0294a9-a53e-4650-b3d1-6a6482cf3b70"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:3f0294a9-a53e-4650-b3d1-6a6482cf3b70",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:cedf4396-8e55-491d-b6f8-02ff94679b7d": {
+        "id": "urn:infai:ses:concept:cedf4396-8e55-491d-b6f8-02ff94679b7d",
+        "name": "energy",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:3febed55-ba9b-43dc-8709-9c73bae3716e"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:3febed55-ba9b-43dc-8709-9c73bae3716e",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:dbe4ad57-aa1d-4d24-9bee-a44a1c670d7f": {
+        "id": "urn:infai:ses:concept:dbe4ad57-aa1d-4d24-9bee-a44a1c670d7f",
+        "name": "brightness",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:72b624b5-6edc-4ec4-9ad9-fa00b39915c0"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:72b624b5-6edc-4ec4-9ad9-fa00b39915c0",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:ebfeabb3-50f0-44bd-b06e-95eb52df484e": {
+        "id": "urn:infai:ses:concept:ebfeabb3-50f0-44bd-b06e-95eb52df484e",
+        "name": "binary state",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:8e520c73-7ee1-4a4b-954b-1c7c55139e27",
+            "urn:infai:ses:characteristic:7621686a-56bc-402d-b4cc-5b266d39736f",
+            "urn:infai:ses:characteristic:c0353532-a8fb-4553-a00b-418cb8a80a65",
+            "urn:infai:ses:characteristic:7dc1bb7e-b256-408a-a6f9-044dc60fdcf5"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:7dc1bb7e-b256-408a-a6f9-044dc60fdcf5",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:f7fae105-b4d9-40c9-8a47-82c377899cd5": {
+        "id": "urn:infai:ses:concept:f7fae105-b4d9-40c9-8a47-82c377899cd5",
+        "name": "fog area fraction",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:7aaf53b9-6cd3-4e36-b27e-9e77489f6f78"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:7aaf53b9-6cd3-4e36-b27e-9e77489f6f78",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:f917e146-9192-4796-8bbe-6be14292346f": {
+        "id": "urn:infai:ses:concept:f917e146-9192-4796-8bbe-6be14292346f",
+        "name": "lifespan",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:5caa707d-dc08-4f3b-bd9f-f08935c8dd3c"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:5caa707d-dc08-4f3b-bd9f-f08935c8dd3c",
+        "conversions": null
+    },
+    "concept.urn:infai:ses:concept:fb85f32b-1864-456d-b99f-1540892ffd02": {
+        "id": "urn:infai:ses:concept:fb85f32b-1864-456d-b99f-1540892ffd02",
+        "name": "contact",
+        "characteristic_ids": [
+            "urn:infai:ses:characteristic:17cfbe28-ce44-4355-bf75-15b6bf39ba1d",
+            "urn:infai:ses:characteristic:65e9a5db-348f-4888-9d95-588741d67dbf"
+        ],
+        "base_characteristic_id": "urn:infai:ses:characteristic:17cfbe28-ce44-4355-bf75-15b6bf39ba1d",
+        "conversions": null
+    },
+    "list-functions": [
+        {
+            "id": "",
+            "name": "",
+            "display_name": "",
+            "description": "",
+            "concept_id": "",
+            "rdf_type": ""
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:e59bbee4-32a4-456b-99b9-dea8c3545dfc",
+            "name": "getAlarmFunction",
+            "display_name": "",
+            "description": "Checks if an alarm is triggered",
+            "concept_id": "urn:infai:ses:concept:ebfeabb3-50f0-44bd-b06e-95eb52df484e",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:00549f18-88b5-44c7-adb1-f558e8d53d1d",
+            "name": "getBatteryStateFunction",
+            "display_name": "",
+            "description": "Returns the current battery level",
+            "concept_id": "urn:infai:ses:concept:f917e146-9192-4796-8bbe-6be14292346f",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:3395f090-9ac5-45fd-b064-81ccea7eb236",
+            "name": "getBenzeneFunction",
+            "display_name": "",
+            "description": "Measure benzene",
+            "concept_id": "urn:infai:ses:concept:08cde541-54dc-4d92-b2d9-b07304bd659a",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:c51a6ea5-90c3-4223-9052-6fe4136386cd",
+            "name": "getBrightnessFunction",
+            "display_name": "",
+            "description": "Read a brightness level",
+            "concept_id": "urn:infai:ses:concept:dbe4ad57-aa1d-4d24-9bee-a44a1c670d7f",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:ad89a222-75a2-47e1-9fe3-969094320881",
+            "name": "getCarbonDioxidFunction",
+            "display_name": "",
+            "description": "Collect a carbon dioxid measurement",
+            "concept_id": "urn:infai:ses:concept:55efac99-6e5b-4ef3-8f4a-8576c1fe8614",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:76423a12-eac2-4f6c-8f79-0216360e2e61",
+            "name": "getCarbonMonoxideFunction",
+            "display_name": "",
+            "description": "Get a carbon monoxide measurement",
+            "concept_id": "urn:infai:ses:concept:bc7a76fc-86d0-470a-a872-00ef211904f9",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:87709727-53c7-417c-8072-6a50cc3bbf1d",
+            "name": "getCloudFractionFunction",
+            "display_name": "",
+            "description": "Read how much of the sky is covered in clouds",
+            "concept_id": "urn:infai:ses:concept:64106d72-d5b7-4df3-a1bf-cc369799434e",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:bdb6a7c8-4a3d-4fe0-bab3-ce02e09b5869",
+            "name": "getColorFunction",
+            "display_name": "",
+            "description": "Read a color",
+            "concept_id": "urn:infai:ses:concept:8b1161d5-7878-4dd2-a36c-6f98f6b94bf8",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:507a3fc2-5ebe-47fa-84a9-1df1e5314f74",
+            "name": "getConfigFunction",
+            "display_name": "",
+            "description": "",
+            "concept_id": "urn:infai:ses:concept:8f4a00c9-061b-41d8-901f-192b15f5a465",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:b8791b17-cf01-467f-87cf-da2271fffb6d",
+            "name": "getConnectionStatusFunction",
+            "display_name": "",
+            "description": "Check if something is connected",
+            "concept_id": "urn:infai:ses:concept:85e11726-620a-4584-96a2-3a6fe4141b2d",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:90f05fa4-b765-4998-a09c-448f83a5e8c5",
+            "name": "getContactFunction",
+            "display_name": "",
+            "description": "",
+            "concept_id": "urn:infai:ses:concept:fb85f32b-1864-456d-b99f-1540892ffd02",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:6a04430c-0b40-4d26-8851-2401e13edfd6",
+            "name": "getCurrentConsumptionFunction",
+            "display_name": "",
+            "description": "Return the current consumption",
+            "concept_id": "urn:infai:ses:concept:7ffc7509-51dc-4a62-bb42-850090996586",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:28326e5a-69fa-439b-baa9-0e63c453186f",
+            "name": "getCurrentFunction",
+            "display_name": "",
+            "description": "Return a current measurement",
+            "concept_id": "urn:infai:ses:concept:7ffc7509-51dc-4a62-bb42-850090996586",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:48c6f5fe-2ad8-49c2-b63d-4e4b13b7af67",
+            "name": "getDewPointFunction",
+            "display_name": "",
+            "description": "Get a dew point measurement",
+            "concept_id": "urn:infai:ses:concept:7d28f92e-8836-42bf-bca6-342989059ddf",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:2d9bb487-7430-4830-bf09-955e8824c871",
+            "name": "getDirectionFunction",
+            "display_name": "",
+            "description": "Direction of something",
+            "concept_id": "urn:infai:ses:concept:76a1082b-7e86-4ba0-b126-7c449e581563",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:57dfd369-92db-462c-aca4-a767b52c972e",
+            "name": "getEnergyConsumptionFunction",
+            "display_name": "",
+            "description": "Return the energy consumption",
+            "concept_id": "urn:infai:ses:concept:cedf4396-8e55-491d-b6f8-02ff94679b7d",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:826e5a04-71cc-4935-9fd4-92c930dc06bb",
+            "name": "getEnergyProductionFunction",
+            "display_name": "",
+            "description": "Return the energy production",
+            "concept_id": "urn:infai:ses:concept:cedf4396-8e55-491d-b6f8-02ff94679b7d",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:8b994547-dbf4-4e3c-a356-e676a744c601",
+            "name": "getFilterStateFunction",
+            "display_name": "",
+            "description": "Return how much a filter has been used up",
+            "concept_id": "urn:infai:ses:concept:f917e146-9192-4796-8bbe-6be14292346f",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:68998f82-33e8-4ca7-8e3a-a3bba077f0fa",
+            "name": "getFogAreaFractionFunction",
+            "display_name": "",
+            "description": "Check how much of the horizontal area is covered in fog",
+            "concept_id": "urn:infai:ses:concept:f7fae105-b4d9-40c9-8a47-82c377899cd5",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:9f180351-e83b-437f-b13f-1ad030703036",
+            "name": "getFrequencyFunction",
+            "display_name": "",
+            "description": "Return a frequency measurement",
+            "concept_id": "urn:infai:ses:concept:1c9e4d58-28e3-4e65-a0a0-48d8d519b0c9",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:53bb96e5-1fb1-4409-89a6-ae6c7332eae4",
+            "name": "getHumidityFunction",
+            "display_name": "",
+            "description": "Read a humidity measurement",
+            "concept_id": "urn:infai:ses:concept:67fbf29b-fd77-4c82-b8fa-19a6000c602d",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:f9f2b270-8c74-4289-b822-649e96b39206",
+            "name": "getLatitudeFunction",
+            "display_name": "",
+            "description": "Get a latitude measurement",
+            "concept_id": "urn:infai:ses:concept:c6d4cb5b-5ae4-489e-a664-cf02003f1d25",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:26508f1a-ad3c-4850-8731-dbf966b96335",
+            "name": "getLongitudeFunction",
+            "display_name": "",
+            "description": "Get a longitude measurement",
+            "concept_id": "urn:infai:ses:concept:a570ecaf-2939-4524-8bd3-c5f12b1e6863",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:d7bd8d39-92f7-49da-9dd9-5445c45f2e27",
+            "name": "getLuminiscenceFunction",
+            "display_name": "",
+            "description": "Read a luminiscence measurement",
+            "concept_id": "urn:infai:ses:concept:59b02acd-aac2-4415-976e-bd4790963ce4",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:231da98e-f21d-47bc-9f56-6606397221a2",
+            "name": "getMonitoringStateFunction",
+            "display_name": "",
+            "description": "Check the state of something being monitored",
+            "concept_id": "urn:infai:ses:concept:ebfeabb3-50f0-44bd-b06e-95eb52df484e",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:64dfd53a-f288-40f7-a3ef-a6a7f7c8a7c3",
+            "name": "getMotionStateFunction",
+            "display_name": "",
+            "description": "Check if something is moving or has been moved",
+            "concept_id": "urn:infai:ses:concept:ebfeabb3-50f0-44bd-b06e-95eb52df484e",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:43525897-6a9c-4501-86ad-768dcbcb7c57",
+            "name": "getNitrogenDioxideFunction",
+            "display_name": "",
+            "description": "Get a nitrogen dioxide measurement",
+            "concept_id": "urn:infai:ses:concept:1f60e21d-0682-483c-9b0b-0146d8a1618d",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:20d3c1d3-77d7-4181-a9f3-b487add58cd0",
+            "name": "getOnOffStateFunction",
+            "display_name": "",
+            "description": "Check if something is on or off",
+            "concept_id": "urn:infai:ses:concept:ebfeabb3-50f0-44bd-b06e-95eb52df484e",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:61b1f2db-3cff-49d8-b22d-424073269f35",
+            "name": "getOscillationStateFunction",
+            "display_name": "",
+            "description": "Check if something is oscillating",
+            "concept_id": "urn:infai:ses:concept:ebfeabb3-50f0-44bd-b06e-95eb52df484e",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:56d6b5c6-9b95-4181-ad8f-d0b109cedb18",
+            "name": "getOzoneFunction",
+            "display_name": "",
+            "description": "Get an ozone measurement",
+            "concept_id": "urn:infai:ses:concept:1b926adc-8e35-4c88-bfe1-15f23e67f4f5",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:0e19d094-70c6-402c-8523-3aaff2ce6dd9",
+            "name": "getParticleAmountPM1",
+            "display_name": "",
+            "description": "Read a PM1 measurement",
+            "concept_id": "urn:infai:ses:concept:a63a960d-1f36-4d95-ad5b-dfb4a7fe3b5b",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:f2c1a22f-a49e-4549-9833-62f0994afec0",
+            "name": "getParticleAmountPM10",
+            "display_name": "",
+            "description": "Read a PM10 measurement",
+            "concept_id": "urn:infai:ses:concept:a63a960d-1f36-4d95-ad5b-dfb4a7fe3b5b",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:controlling-function:8335e851-05e2-479d-8c17-1cf8174e90e9",
+            "name": "getParticleAmountPM10AS",
+            "display_name": "",
+            "description": "Measure arsenic in particulate matter",
+            "concept_id": "urn:infai:ses:concept:a63a960d-1f36-4d95-ad5b-dfb4a7fe3b5b",
+            "rdf_type": "https://senergy.infai.org/ontology/ControllingFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:29cb52fe-e2d9-446b-8be1-f5447ee7967f",
+            "name": "getParticleAmountPM10BAP",
+            "display_name": "",
+            "description": "Measure benzo(a)pyrene in particulate matter",
+            "concept_id": "urn:infai:ses:concept:a63a960d-1f36-4d95-ad5b-dfb4a7fe3b5b",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:cd475584-1b23-4879-ab72-e879f90ade91",
+            "name": "getParticleAmountPM10CD",
+            "display_name": "",
+            "description": "Measure cadmium in particulate matter",
+            "concept_id": "urn:infai:ses:concept:a63a960d-1f36-4d95-ad5b-dfb4a7fe3b5b",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:cee9e218-2bdd-4bfd-bfab-2bcd6dd75bb7",
+            "name": "getParticleAmountPM10NI",
+            "display_name": "",
+            "description": "Measure nickel in particulate matter",
+            "concept_id": "urn:infai:ses:concept:a63a960d-1f36-4d95-ad5b-dfb4a7fe3b5b",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:dd0c3b2f-3a04-430c-8b39-4e8b927cf20e",
+            "name": "getParticleAmountPM10PB",
+            "display_name": "",
+            "description": "Measure lead in particulate matter",
+            "concept_id": "urn:infai:ses:concept:a63a960d-1f36-4d95-ad5b-dfb4a7fe3b5b",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:22bbaa27-595c-4f53-bdda-8b9614ecdf76",
+            "name": "getParticleAmountPM25",
+            "display_name": "",
+            "description": "Read a PM2.5 measurement",
+            "concept_id": "urn:infai:ses:concept:a63a960d-1f36-4d95-ad5b-dfb4a7fe3b5b",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:3e766b2d-0ab5-421d-a4f6-de4a61ccdd62",
+            "name": "getPollenLevel",
+            "display_name": "",
+            "description": "Get how much pollen is in the air",
+            "concept_id": "urn:infai:ses:concept:5859621b-f6b3-4430-8b4f-b25a53bae708",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:97aa3103-995a-4bd2-95f0-ab8f34e9ae36",
+            "name": "getPositionFunction",
+            "display_name": "",
+            "description": "",
+            "concept_id": "urn:infai:ses:concept:b12151d3-d187-4839-82ac-8cc18fae3dd9",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:1c7c90fb-73b6-4690-aac2-72e9735e68d0",
+            "name": "getPowerConsumptionFunction",
+            "display_name": "",
+            "description": "Get the power consumption",
+            "concept_id": "urn:infai:ses:concept:46de11b9-26ff-4cce-b945-e93b84f04fe6",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:4f3cbfb4-ccb0-4233-a7c3-61760a069c02",
+            "name": "getPowerFactorFunction",
+            "display_name": "",
+            "description": "Read a power factor measurement",
+            "concept_id": "urn:infai:ses:concept:3e40dfa7-805d-4732-af15-5207c0a59c47",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:61ebe348-6abc-4e14-911c-0908bd7ba1f8",
+            "name": "getPrecipitationFunction",
+            "display_name": "",
+            "description": "",
+            "concept_id": "urn:infai:ses:concept:0c1eaf2b-ea3d-4ca9-8446-02c55dd5d3f4",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:065c7aa6-5ce3-415b-92a6-4c3a84036488",
+            "name": "getPrecipitationProbability",
+            "display_name": "",
+            "description": "Read how likely precipitation is",
+            "concept_id": "urn:infai:ses:concept:40e8e501-85a0-4406-9aa9-7d5fd6985d1f",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:2acad12c-8983-4655-9a2d-e2359a706101",
+            "name": "getPressureFunction",
+            "display_name": "",
+            "description": "Read a pressure measurement",
+            "concept_id": "urn:infai:ses:concept:9924ea1a-d96a-4882-88a2-165493956ec3",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:f2dfef5e-757d-4a58-bcec-dafd74e83b2a",
+            "name": "getRawWMBusFunction",
+            "display_name": "",
+            "description": "Receive a raw WMBus message",
+            "concept_id": "",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:9377c366-2896-486e-9b28-cff237509555",
+            "name": "getSignalStrengthFunction",
+            "display_name": "",
+            "description": "Read a signal strength measurement",
+            "concept_id": "urn:infai:ses:concept:2769a588-97e7-4bc3-94f4-b97bef591e95",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:f3865739-6de2-41ce-83f7-b878d7c63bcc",
+            "name": "getSpeedFunction",
+            "display_name": "",
+            "description": "Read the speed of something",
+            "concept_id": "urn:infai:ses:concept:95f01a66-f7ea-4c49-9304-29cf065a0c55",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:f6066d39-ed16-4c69-82aa-e18bcf2be2a7",
+            "name": "getSpeedLevelFunction",
+            "display_name": "",
+            "description": "Read the speed of something",
+            "concept_id": "urn:infai:ses:concept:a43e8989-7d4b-4d9c-97d7-766799106499",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:cfefc207-44f9-4a25-b40b-162a96846599",
+            "name": "getSulfurDioxideFunction",
+            "display_name": "",
+            "description": "Get a sulfur dioxide measurement",
+            "concept_id": "urn:infai:ses:concept:c41d2566-aad6-458a-8f21-fee504225b17",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:531efa86-f476-4c9f-8181-8753b7fb938c",
+            "name": "getTamperStateFunction",
+            "display_name": "",
+            "description": "Check if the device has been tampered",
+            "concept_id": "urn:infai:ses:concept:ebfeabb3-50f0-44bd-b06e-95eb52df484e",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:f2769eb9-b6ad-4f7e-bd28-e4ea043d2f8b",
+            "name": "getTemperatureFunction",
+            "display_name": "Temperature",
+            "description": "Get a temperature measurement",
+            "concept_id": "urn:infai:ses:concept:0bc81398-3ed6-4e2b-a6c4-b754583aac37",
+            "rdf_type": ""
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:642558a6-4ba2-4b7e-9bda-1afba86a5c40",
+            "name": "getThunderProbabilityFunction",
+            "display_name": "",
+            "description": "Read how likely thunder is",
+            "concept_id": "urn:infai:ses:concept:6625cc35-a8d0-4d9d-91ef-3c0cb71f0285",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        },
+        {
+            "id": "urn:infai:ses:measuring-function:3b4e0766-0d67-4658-b249-295902cd3290",
+            "name": "getTimestampFunction",
+            "display_name": "",
+            "description": "Get a timestamp reading",
+            "concept_id": "urn:infai:ses:concept:9286d398-f49d-494f-8157-bea17947b1fa",
+            "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+        }
+    ]
+}

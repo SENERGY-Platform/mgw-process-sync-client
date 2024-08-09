@@ -31,10 +31,10 @@ import (
 	"strings"
 )
 
-func (this *Controller) CreateDeployment(deployment model.FogDeploymentMessage) (err error) {
+func (this *Controller) CreateDeployment(deployment model.FogDeploymentMessage) (id string, err error) {
 	err = this.cleanupExistingDeployment(deployment.Id)
 	if err != nil {
-		return err
+		return "", err
 	}
 	xml := deployment.Diagram.XmlDeployed
 
@@ -42,7 +42,7 @@ func (this *Controller) CreateDeployment(deployment model.FogDeploymentMessage) 
 
 	xml, err = ReplaceTaskTopics(xml, this.config.TaskTopicReplace)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	svg := deployment.Diagram.Svg
@@ -54,11 +54,10 @@ func (this *Controller) CreateDeployment(deployment model.FogDeploymentMessage) 
 	if this.config.Debug {
 		log.Println("deploy process", deployment.Id, deployment.Name, xml)
 	}
-	var id string
 	id, err = this.camunda.DeployProcess(deployment.Name, xml, svg, UserId, "senergy")
 	if err != nil {
 		log.Println("WARNING: unable to deploy process to camunda ", err)
-		return err
+		return "", err
 	}
 
 	incidentHandling := deployment.IncidentHandling
@@ -69,7 +68,7 @@ func (this *Controller) CreateDeployment(deployment model.FogDeploymentMessage) 
 			if removeErr != nil {
 				log.Println("ERROR: unable to remove deployed process", id, removeErr, err)
 			}
-			return err
+			return id, err
 		}
 	}
 
@@ -93,10 +92,10 @@ func (this *Controller) CreateDeployment(deployment model.FogDeploymentMessage) 
 	err = this.DeployConditionalEventOperators(metadata)
 	if err != nil {
 		log.Println("ERROR: DeployConditionalEventOperators()", err)
-		return err
+		return id, err
 	}
 
-	return this.backend.SendDeploymentMetadata(metadata)
+	return id, this.backend.SendDeploymentMetadata(metadata)
 }
 
 func (this *Controller) replaceNotificationUrl(xml string) string {

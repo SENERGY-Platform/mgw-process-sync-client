@@ -41,6 +41,10 @@ func (this *Controller) spyOnCamundaDb(ctx context.Context) (err error) {
 	if err != nil {
 		return err
 	}
+	err = this.spyOn(ctx, "incident", "act_ru_incident", this.NotifyIncident, func(string) {})
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
