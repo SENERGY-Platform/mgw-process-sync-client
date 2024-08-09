@@ -81,6 +81,7 @@ func TestScriptError(t *testing.T) {
 	mux := sync.Mutex{}
 	incidentCount := 0
 	notificationCount := 0
+	deleteCount := 0
 
 	notificationTestServer := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 		msg, _ := io.ReadAll(request.Body)
@@ -131,6 +132,8 @@ func TestScriptError(t *testing.T) {
 			}
 			deploymentId = wrapper.Id
 			t.Log("use deploymentId=", deploymentId)
+		case "processes/state/process-instance/delete":
+			deleteCount = deleteCount + 1
 		case "processes/state/incident":
 			incidentCount = incidentCount + 1
 		}
@@ -195,5 +198,8 @@ func TestScriptError(t *testing.T) {
 	}
 	if incidentCount < 2 {
 		t.Error("incident count should be greater than 2")
+	}
+	if deleteCount < 2 {
+		t.Error("deleteCount count should be greater than 2")
 	}
 }
