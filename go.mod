@@ -5,10 +5,10 @@ go 1.23.0
 toolchain go1.23.4
 
 require (
-	github.com/SENERGY-Platform/event-worker v1.0.18
-	github.com/SENERGY-Platform/process-deployment v0.0.11
+	github.com/SENERGY-Platform/event-worker v1.0.19
+	github.com/SENERGY-Platform/process-deployment v0.0.12
 	github.com/SENERGY-Platform/process-history-cleanup v1.1.2
-	github.com/SENERGY-Platform/process-sync v0.0.12
+	github.com/SENERGY-Platform/process-sync v0.0.13
 	github.com/dgraph-io/badger/v3 v3.2103.5
 	github.com/eclipse/paho.mqtt.golang v1.4.3
 	github.com/google/uuid v1.6.0
@@ -28,7 +28,7 @@ require (
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/OneOfOne/xxhash v1.2.8 // indirect
 	github.com/SENERGY-Platform/developer-notifications v0.0.4 // indirect
-	github.com/SENERGY-Platform/device-repository v0.1.51 // indirect
+	github.com/SENERGY-Platform/device-repository v0.1.52 // indirect
 	github.com/SENERGY-Platform/models/go v0.0.0-20241007061544-de7132ae94e4 // indirect
 	github.com/SENERGY-Platform/permissions-v2 v0.0.27 // indirect
 	github.com/SENERGY-Platform/service-commons v0.0.0-20240813072046-91b3195dd8fc // indirect
