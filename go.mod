@@ -6,9 +6,10 @@ toolchain go1.23.4
 
 require (
 	github.com/SENERGY-Platform/event-worker v1.0.19
-	github.com/SENERGY-Platform/process-deployment v0.0.12
+	github.com/SENERGY-Platform/process-deployment v0.0.13
 	github.com/SENERGY-Platform/process-history-cleanup v1.1.2
 	github.com/SENERGY-Platform/process-sync v0.0.13
+	github.com/SENERGY-Platform/service-commons v0.0.0-20240813072046-91b3195dd8fc
 	github.com/dgraph-io/badger/v3 v3.2103.5
 	github.com/eclipse/paho.mqtt.golang v1.4.3
 	github.com/google/uuid v1.6.0
@@ -31,7 +32,6 @@ require (
 	github.com/SENERGY-Platform/device-repository v0.1.52 // indirect
 	github.com/SENERGY-Platform/models/go v0.0.0-20241007061544-de7132ae94e4 // indirect
 	github.com/SENERGY-Platform/permissions-v2 v0.0.27 // indirect
-	github.com/SENERGY-Platform/service-commons v0.0.0-20240813072046-91b3195dd8fc // indirect
 	github.com/beevik/etree v1.4.0 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/cespare/xxhash v1.1.0 // indirect
@@ -76,6 +76,7 @@ require (
 	github.com/morikuni/aec v1.0.0 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.0 // indirect
+	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/pierrec/lz4/v4 v4.1.21 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55 // indirect

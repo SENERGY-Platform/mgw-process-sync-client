@@ -25,6 +25,7 @@ import (
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/events"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/metadata"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model"
+	"github.com/SENERGY-Platform/service-commons/pkg/cache"
 	"log"
 	"time"
 )
@@ -32,7 +33,11 @@ import (
 const UserId = model.UserId
 
 func New(config configuration.Config, ctx context.Context) (ctrl *Controller, err error) {
-	ctrl = &Controller{config: config, incidentsHandler: map[string]OnIncident{}}
+	c, err := cache.New(cache.Config{}) //if the worker is scaled, the l2 must be configured with a shared memcached
+	if err != nil {
+		return nil, err
+	}
+	ctrl = &Controller{config: config, incidentsHandler: map[string]OnIncident{}, handledIncidentsCache: c}
 
 	ctrl.metadata, err = metadata.NewStorage(ctx, config)
 	if err != nil {
@@ -105,12 +110,13 @@ type EventRepo interface {
 }
 
 type Controller struct {
-	config           configuration.Config
-	backend          *backend.Client
-	camunda          *camunda.Camunda
-	metadata         metadata.Storage
-	events           EventRepo
-	incidentsHandler map[string]OnIncident
+	config                configuration.Config
+	backend               *backend.Client
+	camunda               *camunda.Camunda
+	metadata              metadata.Storage
+	events                EventRepo
+	incidentsHandler      map[string]OnIncident
+	handledIncidentsCache *cache.Cache
 }
 
 func (this *Controller) SendCurrentStates() (err error) {

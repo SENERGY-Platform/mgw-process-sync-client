@@ -22,6 +22,7 @@ import (
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/controller/notification"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
 	"github.com/SENERGY-Platform/process-deployment/lib/model/deploymentmodel"
+	"github.com/SENERGY-Platform/service-commons/pkg/cache"
 	"github.com/google/uuid"
 	"log"
 	"time"
@@ -134,7 +135,7 @@ func (this *Controller) DeployIncidentsHandlerForDeploymentId(camundaDeplId stri
 	return nil
 }
 
-func (this *Controller) HandleIncident(incident camundamodel.Incident) error {
+func (this *Controller) handleIncident(incident camundamodel.Incident) error {
 	handler, ok := this.incidentsHandler[incident.ProcessDefinitionId]
 	if !ok {
 		log.Printf("unhandled incident for %v", incident.DeploymentName)
@@ -168,4 +169,13 @@ func (this *Controller) HandleIncident(incident camundamodel.Incident) error {
 		}
 	}
 	return nil
+}
+
+func (this *Controller) HandleIncident(incident camundamodel.Incident) error {
+	//for every process instance an incident may only be handled once every 5 min
+	//use the cache.Use method to do incident handling, only if the process instance is not found in cache
+	_, err := cache.Use[string](this.handledIncidentsCache, incident.ProcessInstanceId, func() (string, error) {
+		return "", this.handleIncident(incident)
+	}, cache.NoValidation, 5*time.Minute)
+	return err
 }
