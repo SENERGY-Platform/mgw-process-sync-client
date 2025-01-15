@@ -27,6 +27,7 @@ import (
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model"
 	"github.com/SENERGY-Platform/service-commons/pkg/cache"
 	"log"
+	"sync"
 	"time"
 )
 
@@ -117,6 +118,7 @@ type Controller struct {
 	events                EventRepo
 	incidentsHandler      map[string]OnIncident
 	handledIncidentsCache *cache.Cache
+	mux                   *sync.Mutex
 }
 
 func (this *Controller) SendCurrentStates() (err error) {

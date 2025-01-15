@@ -141,7 +141,7 @@ func (this *Controller) handleIncident(incident camundamodel.Incident) error {
 		log.Printf("unhandled incident for %v", incident.DeploymentName)
 		return nil
 	}
-	log.Printf("handle incident for %v: notify: %v, restart: %v", incident.DeploymentName, handler.Notify, handler.Restart)
+	log.Printf("handle incident for %v %v: notify: %v, restart: %v", incident.DeploymentName, incident.ProcessInstanceId, handler.Notify, handler.Restart)
 	if handler.Notify {
 		msg := notification.Message{
 			Title:   "Fog Process-Incident in " + incident.DeploymentName,
@@ -172,6 +172,8 @@ func (this *Controller) handleIncident(incident camundamodel.Incident) error {
 }
 
 func (this *Controller) HandleIncident(incident camundamodel.Incident) error {
+	this.mux.Lock()
+	defer this.mux.Unlock()
 	//for every process instance an incident may only be handled once every 5 min
 	//use the cache.Use method to do incident handling, only if the process instance is not found in cache
 	_, err := cache.Use[string](this.handledIncidentsCache, incident.ProcessInstanceId, func() (string, error) {
