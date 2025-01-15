@@ -118,7 +118,7 @@ type Controller struct {
 	events                EventRepo
 	incidentsHandler      map[string]OnIncident
 	handledIncidentsCache *cache.Cache
-	mux                   *sync.Mutex
+	mux                   sync.Mutex
 }
 
 func (this *Controller) SendCurrentStates() (err error) {
