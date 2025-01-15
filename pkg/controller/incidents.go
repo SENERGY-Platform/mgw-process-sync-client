@@ -146,6 +146,7 @@ func (this *Controller) handleIncident(incident camundamodel.Incident) error {
 		msg := notification.Message{
 			Title:   "Fog Process-Incident in " + incident.DeploymentName,
 			Message: incident.ErrorMessage,
+			Topic:   notification.Topic,
 		}
 		if handler.Restart {
 			msg.Message = msg.Message + "\n\nprocess will be restarted"
@@ -164,6 +165,7 @@ func (this *Controller) handleIncident(incident camundamodel.Incident) error {
 				_ = notification.Send(this.config.NotificationUrl, notification.Message{
 					Title:   "Fog ERROR: unable to restart process after incident in: " + incident.DeploymentName,
 					Message: fmt.Sprintf("Restart-Error: %v \n\n Incident: %v \n", err, incident.ErrorMessage),
+					Topic:   notification.Topic,
 				})
 			}
 		}

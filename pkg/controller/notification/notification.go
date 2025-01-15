@@ -63,4 +63,7 @@ type Message struct {
 	UserId  string `json:"userId" bson:"userId"`
 	Title   string `json:"title" bson:"title"`
 	Message string `json:"message" bson:"message"`
+	Topic   string `json:"topic" bson:"topic"`
 }
+
+const Topic = "incident"
