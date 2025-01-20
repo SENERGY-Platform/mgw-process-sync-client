@@ -19,8 +19,8 @@ github.com/SENERGY-Platform/developer-notifications v0.0.4 h1:SmblhfWavNhE1mDxzr
 github.com/SENERGY-Platform/developer-notifications v0.0.4/go.mod h1:8yJrYnAYMtPEPy89ULw8ivgG8orVhSnaLgyfDt0bdgg=
 github.com/SENERGY-Platform/device-repository v0.1.52 h1:JedGhrK3dm0x693jHAPgsn85iO9esjxJz9zgdyt/nis=
 github.com/SENERGY-Platform/device-repository v0.1.52/go.mod h1:36pibGmG2igxgydf+deII/wiP1gWxF2/bgijDzwRriY=
-github.com/SENERGY-Platform/event-worker v1.0.19 h1:mXFEjzJfSjWdDjEWUv2qNLpsW/15dyL3GvZH7CqhB/g=
-github.com/SENERGY-Platform/event-worker v1.0.19/go.mod h1:vSiP9Ug7AU9O6LYBSTSDG8r8Lhd5VZ6WlBrGRIvjf30=
+github.com/SENERGY-Platform/event-worker v1.0.20 h1:U079tlUiDBjFFXJfXz5mAosAgYf7TcnDQoTRHcAkOe4=
+github.com/SENERGY-Platform/event-worker v1.0.20/go.mod h1:zmntQ+02XCv02SRFoWFBWXNYFkmMvq1WJ9HWIAKdYPE=
 github.com/SENERGY-Platform/models/go v0.0.0-20241007061544-de7132ae94e4 h1:zS65f1cmjAoBQUA432nmJl2TXAwqqqJMz7sp2DHLAGc=
 github.com/SENERGY-Platform/models/go v0.0.0-20241007061544-de7132ae94e4/go.mod h1:bCREPNRN4P8oxLgpC3/ZKK4jXSy4MSPXoiomhohE+aw=
 github.com/SENERGY-Platform/permissions-v2 v0.0.27 h1:4Sf5zNW0KMrSSJrv90MmyKD5RMnS8CT26yE7W9Za/x0=
@@ -29,8 +29,8 @@ github.com/SENERGY-Platform/process-deployment v0.0.13 h1:wAwIYbEYa7MUPkzcZhnsKe
 github.com/SENERGY-Platform/process-deployment v0.0.13/go.mod h1:0V9KCf6ewlkIB5i6mxl0CqZFZcL6Wd3IFVpWGt6b7pE=
 github.com/SENERGY-Platform/process-history-cleanup v1.1.2 h1:Q39V40Hbbc8XabZCX2Fcl2eE7f6OWvZOPl0D8qCDiq0=
 github.com/SENERGY-Platform/process-history-cleanup v1.1.2/go.mod h1:apnZS3WBuH/iFMaNYiu2Y918d3SS+VZ+4ZOxHblOwP4=
-github.com/SENERGY-Platform/process-sync v0.0.13 h1:cN9rZls8glZYvKXHBDZd1CJYqjqTqY7FsT/UgFzIWHg=
-github.com/SENERGY-Platform/process-sync v0.0.13/go.mod h1:PHbwB2s8ruRXuDwi8H+NtcgRhFnANZEOm8+fLNFs2R4=
+github.com/SENERGY-Platform/process-sync v0.0.14 h1:KfYf7xNlvXCG3XasfJu2K28Nxfhl/SnGlE6CYE9b648=
+github.com/SENERGY-Platform/process-sync v0.0.14/go.mod h1:+V7CqNbmaQGG54wCuxFY1n/mNoJkQG3IiA3HfId2JIA=
 github.com/SENERGY-Platform/service-commons v0.0.0-20240813072046-91b3195dd8fc h1:FbGDfHiDukp8wD1w4YNxjwiDpSNkRUG+Ymq9jjz3Auc=
 github.com/SENERGY-Platform/service-commons v0.0.0-20240813072046-91b3195dd8fc/go.mod h1:1p2CQPNtler5leXqNgaOfr7DlgZUydrQlQYA97ycm4k=
 github.com/armon/consul-api v0.0.0-20180202201655-eb2c6b5be1b6/go.mod h1:grANhF5doyWs3UAsr3K4I6qtAmlQcZDesFNEHPZAzj8=

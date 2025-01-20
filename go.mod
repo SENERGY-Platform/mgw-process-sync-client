@@ -5,10 +5,10 @@ go 1.23.0
 toolchain go1.23.4
 
 require (
-	github.com/SENERGY-Platform/event-worker v1.0.19
+	github.com/SENERGY-Platform/event-worker v1.0.20
 	github.com/SENERGY-Platform/process-deployment v0.0.13
 	github.com/SENERGY-Platform/process-history-cleanup v1.1.2
-	github.com/SENERGY-Platform/process-sync v0.0.13
+	github.com/SENERGY-Platform/process-sync v0.0.14
 	github.com/SENERGY-Platform/service-commons v0.0.0-20240813072046-91b3195dd8fc
 	github.com/dgraph-io/badger/v3 v3.2103.5
 	github.com/eclipse/paho.mqtt.golang v1.4.3
