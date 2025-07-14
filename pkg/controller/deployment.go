@@ -28,6 +28,7 @@ import (
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
 	"log"
 	"runtime/debug"
+	"strconv"
 	"strings"
 )
 
@@ -37,6 +38,11 @@ func (this *Controller) CreateDeployment(deployment model.FogDeploymentMessage) 
 		return "", err
 	}
 	xml := deployment.Diagram.XmlDeployed
+
+	xml, err = SetProcessId(xml, deployment.Id)
+	if err != nil {
+		return "", err
+	}
 
 	xml = this.replaceNotificationUrl(xml)
 
@@ -247,6 +253,32 @@ func ReplaceTaskTopics(xml string, fromToMap map[string]string) (result string, 
 			attr := element.SelectAttr("camunda:topic")
 			if attr != nil {
 				attr.Value = to
+			}
+		}
+	}
+	return doc.WriteToString()
+}
+
+func SetProcessId(xml string, id string) (result string, err error) {
+	defer func() {
+		if r := recover(); r != nil && err == nil {
+			log.Printf("%s: %s", r, debug.Stack())
+			err = errors.New(fmt.Sprint("Recovered Error: ", r))
+		}
+	}()
+	doc := etree.NewDocument()
+	err = doc.ReadFromString(xml)
+	if err != nil {
+		return result, err
+	}
+	normalizedId := "deplid_" + strings.NewReplacer("-", "_", ":", "_", "#", "_").Replace(id)
+	for i, element := range doc.FindElements("//bpmn:process") {
+		attr := element.SelectAttr("id")
+		if attr != nil {
+			if i > 0 {
+				attr.Value = normalizedId + "_" + strconv.Itoa(i)
+			} else {
+				attr.Value = normalizedId
 			}
 		}
 	}
