@@ -87,17 +87,17 @@ func (this *Controller) CreateDeployment(deployment model.FogDeploymentMessage) 
 
 	metadata.ProcessParameter, err = this.getProcessParameter(id)
 	if err != nil {
-		log.Println("WARNING: unable to get process parameter", err)
+		log.Println("WARNING: unable to get process parameter:", err)
 	}
 
 	err = this.metadata.Store(metadata)
 	if err != nil {
-		log.Println("WARNING: unable to store deployment metadata ", err)
+		log.Println("WARNING: unable to store deployment metadata:", err)
 	}
 
 	err = this.DeployConditionalEventOperators(metadata)
 	if err != nil {
-		log.Println("ERROR: DeployConditionalEventOperators()", err)
+		log.Println("ERROR: DeployConditionalEventOperators():", err)
 		return id, err
 	}
 
@@ -113,6 +113,9 @@ func (this *Controller) getProcessParameter(deploymentId string) (result map[str
 	if err != nil {
 		return nil, err
 	}
+	if len(definition) == 0 {
+		return nil, fmt.Errorf("no definition for deployment '%v' found", deploymentId)
+	}
 	return this.camunda.GetProcessParameters(definition[0].Id, UserId)
 }
 
@@ -120,15 +123,15 @@ func (this *Controller) DeleteDeployment(id string) error {
 	return this.camunda.RemoveProcess(id, UserId)
 }
 
-func (this *Controller) StartDeployment(id string, parameter map[string]interface{}) error {
+func (this *Controller) StartDeployment(id string, businessKey string, parameter map[string]interface{}) error {
 	definitions, err := this.camunda.GetDefinitionByDeploymentVid(id, UserId)
 	if err != nil {
 		return err
 	}
 	if len(definitions) == 0 {
-		return errors.New("no definition for deployment found: " + id)
+		return fmt.Errorf("no definition for deployment '%s' found", id)
 	}
-	return this.camunda.StartProcess(definitions[0].Id, UserId, parameter)
+	return this.camunda.StartProcess(definitions[0].Id, businessKey, UserId, parameter)
 }
 
 func (this *Controller) SendCurrentDeployments() error {

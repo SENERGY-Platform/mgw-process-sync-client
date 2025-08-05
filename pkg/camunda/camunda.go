@@ -45,13 +45,13 @@ func New(config configuration.Config, shards shards.Shards) *Camunda {
 	return &Camunda{shards: shards, config: config}
 }
 
-func (this *Camunda) StartProcess(processDefinitionId string, userId string, parameter map[string]interface{}) (err error) {
+func (this *Camunda) StartProcess(processDefinitionId string, businessKey string, userId string, parameter map[string]interface{}) (err error) {
 	shard, err := this.shards.EnsureShardForUser(userId)
 	if err != nil {
 		return err
 	}
 
-	message := createStartMessage(parameter)
+	message := createStartMessage(parameter, businessKey)
 
 	b := new(bytes.Buffer)
 	err = json.NewEncoder(b).Encode(message)
@@ -79,9 +79,9 @@ func (this *Camunda) StartProcess(processDefinitionId string, userId string, par
 	return nil
 }
 
-func createStartMessage(parameter map[string]interface{}) map[string]interface{} {
+func createStartMessage(parameter map[string]interface{}, businessKey string) map[string]interface{} {
 	if len(parameter) == 0 {
-		return map[string]interface{}{}
+		return map[string]interface{}{"businessKey": businessKey}
 	}
 	variables := map[string]interface{}{}
 	for key, val := range parameter {
@@ -89,7 +89,7 @@ func createStartMessage(parameter map[string]interface{}) map[string]interface{}
 			"value": val,
 		}
 	}
-	return map[string]interface{}{"variables": variables}
+	return map[string]interface{}{"variables": variables, "businessKey": businessKey}
 }
 
 func (this *Camunda) GetProcessParameters(processDefinitionId string, userId string) (result map[string]model.Variable, err error) {
@@ -115,13 +115,13 @@ func (this *Camunda) GetProcessParameters(processDefinitionId string, userId str
 	return
 }
 
-func (this *Camunda) StartProcessGetId(processDefinitionId string, userId string, parameter map[string]interface{}) (result model.ProcessInstance, err error) {
+func (this *Camunda) StartProcessGetId(processDefinitionId string, businessKey string, userId string, parameter map[string]interface{}) (result model.ProcessInstance, err error) {
 	shard, err := this.shards.EnsureShardForUser(userId)
 	if err != nil {
 		return result, err
 	}
 
-	message := createStartMessage(parameter)
+	message := createStartMessage(parameter, businessKey)
 
 	b := new(bytes.Buffer)
 	err = json.NewEncoder(b).Encode(message)
@@ -171,6 +171,15 @@ func (this *Camunda) StopProcessInstance(id string) (err error) {
 	msg, _ := io.ReadAll(resp.Body)
 	err = errors.New("error on delete in engine for " + shard + "/engine-rest/process-instance/" + url.PathEscape(id) + ": " + resp.Status + " " + string(msg))
 	return err
+}
+
+func (this *Camunda) GetHistoricProcessInstance(id string, userId string) (result model.HistoricProcessInstance, err error) {
+	shard, err := this.shards.EnsureShardForUser(userId)
+	if err != nil {
+		return result, err
+	}
+	err = request.Get(shard+"/engine-rest/history/process-instance/"+url.QueryEscape(id), &result)
+	return
 }
 
 func (this *Camunda) CheckProcessDefinitionAccess(id string, userId string) (err error) {
@@ -421,6 +430,7 @@ func (this *Camunda) GetRawDefinitionsByDeployment(deploymentId string, userId s
 	if err != nil {
 		return result, err
 	}
+
 	err = request.Get(shard+"/engine-rest/process-definition?deploymentId="+url.QueryEscape(deploymentId), &result)
 	return
 }

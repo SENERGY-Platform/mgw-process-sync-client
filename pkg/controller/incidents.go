@@ -57,6 +57,12 @@ func (this *Controller) NotifyIncident(extra string) {
 		def = camundamodel.ProcessDefinition{Name: "unknown"}
 	}
 
+	instance, err := this.camunda.GetHistoricProcessInstance(element.ProcessInstanceId, UserId)
+	if err != nil {
+		log.Println("WARNING: unable to get process instance in NotifyIncident(): ", err)
+		instance = camundamodel.HistoricProcessInstance{}
+	}
+
 	err = this.backend.SendIncident(camundamodel.Incident{
 		Id:                  uuid.NewString(),
 		ExternalTaskId:      element.ActivityId,
@@ -67,6 +73,7 @@ func (this *Controller) NotifyIncident(extra string) {
 		Time:                time.Now(),
 		TenantId:            UserId,
 		DeploymentName:      def.Name,
+		BusinessKey:         instance.BusinessKey,
 	})
 	if err != nil {
 		log.Println("WARNING: unable to send incident:", err)
@@ -80,6 +87,12 @@ func (this *Controller) sendPgIncident(incident ProcessIncidentInPg) {
 		def = camundamodel.ProcessDefinition{Name: "unknown"}
 	}
 
+	instance, err := this.camunda.GetHistoricProcessInstance(incident.ProcessInstanceId, UserId)
+	if err != nil {
+		log.Println("WARNING: unable to get process instance in NotifyIncident(): ", err)
+		instance = camundamodel.HistoricProcessInstance{}
+	}
+
 	err = this.backend.SendIncident(camundamodel.Incident{
 		Id:                  uuid.NewString(),
 		ExternalTaskId:      incident.ActivityId,
@@ -90,6 +103,7 @@ func (this *Controller) sendPgIncident(incident ProcessIncidentInPg) {
 		Time:                time.Now(),
 		TenantId:            UserId,
 		DeploymentName:      def.Name,
+		BusinessKey:         instance.BusinessKey,
 	})
 	if err != nil {
 		log.Println("WARNING: unable to send incident:", err)
@@ -158,7 +172,7 @@ func (this *Controller) handleIncident(incident camundamodel.Incident) error {
 		return err
 	}
 	if handler.Restart {
-		err := this.camunda.StartProcess(incident.ProcessDefinitionId, UserId, nil)
+		err := this.camunda.StartProcess(incident.ProcessDefinitionId, incident.BusinessKey, UserId, nil)
 		if err != nil {
 			log.Printf("ERROR: unable to restart process %v \n %#v \n", err, incident)
 			if incident.TenantId != "" {

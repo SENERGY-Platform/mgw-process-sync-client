@@ -31,3 +31,6 @@ const SvgExample = `<svg height='48' version='1.1' viewBox='167 96 134 48' width
 
 //go:embed repo_fallback.json
 var RepoFallbackFile string
+
+//go:embed long.bpmn
+var LongProcess string

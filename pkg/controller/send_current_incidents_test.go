@@ -123,7 +123,7 @@ func TestSendCurrentIncidents(t *testing.T) {
 
 	time.Sleep(1 * time.Second)
 
-	err = ctrl.StartDeployment(id, map[string]interface{}{})
+	err = ctrl.StartDeployment(id, "", map[string]interface{}{})
 	if err != nil {
 		t.Error(err)
 		return

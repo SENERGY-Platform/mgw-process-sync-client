@@ -23,6 +23,7 @@ import (
 type StartMessage struct {
 	DeploymentId string                 `json:"deployment_id"`
 	Parameter    map[string]interface{} `json:"parameter"`
+	BusinessKey  string                 `json:"business_key"`
 }
 
 type FogDeploymentMessage = model.DeploymentWithEventDesc

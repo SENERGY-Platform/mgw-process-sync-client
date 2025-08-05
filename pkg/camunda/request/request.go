@@ -18,6 +18,8 @@ package request
 
 import (
 	"encoding/json"
+	"fmt"
+	"io"
 	"net/http"
 )
 
@@ -27,5 +29,9 @@ func Get(url string, result interface{}) (err error) {
 		return
 	}
 	defer resp.Body.Close()
+	if resp.StatusCode >= 300 {
+		pl, _ := io.ReadAll(resp.Body)
+		return fmt.Errorf("http error: %d %s", resp.StatusCode, string(pl))
+	}
 	return json.NewDecoder(resp.Body).Decode(result)
 }

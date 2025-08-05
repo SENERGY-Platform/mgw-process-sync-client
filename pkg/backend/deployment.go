@@ -76,7 +76,7 @@ func (this *Client) handleDeploymentStartCommand(message paho.Message) {
 	if err != nil {
 		this.error(err)
 	}
-	err = this.handler.StartDeployment(msg.DeploymentId, msg.Parameter)
+	err = this.handler.StartDeployment(msg.DeploymentId, msg.BusinessKey, msg.Parameter)
 	if err != nil {
 		this.error(err)
 	}
