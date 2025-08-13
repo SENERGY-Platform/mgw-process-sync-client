@@ -18,9 +18,11 @@ package server
 
 import (
 	"context"
+	"fmt"
+	"sync"
+
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/tests/docker"
-	"sync"
 )
 
 func CreateSyncEnv(ctx context.Context, wg *sync.WaitGroup, initConf configuration.Config) (config configuration.Config, err error) {
@@ -28,7 +30,7 @@ func CreateSyncEnv(ctx context.Context, wg *sync.WaitGroup, initConf configurati
 	if err != nil {
 		return config, err
 	}
-	mqttport, _, err := docker.Mqtt(ctx, wg)
+	_, mqttIp, err := docker.Mqtt(ctx, wg)
 	if err != nil {
 		return config, err
 	}
@@ -38,7 +40,7 @@ func CreateSyncEnv(ctx context.Context, wg *sync.WaitGroup, initConf configurati
 		return config, err
 	}
 
-	config.MqttBroker = "tcp://localhost:" + mqttport
+	config.MqttBroker = fmt.Sprintf("tcp://%s:%s", mqttIp, "1883")
 	config.MqttClientId = "test-sync-client"
 	config.NetworkId = "test-network-id"
 	config.DeploymentMetadataStorage = "mongodb://localhost:" + mongoPort + "/metadata"

@@ -19,13 +19,6 @@ package tests
 import (
 	"context"
 	"encoding/json"
-	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
-	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/controller"
-	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model"
-	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/tests/docker"
-	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/tests/resources"
-	"github.com/SENERGY-Platform/process-deployment/lib/model/deploymentmodel"
-	paho "github.com/eclipse/paho.mqtt.golang"
 	"io"
 	"log"
 	"net/http"
@@ -33,6 +26,14 @@ import (
 	"sync"
 	"testing"
 	"time"
+
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/controller"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/tests/docker"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/tests/resources"
+	"github.com/SENERGY-Platform/process-deployment/lib/model/deploymentmodel"
+	paho "github.com/eclipse/paho.mqtt.golang"
 )
 
 // INSERT INTO public.act_ru_incident (id_, rev_, incident_timestamp_, incident_msg_, incident_type_, execution_id_, activity_id_, proc_inst_id_, proc_def_id_, cause_incident_id_, root_cause_incident_id_, configuration_, tenant_id_, job_def_id_) VALUES ('6da046d1-5580-11ef-9030-0242ac11000a', 1, '2024-08-08 12:19:15.517000', 'Unable to evaluate script while executing activity ”Task_0fi26gl” in the process definition with id ”script_err:1:631e00d6-5580-11ef-9030-0242ac11000a”:TypeError: Cannot read property "batz" from undefined in <eval> at line number 2', 'failedJob', '6614ab9a-5580-11ef-9030-0242ac11000a', 'IntermediateThrowEvent_1jxyivh', '6613e848-5580-11ef-9030-0242ac11000a', 'script_err:1:631e00d6-5580-11ef-9030-0242ac11000a', '6da046d1-5580-11ef-9030-0242ac11000a', '6da046d1-5580-11ef-9030-0242ac11000a', '66156eec-5580-11ef-9030-0242ac11000a', 'senergy', '631e27e7-5580-11ef-9030-0242ac11000a');
@@ -98,7 +99,7 @@ func TestScriptError(t *testing.T) {
 		return
 	}
 
-	err = docker.TaskWorker(ctx, &wg, config.MqttBroker, config.CamundaUrl)
+	err = docker.TaskWorker(ctx, &wg, config.MqttBroker, config.CamundaUrl, "")
 	if err != nil {
 		t.Error(err)
 		return

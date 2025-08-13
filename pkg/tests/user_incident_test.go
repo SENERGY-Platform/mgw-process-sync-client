@@ -19,6 +19,13 @@ package tests
 import (
 	"context"
 	"encoding/json"
+	"io"
+	"net/http"
+	"net/http/httptest"
+	"sync"
+	"testing"
+	"time"
+
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/controller"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model"
@@ -26,12 +33,6 @@ import (
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/tests/resources"
 	"github.com/SENERGY-Platform/process-deployment/lib/model/deploymentmodel"
 	paho "github.com/eclipse/paho.mqtt.golang"
-	"io"
-	"net/http"
-	"net/http/httptest"
-	"sync"
-	"testing"
-	"time"
 )
 
 func TestUserIncident(t *testing.T) {
@@ -94,7 +95,7 @@ func TestUserIncident(t *testing.T) {
 		return
 	}
 
-	err = docker.TaskWorker(ctx, &wg, config.MqttBroker, config.CamundaUrl)
+	err = docker.TaskWorker(ctx, &wg, config.MqttBroker, config.CamundaUrl, "")
 
 	time.Sleep(5 * time.Second)
 

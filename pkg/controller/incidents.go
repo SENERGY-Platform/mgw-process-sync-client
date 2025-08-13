@@ -19,13 +19,14 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
+	"log"
+	"time"
+
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/controller/notification"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
 	"github.com/SENERGY-Platform/process-deployment/lib/model/deploymentmodel"
 	"github.com/SENERGY-Platform/service-commons/pkg/cache"
 	"github.com/google/uuid"
-	"log"
-	"time"
 )
 
 type OnIncident struct {
@@ -155,7 +156,7 @@ func (this *Controller) handleIncident(incident camundamodel.Incident) error {
 		log.Printf("unhandled incident for %v", incident.DeploymentName)
 		return nil
 	}
-	log.Printf("handle incident for %v %v: notify: %v, restart: %v", incident.DeploymentName, incident.ProcessInstanceId, handler.Notify, handler.Restart)
+	log.Printf("handle incident for name=%v instance=%v businessKey=%v notify=%v, restart=%v", incident.DeploymentName, incident.ProcessInstanceId, incident.BusinessKey, handler.Notify, handler.Restart)
 	if handler.Notify {
 		msg := notification.Message{
 			Title:   "Fog Process-Incident in " + incident.DeploymentName,
@@ -172,6 +173,9 @@ func (this *Controller) handleIncident(incident camundamodel.Incident) error {
 		return err
 	}
 	if handler.Restart {
+		if this.config.Debug {
+			log.Printf("restart process definitionsId=%v businessKey=%v", incident.ProcessDefinitionId, incident.BusinessKey)
+		}
 		err := this.camunda.StartProcess(incident.ProcessDefinitionId, incident.BusinessKey, UserId, nil)
 		if err != nil {
 			log.Printf("ERROR: unable to restart process %v \n %#v \n", err, incident)
