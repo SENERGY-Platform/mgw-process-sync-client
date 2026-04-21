@@ -19,12 +19,13 @@ package backend
 import (
 	"context"
 	"encoding/json"
+	"log"
+
 	eventmodel "github.com/SENERGY-Platform/event-worker/pkg/model"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
 	paho "github.com/eclipse/paho.mqtt.golang"
-	"log"
 )
 
 type Client struct {
@@ -153,10 +154,16 @@ func (this *Client) getStateTopic(entity string, substate ...string) (topic stri
 	return
 }
 
-func (this *Client) sendObj(topic string, message interface{}) error {
-	msg, err := json.Marshal(message)
-	if err != nil {
-		return err
+func (this *Client) sendObj(topic string, message interface{}) (err error) {
+	var msg []byte
+	switch v := message.(type) {
+	case error:
+		msg = []byte(v.Error())
+	default:
+		msg, err = json.Marshal(message)
+		if err != nil {
+			return err
+		}
 	}
 	if this.debug {
 		log.Println("DEBUG: sendObj", topic, string(msg))

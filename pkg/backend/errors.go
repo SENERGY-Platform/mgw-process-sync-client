@@ -20,6 +20,14 @@ import (
 	"log"
 )
 
-func (this *Client) error(err error) {
+type ErrorMessage struct {
+	NetworkId           string `json:"network_id"`
+	DeploymentId        string `json:"deployment_id"`
+	CamundaDeploymentId string `json:"camunda_deployment_id"`
+	BusinessKey         string `json:"business_key"`
+	Error               string `json:"error"`
+}
+
+func (this *Client) error(err ErrorMessage) {
 	log.Println("ERROR:", err, "\n", this.sendObj(this.getStateTopic("error"), err))
 }

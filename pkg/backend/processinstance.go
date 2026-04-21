@@ -38,7 +38,13 @@ func (this *Client) getProcessStopTopic() string {
 func (this *Client) handleProcessStopCommand(message paho.Message) {
 	err := this.handler.DeleteProcessInstance(string(message.Payload()))
 	if err != nil {
-		this.error(err)
+		this.error(ErrorMessage{
+			NetworkId:           this.config.NetworkId,
+			DeploymentId:        "",
+			CamundaDeploymentId: "",
+			BusinessKey:         "",
+			Error:               err.Error(),
+		})
 	}
 }
 

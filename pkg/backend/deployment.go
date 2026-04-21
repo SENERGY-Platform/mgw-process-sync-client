@@ -18,6 +18,7 @@ package backend
 
 import (
 	"encoding/json"
+
 	eventmodel "github.com/SENERGY-Platform/event-worker/pkg/model"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/metadata"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model"
@@ -35,11 +36,23 @@ func (this *Client) handleDeploymentCommand(message paho.Message) {
 	deployment := model.FogDeploymentMessage{}
 	err := json.Unmarshal(message.Payload(), &deployment)
 	if err != nil {
-		this.error(err)
+		this.error(ErrorMessage{
+			NetworkId:           this.config.NetworkId,
+			DeploymentId:        "",
+			CamundaDeploymentId: "",
+			BusinessKey:         "",
+			Error:               err.Error(),
+		})
 	}
-	_, err = this.handler.CreateDeployment(deployment)
+	camundaId, err := this.handler.CreateDeployment(deployment)
 	if err != nil {
-		this.error(err)
+		this.error(ErrorMessage{
+			NetworkId:           this.config.NetworkId,
+			DeploymentId:        deployment.Id,
+			CamundaDeploymentId: camundaId,
+			BusinessKey:         "",
+			Error:               err.Error(),
+		})
 	}
 }
 
@@ -58,11 +71,23 @@ func (this *Client) handleEventUpdateCommand(message paho.Message) {
 	msg := EventDescriptionsUpdate{}
 	err := json.Unmarshal(message.Payload(), &msg)
 	if err != nil {
-		this.error(err)
+		this.error(ErrorMessage{
+			NetworkId:           this.config.NetworkId,
+			DeploymentId:        "",
+			CamundaDeploymentId: "",
+			BusinessKey:         "",
+			Error:               err.Error(),
+		})
 	}
 	err = this.handler.UpdateDeploymentEvents(msg.CamundaDeploymentId, msg.EventDescriptions, msg.DeviceIdToLocalId, msg.DeviceIdToLocalId)
 	if err != nil {
-		this.error(err)
+		this.error(ErrorMessage{
+			NetworkId:           this.config.NetworkId,
+			DeploymentId:        "",
+			CamundaDeploymentId: msg.CamundaDeploymentId,
+			BusinessKey:         "",
+			Error:               err.Error(),
+		})
 	}
 }
 
@@ -74,11 +99,23 @@ func (this *Client) handleDeploymentStartCommand(message paho.Message) {
 	msg := model.StartMessage{}
 	err := json.Unmarshal(message.Payload(), &msg)
 	if err != nil {
-		this.error(err)
+		this.error(ErrorMessage{
+			NetworkId:           this.config.NetworkId,
+			DeploymentId:        "",
+			CamundaDeploymentId: "",
+			BusinessKey:         "",
+			Error:               err.Error(),
+		})
 	}
 	err = this.handler.StartDeployment(msg.DeploymentId, msg.BusinessKey, msg.Parameter)
 	if err != nil {
-		this.error(err)
+		this.error(ErrorMessage{
+			NetworkId:           this.config.NetworkId,
+			DeploymentId:        msg.DeploymentId,
+			CamundaDeploymentId: "",
+			BusinessKey:         msg.BusinessKey,
+			Error:               err.Error(),
+		})
 	}
 }
 
@@ -87,9 +124,16 @@ func (this *Client) getDeploymentDeleteTopic() string {
 }
 
 func (this *Client) handleDeploymentDeleteCommand(message paho.Message) {
-	err := this.handler.DeleteDeployment(string(message.Payload()))
+	id := string(message.Payload())
+	err := this.handler.DeleteDeployment(id)
 	if err != nil {
-		this.error(err)
+		this.error(ErrorMessage{
+			NetworkId:           this.config.NetworkId,
+			DeploymentId:        "",
+			CamundaDeploymentId: id,
+			BusinessKey:         "",
+			Error:               "",
+		})
 	}
 }
 

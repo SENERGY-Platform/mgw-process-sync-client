@@ -34,3 +34,6 @@ var RepoFallbackFile string
 
 //go:embed long.bpmn
 var LongProcess string
+
+//go:embed bad_process.bpmn
+var BadProcess string

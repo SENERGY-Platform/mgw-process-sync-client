@@ -27,10 +27,71 @@ import (
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/controller"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/tests/helper"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/tests/resources"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/tests/server"
 	"github.com/SENERGY-Platform/process-deployment/lib/model/deploymentmodel"
 	paho "github.com/eclipse/paho.mqtt.golang"
 )
+
+func TestError(t *testing.T) {
+	wg := &sync.WaitGroup{}
+	defer wg.Wait()
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	conf, err := server.CreateSyncEnv(ctx, wg, configuration.Config{InitialWaitDuration: "1s"})
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	mqtt := paho.NewClient(paho.NewClientOptions().
+		SetPassword(conf.MqttPw).
+		SetUsername(conf.MqttUser).
+		SetAutoReconnect(true).
+		SetCleanSession(false).
+		SetClientID("test-client").
+		AddBroker(conf.MqttBroker))
+	if token := mqtt.Connect(); token.Wait() && token.Error() != nil {
+		t.Error(token.Error())
+		return
+	}
+
+	mqttMessages := map[string][]string{}
+	mqttmux := sync.Mutex{}
+	mqtt.Subscribe("#", 2, func(client paho.Client, message paho.Message) {
+		mqttmux.Lock()
+		defer mqttmux.Unlock()
+		mqttMessages[message.Topic()] = append(mqttMessages[message.Topic()], string(message.Payload()))
+	})
+
+	_, err = controller.New(conf, ctx)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	t.Run("create deployment err", createTestDeployment(conf, mqtt, "err", resources.BadProcess, helper.SvgExample))
+
+	t.Run("wait", func(t *testing.T) { time.Sleep(2 * time.Second) })
+
+	t.Run("check mqtt messages", func(t *testing.T) {
+		for topic, messages := range mqttMessages {
+			t.Log("==========================================================")
+			t.Log("TOPIC:", topic)
+			t.Log("----------------------------------------------------------")
+			for _, msg := range messages {
+				t.Log(msg)
+			}
+			t.Log("==========================================================")
+		}
+		if len(mqttMessages["processes/test-network-id/state/error"]) != 1 {
+			t.Error("expect 1 error message")
+		}
+	})
+
+}
 
 func TestSync(t *testing.T) {
 	wg := &sync.WaitGroup{}

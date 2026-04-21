@@ -18,15 +18,17 @@ package camunda
 
 import (
 	"bytes"
-	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/camunda/request"
-	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/camunda/shards"
-	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
-	model "github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
+	"fmt"
 	"io"
 	"net/url"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/camunda/request"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/camunda/shards"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
+	model "github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
 
 	"errors"
 	"net/http"
@@ -472,29 +474,23 @@ func (this *Camunda) DeployProcess(name string, xml string, svg string, owner st
 		log.Println("ERROR: unable to decode process engine deployment response", err)
 		return deploymentId, err
 	}
+	if responseWrapper["type"] == "ProcessEngineException" {
+		err = fmt.Errorf("unable to deploy process '%v': %#v", name, responseWrapper)
+		log.Println("ERROR: ", err)
+		return deploymentId, err
+	}
 	ok := false
 	deploymentId, ok = responseWrapper["id"].(string)
 	if !ok {
 		log.Println("ERROR: unable to interpret process engine deployment response", responseWrapper)
-		if responseWrapper["type"] == "ProcessEngineException" {
-			log.Println("DEBUG: try deploying placeholder process")
-			responseWrapper, err = this.deployProcess(name, CreateBlankProcess(), CreateBlankSvg(), owner, source)
-			deploymentId, ok = responseWrapper["id"].(string)
-			if !ok {
-				log.Println("ERROR: unable to deploy placeholder process", responseWrapper)
-				err = errors.New("unable to interpret process engine deployment response")
-				return
-			}
-		} else {
-			log.Println("ERROR: unable to deploy placeholder process", responseWrapper)
-			err = errors.New("unable to interpret process engine deployment response")
-			return
-		}
+		err = fmt.Errorf("unable to interpret process engine deployment response for '%v': %#v", name, responseWrapper)
+		return deploymentId, err
 	}
-	if err == nil && deploymentId == "" {
+	if deploymentId == "" {
 		err = errors.New("process-engine didnt deploy process: " + xml)
+		return deploymentId, err
 	}
-	return
+	return deploymentId, nil
 }
 
 func (this *Camunda) deployProcess(name string, xml string, svg string, owner string, source string) (result map[string]interface{}, err error) {

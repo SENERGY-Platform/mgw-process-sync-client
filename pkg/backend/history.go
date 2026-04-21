@@ -30,7 +30,13 @@ func (this *Client) getProcessHistoryDeleteTopic() string {
 func (this *Client) handleProcessHistoryDeleteCommand(message paho.Message) {
 	err := this.handler.DeleteProcessInstanceHistory(string(message.Payload()))
 	if err != nil {
-		this.error(err)
+		this.error(ErrorMessage{
+			NetworkId:           this.config.NetworkId,
+			DeploymentId:        "",
+			CamundaDeploymentId: "",
+			BusinessKey:         "",
+			Error:               err.Error(),
+		})
 	}
 }
 

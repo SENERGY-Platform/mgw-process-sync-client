@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:senergy="https://senergy.infai.org" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn"><bpmn:process id="tv_rollo" isExecutable="true"><bpmn:startEvent id="StartEvent_0cvjp87"><bpmn:outgoing>SequenceFlow_1m24wor</bpmn:outgoing></bpmn:startEvent><bpmn:sequenceFlow id="SequenceFlow_1m24wor" sourceRef="StartEvent_0cvjp87" targetRef="tv_power_on" /><bpmn:sequenceFlow id="SequenceFlow_0tbe0j3" sourceRef="tv_power_on" targetRef="Task_146jza3" /><bpmn:exclusiveGateway id="ExclusiveGateway_1e7x95h"><bpmn:incoming>SequenceFlow_0pm24lj</bpmn:incoming><bpmn:outgoing>SequenceFlow_16wpf0n</bpmn:outgoing><bpmn:outgoing>SequenceFlow_1gga7r4</bpmn:outgoing></bpmn:exclusiveGateway><bpmn:sequenceFlow id="SequenceFlow_0pm24lj" sourceRef="Task_146jza3" targetRef="ExclusiveGateway_1e7x95h" /><bpmn:sequenceFlow id="SequenceFlow_16wpf0n" sourceRef="ExclusiveGateway_1e7x95h" targetRef="Task_0dng6mf"><bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" language="javascript">outputs[0] &gt; 100</bpmn:conditionExpression></bpmn:sequenceFlow><bpmn:exclusiveGateway id="ExclusiveGateway_041tkt2"><bpmn:incoming>SequenceFlow_1kpehfc</bpmn:incoming><bpmn:incoming>SequenceFlow_14pm9hl</bpmn:incoming><bpmn:outgoing>SequenceFlow_1ygzvfg</bpmn:outgoing></bpmn:exclusiveGateway><bpmn:sequenceFlow id="SequenceFlow_1s9bp4s" sourceRef="Task_0dng6mf" targetRef="tv_power_off" /><bpmn:sequenceFlow id="SequenceFlow_1gga7r4" sourceRef="ExclusiveGateway_1e7x95h" targetRef="tv_power_off_2"><bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" language="javascript">outputs[0] &lt;= 100</bpmn:conditionExpression></bpmn:sequenceFlow><bpmn:intermediateCatchEvent id="tv_power_on" name="Get Power Watt&#10;value &#62; 50" senergy:aspect="urn:infai:ses:aspect:74a7b913-73ac-42b7-9b35-573f2c1e97cf" senergy:function="urn:infai:ses:measuring-function:1c7c90fb-73b6-4690-aac2-72e9735e68d0" senergy:characteristic="urn:infai:ses:characteristic:a3931f28-664d-452f-9370-a641fadd21db" senergy:script="value &#62; 50" senergy:value_variable_name="value" senergy:qos="0"><bpmn:incoming>SequenceFlow_1m24wor</bpmn:incoming><bpmn:incoming>SequenceFlow_1ygzvfg</bpmn:incoming><bpmn:outgoing>SequenceFlow_0tbe0j3</bpmn:outgoing><bpmn:messageEventDefinition /></bpmn:intermediateCatchEvent><bpmn:intermediateCatchEvent id="tv_power_off" name="Get Power Watt&#10;value &#60; 50" senergy:aspect="urn:infai:ses:aspect:74a7b913-73ac-42b7-9b35-573f2c1e97cf" senergy:function="urn:infai:ses:measuring-function:1c7c90fb-73b6-4690-aac2-72e9735e68d0" senergy:characteristic="urn:infai:ses:characteristic:a3931f28-664d-452f-9370-a641fadd21db" senergy:script="value &#60; 50" senergy:value_variable_name="value" senergy:qos="0"><bpmn:incoming>SequenceFlow_1s9bp4s</bpmn:incoming><bpmn:outgoing>SequenceFlow_1eeyal9</bpmn:outgoing><bpmn:messageEventDefinition /></bpmn:intermediateCatchEvent><bpmn:serviceTask id="Task_0dng6mf" name="Motorized Curtain Set Relative Position" camunda:type="external" camunda:topic="optimistic"><bpmn:extensionElements><camunda:inputOutput><camunda:inputParameter name="payload">{
+    "version": 2,
+    "function": {
+        "id": "urn:infai:ses:controlling-function:73b66ece-d4a6-41c1-b94d-9c8e41f013b2",
+        "name": "Set Relative Position",
+        "display_name": "",
+        "description": "",
+        "concept_id": "urn:infai:ses:concept:b12151d3-d187-4839-82ac-8cc18fae3dd9",
+        "rdf_type": "https://senergy.infai.org/ontology/ControllingFunction"
+    },
+    "device_class": {
+        "id": "urn:infai:ses:device-class:e8886926-ef3a-456c-a0f2-0373effb5e43",
+        "image": "",
+        "name": "Motorized Curtain"
+    },
+    "aspect": null,
+    "label": "Set Relative Position",
+    "input": 0,
+    "characteristic_id": "urn:infai:ses:characteristic:46f808f4-bb9e-4cc2-bd50-dc33ca74f273",
+    "retries": 0,
+    "prefer_event": false
+}</camunda:inputParameter><camunda:inputParameter name="inputs">0</camunda:inputParameter></camunda:inputOutput></bpmn:extensionElements><bpmn:incoming>SequenceFlow_16wpf0n</bpmn:incoming><bpmn:outgoing>SequenceFlow_1s9bp4s</bpmn:outgoing></bpmn:serviceTask><bpmn:serviceTask id="Task_146jza3" name="Consumption Get Power PV" camunda:type="external" camunda:topic="pessimistic"><bpmn:extensionElements><camunda:inputOutput><camunda:inputParameter name="payload">{
+    "version": 2,
+    "function": {
+        "id": "urn:infai:ses:measuring-function:1c7c90fb-73b6-4690-aac2-72e9735e68d0",
+        "name": "Get Power",
+        "display_name": "Power",
+        "description": "Get the power consumption",
+        "concept_id": "urn:infai:ses:concept:46de11b9-26ff-4cce-b945-e93b84f04fe6",
+        "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+    },
+    "device_class": null,
+    "aspect": {
+        "id": "urn:infai:ses:aspect:74a7b913-73ac-42b7-9b35-573f2c1e97cf",
+        "name": "Consumption",
+        "root_id": "urn:infai:ses:aspect:412a48ad-3a80-46f7-8b99-408c4b9c3528",
+        "parent_id": "urn:infai:ses:aspect:412a48ad-3a80-46f7-8b99-408c4b9c3528",
+        "child_ids": [
+            "urn:infai:ses:aspect:34fdb3f7-5366-4746-82a1-89b0ca90263f",
+            "urn:infai:ses:aspect:4e110c6a-6cdd-4a25-9eb9-dbeec5e3c22c",
+            "urn:infai:ses:aspect:82b9e844-1fa6-4fb5-8213-ec7333a9a8ba",
+            "urn:infai:ses:aspect:b58c91a8-0db3-44df-a66e-94d438dea97e",
+            "urn:infai:ses:aspect:c407cb46-01a3-49b5-997d-25aa343fff6f",
+            "urn:infai:ses:aspect:c9ea9ed3-14e2-4a0d-aa41-668be5b1fd50",
+            "urn:infai:ses:aspect:d0385a96-d9e7-45e0-8c0d-df6e97a8da05",
+            "urn:infai:ses:aspect:e878a59a-248f-440e-b631-ccf1af8210f2",
+            "urn:infai:ses:aspect:fdc999eb-d366-44e8-9d24-bfd48d5fece1"
+        ],
+        "ancestor_ids": [
+            "urn:infai:ses:aspect:412a48ad-3a80-46f7-8b99-408c4b9c3528"
+        ],
+        "descendent_ids": [
+            "urn:infai:ses:aspect:34fdb3f7-5366-4746-82a1-89b0ca90263f",
+            "urn:infai:ses:aspect:4e110c6a-6cdd-4a25-9eb9-dbeec5e3c22c",
+            "urn:infai:ses:aspect:82b9e844-1fa6-4fb5-8213-ec7333a9a8ba",
+            "urn:infai:ses:aspect:b58c91a8-0db3-44df-a66e-94d438dea97e",
+            "urn:infai:ses:aspect:c407cb46-01a3-49b5-997d-25aa343fff6f",
+            "urn:infai:ses:aspect:c9ea9ed3-14e2-4a0d-aa41-668be5b1fd50",
+            "urn:infai:ses:aspect:d0385a96-d9e7-45e0-8c0d-df6e97a8da05",
+            "urn:infai:ses:aspect:e878a59a-248f-440e-b631-ccf1af8210f2",
+            "urn:infai:ses:aspect:fdc999eb-d366-44e8-9d24-bfd48d5fece1"
+        ]
+    },
+    "label": "Get Power",
+    "input": {},
+    "characteristic_id": "urn:infai:ses:characteristic:a3931f28-664d-452f-9370-a641fadd21db",
+    "retries": -1,
+    "prefer_event": true
+}</camunda:inputParameter><camunda:outputParameter name="outputs">${result}</camunda:outputParameter></camunda:inputOutput></bpmn:extensionElements><bpmn:incoming>SequenceFlow_0tbe0j3</bpmn:incoming><bpmn:outgoing>SequenceFlow_0pm24lj</bpmn:outgoing></bpmn:serviceTask><bpmn:sequenceFlow id="SequenceFlow_1kpehfc" sourceRef="tv_power_off_2" targetRef="ExclusiveGateway_041tkt2" /><bpmn:intermediateCatchEvent id="tv_power_off_2" name="Get Power Watt&#10;value &#60; 50" senergy:aspect="urn:infai:ses:aspect:74a7b913-73ac-42b7-9b35-573f2c1e97cf" senergy:function="urn:infai:ses:measuring-function:1c7c90fb-73b6-4690-aac2-72e9735e68d0" senergy:characteristic="urn:infai:ses:characteristic:a3931f28-664d-452f-9370-a641fadd21db" senergy:script="value &#60; 50" senergy:value_variable_name="value"><bpmn:incoming>SequenceFlow_1gga7r4</bpmn:incoming><bpmn:outgoing>SequenceFlow_1kpehfc</bpmn:outgoing><bpmn:messageEventDefinition /></bpmn:intermediateCatchEvent><bpmn:sequenceFlow id="SequenceFlow_1eeyal9" sourceRef="tv_power_off" targetRef="Task_1x6koil" /><bpmn:serviceTask id="Task_1x6koil" name="Shutter Get Relative Position" camunda:type="external" camunda:topic="pessimistic"><bpmn:extensionElements><camunda:inputOutput><camunda:inputParameter name="payload">{
+    "version": 2,
+    "function": {
+        "id": "urn:infai:ses:measuring-function:97aa3103-995a-4bd2-95f0-ab8f34e9ae36",
+        "name": "Get Relative Position",
+        "display_name": "Position",
+        "description": "",
+        "concept_id": "urn:infai:ses:concept:b12151d3-d187-4839-82ac-8cc18fae3dd9",
+        "rdf_type": "https://senergy.infai.org/ontology/MeasuringFunction"
+    },
+    "device_class": null,
+    "aspect": {
+        "id": "urn:infai:ses:aspect:380317fc-dec5-4262-837d-2cde9a47f072",
+        "name": "Shutter",
+        "root_id": "urn:infai:ses:aspect:e4a736ff-803d-49f2-86fc-3980647e884e",
+        "parent_id": "urn:infai:ses:aspect:e4a736ff-803d-49f2-86fc-3980647e884e",
+        "child_ids": [],
+        "ancestor_ids": [
+            "urn:infai:ses:aspect:e4a736ff-803d-49f2-86fc-3980647e884e"
+        ],
+        "descendent_ids": [],
+        "root_name": "Door/Window"
+    },
+    "label": "Get Relative Position",
+    "input": {},
+    "characteristic_id": "urn:infai:ses:characteristic:46f808f4-bb9e-4cc2-bd50-dc33ca74f273",
+    "retries": -1,
+    "prefer_event": true
+}</camunda:inputParameter><camunda:outputParameter name="outputs">${result[0]}</camunda:outputParameter></camunda:inputOutput></bpmn:extensionElements><bpmn:incoming>SequenceFlow_1eeyal9</bpmn:incoming><bpmn:outgoing>SequenceFlow_156sk7h</bpmn:outgoing></bpmn:serviceTask><bpmn:sequenceFlow id="SequenceFlow_156sk7h" sourceRef="Task_1x6koil" targetRef="Task_1350zro" /><bpmn:serviceTask id="Task_1350zro" name="Motorized Curtain Set Relative Position" camunda:type="external" camunda:topic="optimistic"><bpmn:extensionElements><camunda:inputOutput><camunda:inputParameter name="payload">{
+    "version": 2,
+    "function": {
+        "id": "urn:infai:ses:controlling-function:73b66ece-d4a6-41c1-b94d-9c8e41f013b2",
+        "name": "Set Relative Position",
+        "display_name": "",
+        "description": "",
+        "concept_id": "urn:infai:ses:concept:b12151d3-d187-4839-82ac-8cc18fae3dd9",
+        "rdf_type": "https://senergy.infai.org/ontology/ControllingFunction"
+    },
+    "device_class": {
+        "id": "urn:infai:ses:device-class:e8886926-ef3a-456c-a0f2-0373effb5e43",
+        "image": "",
+        "name": "Motorized Curtain"
+    },
+    "aspect": null,
+    "label": "Set Relative Position",
+    "input": 0,
+    "characteristic_id": "urn:infai:ses:characteristic:46f808f4-bb9e-4cc2-bd50-dc33ca74f273",
+    "retries": 0,
+    "prefer_event": false
+}</camunda:inputParameter><camunda:inputParameter name="inputs">${outputs]}</camunda:inputParameter></camunda:inputOutput></bpmn:extensionElements><bpmn:incoming>SequenceFlow_156sk7h</bpmn:incoming><bpmn:outgoing>SequenceFlow_14pm9hl</bpmn:outgoing></bpmn:serviceTask><bpmn:sequenceFlow id="SequenceFlow_14pm9hl" sourceRef="Task_1350zro" targetRef="ExclusiveGateway_041tkt2" /><bpmn:sequenceFlow id="SequenceFlow_1ygzvfg" sourceRef="ExclusiveGateway_041tkt2" targetRef="tv_power_on" /></bpmn:process><bpmndi:BPMNDiagram id="BPMNDiagram_1"><bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="tv_rollo"><bpmndi:BPMNShape id="StartEvent_0cvjp87_di" bpmnElement="StartEvent_0cvjp87"><dc:Bounds x="92" y="182" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNEdge id="SequenceFlow_1m24wor_di" bpmnElement="SequenceFlow_1m24wor"><di:waypoint x="128" y="200" /><di:waypoint x="182" y="200" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="SequenceFlow_0tbe0j3_di" bpmnElement="SequenceFlow_0tbe0j3"><di:waypoint x="218" y="200" /><di:waypoint x="280" y="200" /></bpmndi:BPMNEdge><bpmndi:BPMNShape id="ExclusiveGateway_1e7x95h_di" bpmnElement="ExclusiveGateway_1e7x95h" isMarkerVisible="true"><dc:Bounds x="445" y="175" width="50" height="50" /></bpmndi:BPMNShape><bpmndi:BPMNEdge id="SequenceFlow_0pm24lj_di" bpmnElement="SequenceFlow_0pm24lj"><di:waypoint x="380" y="200" /><di:waypoint x="445" y="200" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="SequenceFlow_16wpf0n_di" bpmnElement="SequenceFlow_16wpf0n"><di:waypoint x="495" y="200" /><di:waypoint x="560" y="200" /></bpmndi:BPMNEdge><bpmndi:BPMNShape id="ExclusiveGateway_041tkt2_di" bpmnElement="ExclusiveGateway_041tkt2" isMarkerVisible="true"><dc:Bounds x="1225" y="45" width="50" height="50" /></bpmndi:BPMNShape><bpmndi:BPMNEdge id="SequenceFlow_1s9bp4s_di" bpmnElement="SequenceFlow_1s9bp4s"><di:waypoint x="660" y="200" /><di:waypoint x="742" y="200" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="SequenceFlow_1gga7r4_di" bpmnElement="SequenceFlow_1gga7r4"><di:waypoint x="470" y="225" /><di:waypoint x="470" y="310" /><di:waypoint x="742" y="310" /></bpmndi:BPMNEdge><bpmndi:BPMNShape id="IntermediateCatchEvent_11sd2x4_di" bpmnElement="tv_power_on"><dc:Bounds x="182" y="182" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="160" y="225" width="81" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape><bpmndi:BPMNShape id="IntermediateCatchEvent_014jl4a_di" bpmnElement="tv_power_off"><dc:Bounds x="742" y="182" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="720" y="225" width="81" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape><bpmndi:BPMNShape id="ServiceTask_0h2o4w7_di" bpmnElement="Task_0dng6mf"><dc:Bounds x="560" y="160" width="100" height="80" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="ServiceTask_1cu1gb1_di" bpmnElement="Task_146jza3"><dc:Bounds x="280" y="160" width="100" height="80" /></bpmndi:BPMNShape><bpmndi:BPMNEdge id="SequenceFlow_1kpehfc_di" bpmnElement="SequenceFlow_1kpehfc"><di:waypoint x="778" y="310" /><di:waypoint x="1250" y="310" /><di:waypoint x="1250" y="95" /></bpmndi:BPMNEdge><bpmndi:BPMNShape id="IntermediateCatchEvent_12sphr4_di" bpmnElement="tv_power_off_2"><dc:Bounds x="742" y="292" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="720" y="335" width="81" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape><bpmndi:BPMNEdge id="SequenceFlow_1eeyal9_di" bpmnElement="SequenceFlow_1eeyal9"><di:waypoint x="778" y="200" /><di:waypoint x="870" y="200" /></bpmndi:BPMNEdge><bpmndi:BPMNShape id="ServiceTask_1uqaf9l_di" bpmnElement="Task_1x6koil"><dc:Bounds x="870" y="160" width="100" height="80" /></bpmndi:BPMNShape><bpmndi:BPMNEdge id="SequenceFlow_156sk7h_di" bpmnElement="SequenceFlow_156sk7h"><di:waypoint x="970" y="200" /><di:waypoint x="1050" y="200" /></bpmndi:BPMNEdge><bpmndi:BPMNShape id="ServiceTask_0lafdyt_di" bpmnElement="Task_1350zro"><dc:Bounds x="1050" y="160" width="100" height="80" /></bpmndi:BPMNShape><bpmndi:BPMNEdge id="SequenceFlow_14pm9hl_di" bpmnElement="SequenceFlow_14pm9hl"><di:waypoint x="1150" y="200" /><di:waypoint x="1250" y="200" /><di:waypoint x="1250" y="95" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="SequenceFlow_1ygzvfg_di" bpmnElement="SequenceFlow_1ygzvfg"><di:waypoint x="1225" y="70" /><di:waypoint x="200" y="70" /><di:waypoint x="200" y="182" /></bpmndi:BPMNEdge></bpmndi:BPMNPlane></bpmndi:BPMNDiagram></bpmn:definitions>
