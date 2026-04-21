@@ -21,11 +21,12 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"github.com/testcontainers/testcontainers-go"
-	"github.com/testcontainers/testcontainers-go/wait"
 	"log"
 	"sync"
 	"time"
+
+	"github.com/testcontainers/testcontainers-go"
+	"github.com/testcontainers/testcontainers-go/wait"
 )
 
 func Postgres(ctx context.Context, wg *sync.WaitGroup, dbname string) (conStr string, err error) {
@@ -50,6 +51,7 @@ func PostgresWithNetwork(ctx context.Context, wg *sync.WaitGroup, dbname string)
 			),
 			Tmpfs: map[string]string{"/var/lib/postgresql/data": "rw"},
 			//SkipReaper: true,
+			AlwaysPullImage: true,
 		},
 		Started: true,
 	})

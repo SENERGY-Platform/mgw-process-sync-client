@@ -18,10 +18,11 @@ package docker
 
 import (
 	"context"
-	"github.com/testcontainers/testcontainers-go"
-	"github.com/testcontainers/testcontainers-go/wait"
 	"log"
 	"sync"
+
+	"github.com/testcontainers/testcontainers-go"
+	"github.com/testcontainers/testcontainers-go/wait"
 )
 
 func Mongo(ctx context.Context, wg *sync.WaitGroup) (hostport string, containerip string, err error) {
@@ -34,7 +35,8 @@ func Mongo(ctx context.Context, wg *sync.WaitGroup) (hostport string, containeri
 				wait.ForLog("waiting for connections"),
 				wait.ForListeningPort("27017/tcp"),
 			),
-			Tmpfs: map[string]string{"/data/db": "rw"},
+			Tmpfs:           map[string]string{"/data/db": "rw"},
+			AlwaysPullImage: true,
 		},
 		Started: true,
 	})
