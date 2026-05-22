@@ -16,10 +16,6 @@
 
 package backend
 
-import (
-	"log"
-)
-
 type ErrorMessage struct {
 	NetworkId           string `json:"network_id"`
 	DeploymentId        string `json:"deployment_id"`
@@ -29,5 +25,5 @@ type ErrorMessage struct {
 }
 
 func (this *Client) error(err ErrorMessage) {
-	log.Println("ERROR:", err, "\n", this.sendObj(this.getStateTopic("error"), err))
+	this.config.GetLogger().Error("forward error", "error", err, "forward_result", this.sendObj(this.getStateTopic("error"), err))
 }

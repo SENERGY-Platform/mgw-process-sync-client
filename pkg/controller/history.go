@@ -18,15 +18,15 @@ package controller
 
 import (
 	"encoding/json"
+
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
-	"log"
 )
 
 func (this *Controller) DeleteProcessInstanceHistory(id string) error {
 	return this.camunda.RemoveProcessInstanceHistory(id, UserId)
 }
 
-//{"id_":"6b84bb04-750c-11eb-b54c-0242ac110006","proc_inst_id_":"6b84bb04-750c-11eb-b54c-0242ac110006","business_key_":null,"proc_def_key_":"ExampleId","proc_def_id_":"ExampleId:1:686e7a53-750c-11eb-b54c-0242ac110006","start_time_":"2021-02-22T12:49:36.886","end_time_":null,"removal_time_":null,"duration_":null,"start_user_id_":null,"start_act_id_":"StartEvent_1","end_act_id_":null,"super_process_instance_id_":null,"root_proc_inst_id_":"6b84bb04-750c-11eb-b54c-0242ac110006","super_case_instance_id_":null,"case_inst_id_":null,"delete_reason_":null,"tenant_id_":"user","state_":"ACTIVE"}
+// {"id_":"6b84bb04-750c-11eb-b54c-0242ac110006","proc_inst_id_":"6b84bb04-750c-11eb-b54c-0242ac110006","business_key_":null,"proc_def_key_":"ExampleId","proc_def_id_":"ExampleId:1:686e7a53-750c-11eb-b54c-0242ac110006","start_time_":"2021-02-22T12:49:36.886","end_time_":null,"removal_time_":null,"duration_":null,"start_user_id_":null,"start_act_id_":"StartEvent_1","end_act_id_":null,"super_process_instance_id_":null,"root_proc_inst_id_":"6b84bb04-750c-11eb-b54c-0242ac110006","super_case_instance_id_":null,"case_inst_id_":null,"delete_reason_":null,"tenant_id_":"user","state_":"ACTIVE"}
 type ProcessInstanceHistoryInPg struct {
 	Id                     string  `json:"id_"`
 	SuperProcessInstanceId string  `json:"super_process_instance_id_"`
@@ -49,7 +49,7 @@ func (this *Controller) NotifyHistoryUpdate(extra string) {
 	element := ProcessInstanceHistoryInPg{}
 	err := json.Unmarshal([]byte(extra), &element)
 	if err != nil {
-		log.Println("ERROR: unable to unmarshal history in NotifyHistoryUpdate(): ", err)
+		this.config.GetLogger().Error("unable to unmarshal history in NotifyHistoryUpdate()", "error", err)
 		return
 	}
 	history := camundamodel.HistoricProcessInstance{
@@ -72,7 +72,7 @@ func (this *Controller) NotifyHistoryUpdate(extra string) {
 
 	definition, err := this.camunda.GetProcessDefinition(element.ProcessDefinitionId, UserId)
 	if err != nil {
-		log.Println("WARNING: unable to get process definition in NotifyHistoryUpdate(): ", err)
+		this.config.GetLogger().Error("unable to get process definition in NotifyHistoryUpdate()", "error", err)
 		err = nil
 	} else {
 		history.ProcessDefinitionName = definition.Name
@@ -81,7 +81,7 @@ func (this *Controller) NotifyHistoryUpdate(extra string) {
 
 	err = this.backend.SendProcessHistoryUpdate(history)
 	if err != nil {
-		log.Println("ERROR: unable to send history update in SendProcessHistoryUpdate(): ", err)
+		this.config.GetLogger().Error("unable to send history update in SendProcessHistoryUpdate()", "error", err)
 		return
 	}
 }
@@ -90,12 +90,12 @@ func (this *Controller) NotifyHistoryDelete(extra string) {
 	element := ProcessInstanceHistoryInPg{}
 	err := json.Unmarshal([]byte(extra), &element)
 	if err != nil {
-		log.Println("ERROR: unable to unmarshal history in NotifyHistoryDelete(): ", err)
+		this.config.GetLogger().Error("unable to unmarshal history in NotifyHistoryDelete()", "error", err)
 		return
 	}
 	err = this.backend.SendProcessHistoryDelete(element.Id)
 	if err != nil {
-		log.Println("ERROR: unable to send history update in NotifyHistoryDelete(): ", err)
+		this.config.GetLogger().Error("unable to send history delete in NotifyHistoryDelete()", "error", err)
 		return
 	}
 }

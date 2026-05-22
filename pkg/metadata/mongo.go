@@ -19,19 +19,20 @@ package metadata
 import (
 	"context"
 	"errors"
+	"reflect"
+	"strings"
+	"time"
+
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/bsoncodec"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/x/mongo/driver/connstring"
-	"log"
-	"reflect"
-	"strings"
-	"time"
 )
 
 const DeploymentMetadataMongoCollection = "deployment_metadata"
+const InstanceParametersMongoCollection = "instance_parameters"
 
 func NewMongoStorage(ctx context.Context, config configuration.Config) (storage Storage, err error) {
 	connStr := config.DeploymentMetadataStorage
@@ -47,7 +48,7 @@ func NewMongoStorage(ctx context.Context, config configuration.Config) (storage 
 	go func() {
 		<-ctx.Done()
 		timeout, _ := getTimeoutContext()
-		log.Println("close mongo connection", client.Disconnect(timeout))
+		config.GetLogger().Info("close mongo connection", "result", client.Disconnect(timeout))
 	}()
 	m := &MongoStorage{
 		config:   config,
@@ -62,10 +63,11 @@ func getTimeoutContext() (context.Context, context.CancelFunc) {
 }
 
 type MongoStorage struct {
-	client      *mongo.Client
-	database    string
-	config      configuration.Config
-	idFieldName string
+	client                                *mongo.Client
+	database                              string
+	config                                configuration.Config
+	idFieldName                           string
+	instanceParameterBusinessKeyFieldName string
 }
 
 func (this *MongoStorage) Read(deploymentId string) (result Metadata, err error) {
@@ -80,7 +82,21 @@ func (this *MongoStorage) IsPlaceholder() bool {
 
 func (this *MongoStorage) Init() (err error) {
 	this.idFieldName, err = this.initCollectionIndex(this.getCollection(), "camunda_deployment_id_index", Metadata{}, "CamundaDeploymentId")
-	return err
+	if err != nil {
+		return err
+	}
+
+	this.instanceParameterBusinessKeyFieldName, err = this.initCollectionIndex(
+		this.getInstanceParameterCollection(),
+		"instance_param_bk_index",
+		InstanceParameter{},
+		"BusinessKey",
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (this *MongoStorage) Store(metadata Metadata) error {
@@ -151,6 +167,69 @@ func (this *MongoStorage) List() (known []Metadata, err error) {
 	}
 	err = cursor.Err()
 	return
+}
+
+type InstanceParameter struct {
+	BusinessKey string                 `bson:"business_key"`
+	Params      map[string]interface{} `bson:"params"`
+}
+
+func (this *MongoStorage) GetInstanceParameter(businessKey string) (result map[string]interface{}, err error) {
+	ctx, _ := getTimeoutContext()
+	obj := InstanceParameter{}
+	err = this.getInstanceParameterCollection().FindOne(ctx, bson.M{this.instanceParameterBusinessKeyFieldName: businessKey}).Decode(&obj)
+	if errors.Is(err, mongo.ErrNoDocuments) {
+		err = errors.Join(err, ErrNotFound)
+	}
+	return obj.Params, err
+}
+
+func (this *MongoStorage) StoreInstanceParameter(businessKey string, params map[string]interface{}) error {
+	ctx, _ := getTimeoutContext()
+	_, err := this.getInstanceParameterCollection().ReplaceOne(
+		ctx,
+		bson.M{
+			this.instanceParameterBusinessKeyFieldName: businessKey,
+		},
+		InstanceParameter{
+			BusinessKey: businessKey,
+			Params:      params,
+		},
+		options.Replace().SetUpsert(true))
+	return err
+}
+
+func (this *MongoStorage) RemoveInstanceParameter(businessKey string) (err error) {
+	ctx, _ := getTimeoutContext()
+	_, err = this.getInstanceParameterCollection().DeleteOne(
+		ctx,
+		bson.M{
+			this.instanceParameterBusinessKeyFieldName: businessKey,
+		})
+	return err
+}
+
+func (this *MongoStorage) ListInstanceParameterBusinessKeys() (businessKeys []string, err error) {
+	ctx, _ := getTimeoutContext()
+	collection := this.getInstanceParameterCollection()
+	cursor, err := collection.Find(ctx, bson.D{})
+	if err != nil {
+		return nil, err
+	}
+	for cursor.Next(ctx) {
+		element := InstanceParameter{}
+		err = cursor.Decode(&element)
+		if err != nil {
+			return nil, err
+		}
+		businessKeys = append(businessKeys, element.BusinessKey)
+	}
+	err = cursor.Err()
+	return
+}
+
+func (this *MongoStorage) getInstanceParameterCollection() (collection *mongo.Collection) {
+	return this.client.Database(this.database).Collection(InstanceParametersMongoCollection)
 }
 
 func (this *MongoStorage) getCollection() (collection *mongo.Collection) {

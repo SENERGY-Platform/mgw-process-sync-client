@@ -17,11 +17,14 @@
 package metadata
 
 import (
+	"errors"
+	"reflect"
+	"sort"
+	"testing"
+
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
 	"github.com/SENERGY-Platform/process-deployment/lib/model/deploymentmodel"
-	"reflect"
-	"testing"
 )
 
 func MetadataTest(storage Storage) func(t *testing.T) {
@@ -127,6 +130,85 @@ func MetadataTest(storage Storage) func(t *testing.T) {
 		}
 		if !reflect.DeepEqual(actual, md3) {
 			t.Error(actual, md3)
+		}
+	}
+}
+
+func ParameterTest(storage Storage) func(t *testing.T) {
+	return func(t *testing.T) {
+		err := storage.StoreInstanceParameter("bk1", map[string]interface{}{"foo": "bar", "num": 42.0})
+		if err != nil {
+			t.Error(err)
+			return
+		}
+		err = storage.StoreInstanceParameter("bk2", map[string]interface{}{"foo": "batz", "num": 13.0})
+		if err != nil {
+			t.Error(err)
+			return
+		}
+		list, err := storage.ListInstanceParameterBusinessKeys()
+		if err != nil {
+			t.Error(err)
+			return
+		}
+		sort.Strings(list)
+		if !reflect.DeepEqual(list, []string{"bk1", "bk2"}) {
+			t.Error(list)
+			return
+		}
+		bk1, err := storage.GetInstanceParameter("bk1")
+		if err != nil {
+			t.Error(err)
+			return
+		}
+		if !reflect.DeepEqual(bk1, map[string]interface{}{"foo": "bar", "num": 42.0}) {
+			t.Error(bk1)
+			return
+		}
+		bk2, err := storage.GetInstanceParameter("bk2")
+		if err != nil {
+			t.Error(err)
+			return
+		}
+		if !reflect.DeepEqual(bk2, map[string]interface{}{"foo": "batz", "num": 13.0}) {
+			t.Error(bk2)
+			return
+		}
+		err = storage.RemoveInstanceParameter("bk1")
+		if err != nil {
+			t.Error(err)
+			return
+		}
+		list, err = storage.ListInstanceParameterBusinessKeys()
+		if err != nil {
+			t.Error(err)
+			return
+		}
+		sort.Strings(list)
+		if !reflect.DeepEqual(list, []string{"bk2"}) {
+			t.Error(list)
+			return
+		}
+
+		bk1, err = storage.GetInstanceParameter("bk1")
+		if !errors.Is(err, ErrNotFound) {
+			t.Error("expected ErrNotFound")
+			return
+		}
+		bk2, err = storage.GetInstanceParameter("bk2")
+		if err != nil {
+			t.Error(err)
+			return
+		}
+		if !reflect.DeepEqual(bk2, map[string]interface{}{"foo": "batz", "num": 13.0}) {
+			t.Error(bk2)
+			return
+		}
+
+		err = storage.RemoveInstanceParameter("bk1")
+		if err != nil {
+			t.Error(err) //remove should not fail if key does not exist
+			return
 		}
 	}
 }

@@ -18,11 +18,17 @@ package controller
 
 import (
 	"encoding/json"
+	"errors"
+	"slices"
+
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
-	"log"
 )
 
 func (this *Controller) DeleteProcessInstance(id string) error {
+	instance, err := this.camunda.GetHistoricProcessInstance(id, UserId)
+	if err == nil {
+		this.metadata.RemoveInstanceParameter(instance.BusinessKey)
+	}
 	return this.camunda.RemoveProcessInstance(id, UserId)
 }
 
@@ -42,7 +48,7 @@ func (this *Controller) NotifyInstanceUpdate(extra string) {
 	element := ProcessInstanceInPg{}
 	err := json.Unmarshal([]byte(extra), &element)
 	if err != nil {
-		log.Println("ERROR: unable to unmarshal instance in NotifyInstanceUpdate(): ", err)
+		this.config.GetLogger().Error("unable to unmarshal instance in NotifyInstanceUpdate()", "error", err)
 		return
 	}
 	//forward only root instances
@@ -58,7 +64,7 @@ func (this *Controller) NotifyInstanceUpdate(extra string) {
 		}
 		err = this.backend.SendProcessInstanceUpdate(instance)
 		if err != nil {
-			log.Println("ERROR: unable to send process instance update in NotifyInstanceUpdate(): ", err)
+			this.config.GetLogger().Error("unable to send process instance update in NotifyInstanceUpdate()", "error", err)
 			return
 		}
 	}
@@ -68,14 +74,14 @@ func (this *Controller) NotifyInstanceDelete(extra string) {
 	element := ProcessInstanceInPg{}
 	err := json.Unmarshal([]byte(extra), &element)
 	if err != nil {
-		log.Println("ERROR: unable to unmarshal process instance in NotifyInstanceDelete(): ", err)
+		this.config.GetLogger().Error("unable to unmarshal process instance in NotifyInstanceDelete()", "error", err)
 		return
 	}
 	//forward only root instances
 	if isRootInstance(element) {
 		err = this.backend.SendProcessInstanceDelete(element.Id)
 		if err != nil {
-			log.Println("ERROR: unable to send process instance delete in NotifyInstanceDelete(): ", err)
+			this.config.GetLogger().Error("unable to send process instance delete in NotifyInstanceDelete()", "error", err)
 			return
 		}
 	}
@@ -99,4 +105,27 @@ func (this *Controller) SendCurrentInstances() error {
 		}
 	}
 	return this.backend.SendProcessInstanceKnownIds(ids)
+}
+
+func (this *Controller) RemoveUnknownInstanceBusinessKeys() error {
+	instances, err := this.camunda.GetProcessInstanceHistoryList(UserId)
+	if err != nil {
+		return err
+	}
+	knownKeys := []string{}
+	for _, instance := range instances {
+		knownKeys = append(knownKeys, instance.BusinessKey)
+	}
+	storedKeys, err := this.metadata.ListInstanceParameterBusinessKeys()
+	if err != nil {
+		return err
+	}
+	for _, key := range storedKeys {
+		if !slices.Contains(knownKeys, key) {
+			temperr := this.metadata.RemoveInstanceParameter(key)
+			this.config.GetLogger().Error("unable to remove instance parameter", "error", temperr, "businessKey", key)
+			err = errors.Join(err, temperr)
+		}
+	}
+	return err
 }

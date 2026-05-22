@@ -19,7 +19,6 @@ package backend
 import (
 	"context"
 	"encoding/json"
-	"log"
 
 	eventmodel "github.com/SENERGY-Platform/event-worker/pkg/model"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
@@ -60,10 +59,10 @@ func New(config configuration.Config, ctx context.Context, handler Handler) (*Cl
 		AddBroker(config.MqttBroker).
 		SetResumeSubs(true).
 		SetConnectionLostHandler(func(_ paho.Client, err error) {
-			log.Println("connection to mqtt broker lost")
+			config.GetLogger().Error("connection to mqtt broker lost", "error", err)
 		}).
 		SetOnConnectHandler(func(m paho.Client) {
-			log.Println("connected to mqtt broker")
+			config.GetLogger().Info("(re)connected to mqtt broker")
 			client.subscribe()
 		})
 
@@ -73,7 +72,7 @@ func New(config configuration.Config, ctx context.Context, handler Handler) (*Cl
 
 	client.mqtt = paho.NewClient(options)
 	if token := client.mqtt.Connect(); token.Wait() && token.Error() != nil {
-		log.Println("Error on MqttStart.Connect(): ", token.Error())
+		config.GetLogger().Error("error on mqtt connect", "error", token.Error())
 		return nil, token.Error()
 	}
 
@@ -87,45 +86,31 @@ func New(config configuration.Config, ctx context.Context, handler Handler) (*Cl
 
 func (this *Client) subscribe() {
 	this.mqtt.Subscribe(this.getDeploymentTopic(), 2, func(client paho.Client, message paho.Message) {
-		if this.debug {
-			log.Println("DEBUG: receive", message.Topic(), string(message.Payload()))
-		}
+		this.config.GetLogger().Debug("recieve", "topic", message.Topic(), "payload", string(message.Payload()))
 		go this.handleDeploymentCommand(message)
 	})
 	this.mqtt.Subscribe(this.getDeploymentDeleteTopic(), 2, func(client paho.Client, message paho.Message) {
-		if this.debug {
-			log.Println("DEBUG: receive", message.Topic(), string(message.Payload()))
-		}
+		this.config.GetLogger().Debug("recieved", "topic", message.Topic(), "payload", string(message.Payload()))
 		go this.handleDeploymentDeleteCommand(message)
 	})
 	this.mqtt.Subscribe(this.getProcessDeploymentStartTopic(), 2, func(client paho.Client, message paho.Message) {
-		if this.debug {
-			log.Println("DEBUG: receive", message.Topic(), string(message.Payload()))
-		}
+		this.config.GetLogger().Debug("recieved", "topic", message.Topic(), "payload", string(message.Payload()))
 		go this.handleDeploymentStartCommand(message)
 	})
 	this.mqtt.Subscribe(this.getProcessEventUpdateTopic(), 2, func(client paho.Client, message paho.Message) {
-		if this.debug {
-			log.Println("DEBUG: receive", message.Topic(), string(message.Payload()))
-		}
+		this.config.GetLogger().Debug("recieved", "topic", message.Topic(), "payload", string(message.Payload()))
 		go this.handleEventUpdateCommand(message)
 	})
 	this.mqtt.Subscribe(this.getProcessStopTopic(), 2, func(client paho.Client, message paho.Message) {
-		if this.debug {
-			log.Println("DEBUG: receive", message.Topic(), string(message.Payload()))
-		}
+		this.config.GetLogger().Debug("recieved", "topic", message.Topic(), "payload", string(message.Payload()))
 		go this.handleProcessStopCommand(message)
 	})
 	this.mqtt.Subscribe(this.getProcessHistoryDeleteTopic(), 2, func(client paho.Client, message paho.Message) {
-		if this.debug {
-			log.Println("DEBUG: receive", message.Topic(), string(message.Payload()))
-		}
+		this.config.GetLogger().Debug("recieved", "topic", message.Topic(), "payload", string(message.Payload()))
 		go this.handleProcessHistoryDeleteCommand(message)
 	})
 	this.mqtt.Subscribe(this.getProcessIncidentTopic(), 2, func(client paho.Client, message paho.Message) {
-		if this.debug {
-			log.Println("DEBUG: receive", message.Topic(), string(message.Payload()))
-		}
+		this.config.GetLogger().Debug("recieved", "topic", message.Topic(), "payload", string(message.Payload()))
 		go this.handleProcessIncident(message)
 	})
 }
@@ -165,18 +150,14 @@ func (this *Client) sendObj(topic string, message interface{}) (err error) {
 			return err
 		}
 	}
-	if this.debug {
-		log.Println("DEBUG: sendObj", topic, string(msg))
-	}
+	this.config.GetLogger().Debug("sendObj", "topic", topic, "payload", string(msg))
 	token := this.mqtt.Publish(topic, 2, false, msg)
 	token.Wait()
 	return token.Error()
 }
 
 func (this *Client) sendStr(topic string, message string) error {
-	if this.debug {
-		log.Println("DEBUG: sendObj", topic, message)
-	}
+	this.config.GetLogger().Debug("sendObj", "topic", topic, "payload", message)
 	token := this.mqtt.Publish(topic, 2, false, message)
 	token.Wait()
 	return token.Error()

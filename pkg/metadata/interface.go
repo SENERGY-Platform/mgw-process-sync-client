@@ -17,6 +17,8 @@
 package metadata
 
 import (
+	"fmt"
+
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
 )
@@ -26,6 +28,8 @@ type Metadata struct {
 	ProcessParameter    map[string]camundamodel.Variable `json:"process_parameter"`
 	DeploymentModel     model.FogDeploymentMessage       `json:"deployment_model"`
 }
+
+var ErrNotFound = fmt.Errorf("not found")
 
 type Storage interface {
 	Store(Metadata) error
@@ -40,4 +44,9 @@ type Storage interface {
 	List() (known []Metadata, err error)
 
 	IsPlaceholder() bool
+
+	GetInstanceParameter(businessKey string) (map[string]interface{}, error)
+	StoreInstanceParameter(businessKey string, params map[string]interface{}) error
+	RemoveInstanceParameter(businessKey string) error
+	ListInstanceParameterBusinessKeys() (businessKeys []string, err error)
 }

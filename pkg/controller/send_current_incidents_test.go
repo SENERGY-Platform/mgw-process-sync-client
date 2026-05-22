@@ -18,6 +18,11 @@ package controller
 
 import (
 	"context"
+	"log"
+	"sync"
+	"testing"
+	"time"
+
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/backend"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/camunda"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/camunda/shards"
@@ -28,10 +33,6 @@ import (
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/tests/docker"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/tests/resources"
 	"github.com/SENERGY-Platform/process-deployment/lib/model/deploymentmodel"
-	"log"
-	"sync"
-	"testing"
-	"time"
 )
 
 func TestSendCurrentIncidents(t *testing.T) {

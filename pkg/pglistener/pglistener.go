@@ -20,10 +20,11 @@ import (
 	"bytes"
 	"context"
 	"database/sql"
-	"github.com/lib/pq"
-	"log"
+	"log/slog"
 	"text/template"
 	"time"
+
+	"github.com/lib/pq"
 )
 
 const MIN_RECONN = 10 * time.Second
@@ -46,7 +47,7 @@ func Listen(ctx context.Context, pgUrl string, channel string, reportErr pq.Even
 func RegisterNotifier(pgUrl string, setChannel string, deleteChannel string, table string) (err error) {
 	db, err := sql.Open("postgres", pgUrl)
 	if err != nil {
-		log.Printf("Failed to connect to '%s': %s", pgUrl, err)
+		slog.Error("Failed to connect to postgres", "error", err, "url", pgUrl)
 		return err
 	}
 	defer db.Close()
@@ -60,13 +61,13 @@ func registerNotifier(db *sql.DB, setChannel string, deleteChannel string, table
 	}
 	_, err = tx.Exec(notifyNewFunctionSql)
 	if err != nil {
-		log.Println("ERROR: unable to create senergy_notify_new", err)
+		slog.Error("unable to create senergy_notify_new", "error", err)
 		return err
 	}
 
 	_, err = tx.Exec(notifyOldFunctionSql)
 	if err != nil {
-		log.Println("ERROR: unable to create senergy_notify_old", err)
+		slog.Error("unable to create senergy_notify_old", "error", err)
 		return err
 	}
 
@@ -81,7 +82,7 @@ func registerNotifier(db *sql.DB, setChannel string, deleteChannel string, table
 
 	_, err = tx.Exec(triggerSql)
 	if err != nil {
-		log.Println("ERROR: unable to create trigger", err, "\n", triggerSql)
+		slog.Error("unable to create trigger", "error", err, "trigger_sql", triggerSql)
 		return err
 	}
 	return tx.Commit()

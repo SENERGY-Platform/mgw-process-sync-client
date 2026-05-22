@@ -18,10 +18,10 @@ package controller
 
 import (
 	"context"
+	"log"
+
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/pglistener"
 	"github.com/lib/pq"
-	"log"
-	"runtime/debug"
 )
 
 func (this *Controller) spyOnCamundaDb(ctx context.Context) (err error) {
@@ -57,7 +57,7 @@ func (this *Controller) spyOn(ctx context.Context, channelName string, table str
 	}
 	notifySetChan, err := pglistener.Listen(ctx, this.config.CamundaDb, setChannel, func(event pq.ListenerEventType, err error) {
 		if err != nil {
-			debug.PrintStack()
+			this.config.GetLogger().Error("FATAL: unable to listen to postgres set-channel", "error", err)
 			log.Fatal("FATAL:", err)
 		}
 	})
@@ -72,7 +72,7 @@ func (this *Controller) spyOn(ctx context.Context, channelName string, table str
 
 	notifyDeleteChan, err := pglistener.Listen(ctx, this.config.CamundaDb, deleteChannel, func(event pq.ListenerEventType, err error) {
 		if err != nil {
-			debug.PrintStack()
+			this.config.GetLogger().Error("FATAL: unable to listen to postgres delete-channel", "error", err)
 			log.Fatal("FATAL:", err)
 		}
 	})

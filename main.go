@@ -19,16 +19,16 @@ package main
 import (
 	"context"
 	"flag"
+	"log"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/controller"
 	cleanup "github.com/SENERGY-Platform/process-history-cleanup/pkg"
 	cleanupconfig "github.com/SENERGY-Platform/process-history-cleanup/pkg/configuration"
-	"log"
-	"os"
-	"os/signal"
-	"runtime/debug"
-	"syscall"
-	"time"
 )
 
 func main() {
@@ -46,7 +46,7 @@ func main() {
 
 	_, err = controller.New(config, ctx)
 	if err != nil {
-		debug.PrintStack()
+		config.GetLogger().Error("FATAL: unable to create controller", "error", err)
 		log.Fatal("FATAL:", err)
 	}
 
@@ -55,7 +55,7 @@ func main() {
 	shutdown := make(chan os.Signal, 1)
 	signal.Notify(shutdown, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL)
 	sig := <-shutdown
-	log.Println("received shutdown signal", sig)
+	config.GetLogger().Info("shutting down gracefully", "signal", sig)
 	cancel()
 	time.Sleep(1 * time.Second) //give connections time to close gracefully
 }
@@ -64,7 +64,7 @@ func historyCleanup(ctx context.Context, config configuration.Config) {
 	if config.HistoryCleanupInterval != "" {
 		interval, err := time.ParseDuration(config.HistoryCleanupInterval)
 		if err != nil {
-			log.Println("WARNING: unable to parse history cleanup interval duration", config.HistoryCleanupInterval, err)
+			config.GetLogger().Warn("unable to parse history cleanup interval duration", "history_cleanup_interval", config.HistoryCleanupInterval, "error", err)
 		} else {
 			ticker := time.NewTicker(interval)
 			go func() {
@@ -74,7 +74,7 @@ func historyCleanup(ctx context.Context, config configuration.Config) {
 					case <-done:
 						return
 					case <-ticker.C:
-						log.Println("start history cleanup")
+						config.GetLogger().Info("start history cleanup")
 						err := cleanup.RunCleanup(&cleanupconfig.ConfigStruct{
 							EngineUrl:     config.CamundaUrl,
 							MaxAge:        config.HistoryCleanupMaxAge,
@@ -84,7 +84,7 @@ func historyCleanup(ctx context.Context, config configuration.Config) {
 							Debug:         config.Debug,
 						})
 						if err != nil {
-							log.Println("ERROR: in history cleanup:", err)
+							config.GetLogger().Error("unable to cleanup history", "error", err)
 						}
 					}
 				}

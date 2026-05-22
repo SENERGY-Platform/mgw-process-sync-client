@@ -20,14 +20,15 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/SENERGY-Platform/event-worker/pkg/model"
-	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
-	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/events/api/util"
-	"github.com/julienschmidt/httprouter"
 	"log"
 	"net/http"
 	"reflect"
-	"runtime/debug"
+
+	"github.com/SENERGY-Platform/event-worker/pkg/model"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/events/api/util"
+	"github.com/SENERGY-Platform/service-commons/pkg/accesslog"
+	"github.com/julienschmidt/httprouter"
 )
 
 type Repo interface {
@@ -48,15 +49,15 @@ func Start(ctx context.Context, config configuration.Config, repo Repo) (err err
 
 	server := &http.Server{Addr: ":" + config.EventApiPort, Handler: router}
 	go func() {
-		log.Println("listening on ", server.Addr)
-		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			debug.PrintStack()
+		config.GetLogger().Info("listening", "address", server.Addr)
+		if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			config.GetLogger().Error("FATAL: unable to listen to http", "error", err)
 			log.Fatal("FATAL:", err)
 		}
 	}()
 	go func() {
 		<-ctx.Done()
-		log.Println("api shutdown", server.Shutdown(context.Background()))
+		config.GetLogger().Info("api shutdown", "result", server.Shutdown(context.Background()))
 	}()
 	return
 }
@@ -65,7 +66,7 @@ func GetRouter(config configuration.Config, repo Repo) http.Handler {
 	router := httprouter.New()
 	for _, e := range endpoints {
 		for name, call := range getEndpointMethods(e) {
-			log.Println("add endpoint " + name)
+			config.GetLogger().Info("add endpoint", "name", name)
 			call(config, router, repo)
 		}
 	}
@@ -74,7 +75,7 @@ func GetRouter(config configuration.Config, repo Repo) http.Handler {
 	if config.DisableEventApiHttpLogger {
 		handler = util.NewCors(router)
 	} else {
-		handler = util.NewLogger(util.NewCors(router))
+		handler = accesslog.New(util.NewCors(router))
 	}
 
 	return handler

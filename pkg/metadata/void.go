@@ -18,7 +18,7 @@ package metadata
 
 import (
 	"errors"
-	"log"
+	"log/slog"
 )
 
 type VoidStorage struct {
@@ -34,29 +34,41 @@ func (this VoidStorage) IsPlaceholder() bool {
 }
 
 func (this VoidStorage) Store(metadata Metadata) error {
-	if this.Debug {
-		log.Println("DEBUG: try to store metadata, no storage is used")
-	}
+	slog.Debug("try to store metadata, no storage is used")
 	return nil
 }
 
 func (this VoidStorage) Remove(camundaDeploymentId string) (err error) {
-	if this.Debug {
-		log.Println("DEBUG: try to remove metadata from storage, no storage is used")
-	}
+	slog.Debug("try to remove metadata, no storage is used")
 	return nil
 }
 
 func (this VoidStorage) EnsureKnownDeployments(knownCamundaDeploymentIds []string) (known []Metadata, err error) {
-	if this.Debug {
-		log.Println("DEBUG: try to retrieve known metadata, no storage is used")
-	}
+	slog.Debug("try to retrieve known metadata, no storage is used")
 	return []Metadata{}, nil
 }
 
 func (this VoidStorage) List() (known []Metadata, err error) {
-	if this.Debug {
-		log.Println("DEBUG: try to list metadata from storage, no storage is used")
-	}
+	slog.Debug("try to list metadata, no storage is used")
 	return nil, nil
+}
+
+func (this VoidStorage) GetInstanceParameter(businessKey string) (map[string]interface{}, error) {
+	slog.Debug("try to get instance parameter, no storage is used")
+	return nil, errors.New("metadata storage disabled")
+}
+
+func (this VoidStorage) StoreInstanceParameter(businessKey string, params map[string]interface{}) error {
+	slog.Debug("try to store instance parameter, no storage is used")
+	return nil
+}
+
+func (this VoidStorage) RemoveInstanceParameter(businessKey string) error {
+	slog.Debug("try to remove instance parameter, no storage is used")
+	return nil
+}
+
+func (this VoidStorage) ListInstanceParameterBusinessKeys() (businessKeys []string, err error) {
+	slog.Debug("try to list instance parameter business keys, no storage is used")
+	return []string{}, nil
 }

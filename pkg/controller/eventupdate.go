@@ -18,8 +18,6 @@ package controller
 
 import (
 	eventmodel "github.com/SENERGY-Platform/event-worker/pkg/model"
-	"log"
-	"runtime/debug"
 )
 
 func (this *Controller) UpdateDeploymentEvents(camundaDeploymentId string, descriptions []eventmodel.EventDesc, deviceMapping map[string]string, serviceMapping map[string]string) error {
@@ -28,8 +26,7 @@ func (this *Controller) UpdateDeploymentEvents(camundaDeploymentId string, descr
 	}
 	m, err := this.metadata.Read(camundaDeploymentId)
 	if err != nil {
-		log.Println("ERROR: unable to update events", err)
-		debug.PrintStack()
+		this.config.GetLogger().Error("unable to update events", "error", err)
 		return nil
 	}
 	m.DeploymentModel.EventDescriptions = descriptions
@@ -37,8 +34,7 @@ func (this *Controller) UpdateDeploymentEvents(camundaDeploymentId string, descr
 	m.DeploymentModel.ServiceIdToLocalId = serviceMapping
 	err = this.metadata.Store(m)
 	if err != nil {
-		log.Println("ERROR: unable to update events", err)
-		debug.PrintStack()
+		this.config.GetLogger().Error("unable to update events", "error", err)
 		return err
 	}
 	err = this.RemoveConditionalEventOperators(camundaDeploymentId)

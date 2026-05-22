@@ -21,15 +21,16 @@ import (
 	"encoding/xml"
 	"errors"
 	"fmt"
+	"log/slog"
+	"runtime/debug"
+	"strconv"
+	"strings"
+
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/camunda"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/controller/etree"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/metadata"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
-	"log"
-	"runtime/debug"
-	"strconv"
-	"strings"
 )
 
 func (this *Controller) CreateDeployment(deployment model.FogDeploymentMessage) (id string, err error) {
@@ -53,16 +54,14 @@ func (this *Controller) CreateDeployment(deployment model.FogDeploymentMessage) 
 
 	svg := deployment.Diagram.Svg
 	if !validateXml(xml) {
-		log.Println("ERROR: got invalid xml, replace with default")
+		this.config.GetLogger().Info("got invalid xml, replace with default")
 		xml = camunda.CreateBlankProcess()
 		svg = camunda.CreateBlankSvg()
 	}
-	if this.config.Debug {
-		log.Println("deploy process", deployment.Id, deployment.Name, xml)
-	}
+	this.config.GetLogger().Debug("deploy process", "deploymentId", deployment.Id, "deploymentName", deployment.Name)
 	id, err = this.camunda.DeployProcess(deployment.Name, xml, svg, UserId, "senergy")
 	if err != nil {
-		log.Println("WARNING: unable to deploy process to camunda ", err)
+		this.config.GetLogger().Warn("unable to deploy process to camunda ", "error", err)
 		return "", err
 	}
 
@@ -72,7 +71,7 @@ func (this *Controller) CreateDeployment(deployment model.FogDeploymentMessage) 
 		if err != nil {
 			removeErr := this.camunda.RemoveProcess(id, UserId)
 			if removeErr != nil {
-				log.Println("ERROR: unable to remove deployed process", id, removeErr, err)
+				this.config.GetLogger().Error("unable to remove deployed process", "id", id, "removeErr", removeErr, "error", err)
 			}
 			return id, err
 		}
@@ -87,17 +86,17 @@ func (this *Controller) CreateDeployment(deployment model.FogDeploymentMessage) 
 
 	metadata.ProcessParameter, err = this.getProcessParameter(id)
 	if err != nil {
-		log.Println("WARNING: unable to get process parameter:", err)
+		this.config.GetLogger().Warn("unable to get process parameter", "error", err)
 	}
 
 	err = this.metadata.Store(metadata)
 	if err != nil {
-		log.Println("WARNING: unable to store deployment metadata:", err)
+		this.config.GetLogger().Warn("unable to store deployment metadata", "error", err)
 	}
 
 	err = this.DeployConditionalEventOperators(metadata)
 	if err != nil {
-		log.Println("ERROR: DeployConditionalEventOperators():", err)
+		this.config.GetLogger().Error("unable to deploy conditional event operators", "error", err)
 		return id, err
 	}
 
@@ -130,6 +129,12 @@ func (this *Controller) StartDeployment(id string, businessKey string, parameter
 	}
 	if len(definitions) == 0 {
 		return fmt.Errorf("no definition for deployment '%s' found", id)
+	}
+	if businessKey != "" && len(parameter) > 0 {
+		err = this.metadata.StoreInstanceParameter(businessKey, parameter)
+		if err != nil {
+			return fmt.Errorf("unable to store instance parameter: %w", err)
+		}
 	}
 	return this.camunda.StartProcess(definitions[0].Id, businessKey, UserId, parameter)
 }
@@ -181,7 +186,7 @@ func (this *Controller) NotifyDeploymentUpdate(extra string) {
 	deployment := DeploymentInPg{}
 	err := json.Unmarshal([]byte(extra), &deployment)
 	if err != nil {
-		log.Println("ERROR: unable to unmarshal deployment in NotifyDeploymentUpdate(): ", err)
+		this.config.GetLogger().Error("unable to unmarshal deployment in NotifyDeploymentUpdate()", "error", err)
 		return
 	}
 	err = this.backend.SendDeploymentUpdate(camundamodel.Deployment{
@@ -192,7 +197,7 @@ func (this *Controller) NotifyDeploymentUpdate(extra string) {
 		TenantId:       deployment.TenantId,
 	})
 	if err != nil {
-		log.Println("ERROR: unable to send deployment update in NotifyDeploymentUpdate(): ", err)
+		this.config.GetLogger().Error("unable to send deployment update in NotifyDeploymentUpdate()", "error", err)
 		return
 	}
 }
@@ -201,20 +206,20 @@ func (this *Controller) NotifyDeploymentDelete(extra string) {
 	deployment := DeploymentInPg{}
 	err := json.Unmarshal([]byte(extra), &deployment)
 	if err != nil {
-		log.Println("ERROR: unable to unmarshal deployment in NotifyDeploymentDelete(): ", err)
+		this.config.GetLogger().Error("unable to unmarshal deployment in NotifyDeploymentDelete()", "error", err)
 		return
 	}
 	err = this.backend.SendDeploymentDelete(deployment.Id)
 	if err != nil {
-		log.Println("ERROR: unable to send deployment delete in NotifyDeploymentDelete(): ", err)
+		this.config.GetLogger().Error("unable to send deployment delete in NotifyDeploymentDelete()", "error", err)
 	}
 	err = this.metadata.Remove(deployment.Id)
 	if err != nil {
-		log.Println("WARNING: unable to remove deployment metadata", err)
+		this.config.GetLogger().Warn("unable to remove deployment metadata", "error", err)
 	}
 	err = this.RemoveConditionalEventOperators(deployment.Id)
 	if err != nil {
-		log.Println("WARNING: unable to remove event operator", err)
+		this.config.GetLogger().Warn("unable to remove event operator", "error", err)
 	}
 }
 
@@ -228,12 +233,12 @@ func validateXml(xmlStr string) bool {
 	}
 	err := etree.NewDocument().ReadFromString(xmlStr)
 	if err != nil {
-		log.Println("ERROR: unable to parse xml", err)
+		slog.Error("unable to parse xml", "error", err)
 		return false
 	}
 	err = xml.Unmarshal([]byte(xmlStr), new(interface{}))
 	if err != nil {
-		log.Println("ERROR: unable to parse xml", err)
+		slog.Error("unable to parse xml", "error", err)
 		return false
 	}
 	return true
@@ -242,7 +247,7 @@ func validateXml(xmlStr string) bool {
 func ReplaceTaskTopics(xml string, fromToMap map[string]string) (result string, err error) {
 	defer func() {
 		if r := recover(); r != nil && err == nil {
-			log.Printf("%s: %s", r, debug.Stack())
+			slog.Error("Recovered Error", "error", r, "stack", debug.Stack())
 			err = errors.New(fmt.Sprint("Recovered Error: ", r))
 		}
 	}()
@@ -265,7 +270,7 @@ func ReplaceTaskTopics(xml string, fromToMap map[string]string) (result string, 
 func SetProcessId(xml string, id string) (result string, err error) {
 	defer func() {
 		if r := recover(); r != nil && err == nil {
-			log.Printf("%s: %s", r, debug.Stack())
+			slog.Error("Recovered Error", "error", r, "stack", debug.Stack())
 			err = errors.New(fmt.Sprint("Recovered Error: ", r))
 		}
 	}()

@@ -34,8 +34,6 @@ import (
 	"net/http"
 
 	"encoding/json"
-
-	"log"
 )
 
 type Camunda struct {
@@ -60,9 +58,7 @@ func (this *Camunda) StartProcess(processDefinitionId string, businessKey string
 	if err != nil {
 		return
 	}
-	if this.config.Debug == true {
-		log.Println("DEBUG: start process definition at camunda:", processDefinitionId)
-	}
+	this.config.GetLogger().Debug("start process definition at camunda", "definition_id", processDefinitionId)
 	req, err := http.NewRequest("POST", shard+"/engine-rest/process-definition/"+url.QueryEscape(processDefinitionId)+"/submit-form", b)
 	if err != nil {
 		return err
@@ -130,9 +126,7 @@ func (this *Camunda) StartProcessGetId(processDefinitionId string, businessKey s
 	if err != nil {
 		return
 	}
-	if this.config.Debug == true {
-		log.Println("DEBUG: start process definition at camunda:", processDefinitionId)
-	}
+	this.config.GetLogger().Debug("start process definition at camunda", "definition_id", processDefinitionId)
 	req, err := http.NewRequest("POST", shard+"/engine-rest/process-definition/"+url.QueryEscape(processDefinitionId)+"/submit-form", b)
 	if err != nil {
 		return result, err
@@ -471,19 +465,19 @@ func buildPayLoad(name string, xml string, svg string, boundary string, owner st
 func (this *Camunda) DeployProcess(name string, xml string, svg string, owner string, source string) (deploymentId string, err error) {
 	responseWrapper, err := this.deployProcess(name, xml, svg, owner, source)
 	if err != nil {
-		log.Println("ERROR: unable to decode process engine deployment response", err)
+		this.config.GetLogger().Error("unable to decode process engine deployment response", "error", err)
 		return deploymentId, err
 	}
 	if responseWrapper["type"] == "ProcessEngineException" {
 		err = fmt.Errorf("unable to deploy process '%v': %#v", name, responseWrapper)
-		log.Println("ERROR: ", err)
+		this.config.GetLogger().Error("process engine exception", "error", err)
 		return deploymentId, err
 	}
 	ok := false
 	deploymentId, ok = responseWrapper["id"].(string)
 	if !ok {
-		log.Println("ERROR: unable to interpret process engine deployment response", responseWrapper)
 		err = fmt.Errorf("unable to interpret process engine deployment response for '%v': %#v", name, responseWrapper)
+		this.config.GetLogger().Error("invalid process engine deployment response", "error", err)
 		return deploymentId, err
 	}
 	if deploymentId == "" {
@@ -501,12 +495,10 @@ func (this *Camunda) deployProcess(name string, xml string, svg string, owner st
 	result = map[string]interface{}{}
 	boundary := "---------------------------" + time.Now().String()
 	b := strings.NewReader(buildPayLoad(name, xml, svg, boundary, owner, source))
-	if this.config.Debug == true {
-		log.Println("DEBUG: deploy process to camunda:", name)
-	}
+	this.config.GetLogger().Debug("deploy process to camunda", "process_name", name)
 	resp, err := http.Post(shard+"/engine-rest/deployment/create", "multipart/form-data; boundary="+boundary, b)
 	if err != nil {
-		log.Println("ERROR: request to processengine ", err)
+		this.config.GetLogger().Error("unable to send processengine request", "error", err)
 		return result, err
 	}
 	err = json.NewDecoder(resp.Body).Decode(&result)

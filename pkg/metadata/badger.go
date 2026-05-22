@@ -20,9 +20,10 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"strings"
+
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
 	"github.com/dgraph-io/badger/v3"
-	"log"
 )
 
 var BADGER_PREFETCH = true
@@ -35,7 +36,7 @@ func NewBadgerStorage(ctx context.Context, config configuration.Config) (storage
 	if err == nil {
 		go func() {
 			<-ctx.Done()
-			log.Println("close badger", storage.db.Close())
+			config.GetLogger().Info("close badger", "result", storage.db.Close())
 		}()
 	}
 	return
@@ -150,7 +151,7 @@ func (this *Badger) List() (known []Metadata, err error) {
 		defer it.Close()
 		for it.Rewind(); it.Valid(); it.Next() {
 			item := it.Item()
-			if BADGER_PREFETCH {
+			if BADGER_PREFETCH && !strings.HasPrefix(string(item.Key()), InstanceParamPrefix) {
 				err = item.Value(func(v []byte) error {
 					temp := Metadata{}
 					err = json.Unmarshal(v, &temp)
@@ -185,4 +186,55 @@ func (this *Badger) Read(deploymentId string) (result Metadata, err error) {
 
 func (this *Badger) IsPlaceholder() bool {
 	return false
+}
+
+const InstanceParamPrefix = "instance_parameter."
+
+func (this *Badger) GetInstanceParameter(businessKey string) (result map[string]interface{}, err error) {
+	err = this.db.View(func(tx *badger.Txn) error {
+		item, err := tx.Get([]byte(InstanceParamPrefix + businessKey))
+		if errors.Is(err, badger.ErrKeyNotFound) {
+			err = errors.Join(err, ErrNotFound)
+		}
+		if err != nil {
+			return err
+		}
+		return item.Value(func(val []byte) error {
+			return json.Unmarshal(val, &result)
+		})
+	})
+	return
+}
+
+func (this *Badger) StoreInstanceParameter(businessKey string, params map[string]interface{}) error {
+	return this.db.Update(func(tx *badger.Txn) error {
+		value, err := json.Marshal(params)
+		if err != nil {
+			return err
+		}
+		return tx.Set([]byte(InstanceParamPrefix+businessKey), value)
+	})
+}
+
+func (this *Badger) RemoveInstanceParameter(businessKey string) error {
+	return this.db.Update(func(tx *badger.Txn) error {
+		return tx.Delete([]byte(InstanceParamPrefix + businessKey))
+	})
+}
+
+func (this *Badger) ListInstanceParameterBusinessKeys() (businessKeys []string, err error) {
+	err = this.db.View(func(tx *badger.Txn) error {
+		opts := badger.DefaultIteratorOptions
+		opts.PrefetchValues = BADGER_PREFETCH
+		it := tx.NewIterator(opts)
+		defer it.Close()
+		for it.Rewind(); it.Valid(); it.Next() {
+			item := it.Item()
+			if BADGER_PREFETCH && strings.HasPrefix(string(item.Key()), InstanceParamPrefix) {
+				businessKeys = append(businessKeys, strings.TrimPrefix(string(item.Key()), InstanceParamPrefix))
+			}
+		}
+		return nil
+	})
+	return
 }

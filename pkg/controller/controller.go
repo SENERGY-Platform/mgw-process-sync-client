@@ -18,6 +18,9 @@ package controller
 
 import (
 	"context"
+	"sync"
+	"time"
+
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/backend"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/camunda"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/camunda/shards"
@@ -26,9 +29,6 @@ import (
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/metadata"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model"
 	"github.com/SENERGY-Platform/service-commons/pkg/cache"
-	"log"
-	"sync"
-	"time"
 )
 
 const UserId = model.UserId
@@ -79,14 +79,14 @@ func New(config configuration.Config, ctx context.Context) (ctrl *Controller, er
 
 	wait, err := time.ParseDuration(config.InitialWaitDuration)
 	if err != nil {
-		log.Println("WARNING: unable to parse initial wait duration", config.InitialWaitDuration, err)
+		config.GetLogger().Warn("unable to parse initial wait duration", "initial_wait_duration", config.InitialWaitDuration, "error", err)
 	} else {
 		time.Sleep(wait) //wait for outstanding commands
 	}
 	if config.FullUpdateInterval != "" {
 		interval, err := time.ParseDuration(config.FullUpdateInterval)
 		if err != nil {
-			log.Println("WARNING: unable to parse full update interval duration", config.FullUpdateInterval, err)
+			config.GetLogger().Warn("unable to parse full update interval duration", "full_update_interval", config.FullUpdateInterval, "error", err)
 		} else {
 			ticker := time.NewTicker(interval)
 			go func() {
@@ -96,7 +96,7 @@ func New(config configuration.Config, ctx context.Context) (ctrl *Controller, er
 					case <-done:
 						return
 					case <-ticker.C:
-						log.Println("do full update", ctrl.SendCurrentStates())
+						config.GetLogger().Info("do full update", "result", ctrl.SendCurrentStates())
 					}
 				}
 			}()
@@ -135,6 +135,10 @@ func (this *Controller) SendCurrentStates() (err error) {
 		return err
 	}
 	err = this.SendCurrentHistories()
+	if err != nil {
+		return err
+	}
+	err = this.RemoveUnknownInstanceBusinessKeys()
 	if err != nil {
 		return err
 	}

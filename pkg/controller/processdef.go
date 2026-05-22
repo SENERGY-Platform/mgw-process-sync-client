@@ -18,7 +18,6 @@ package controller
 
 import (
 	"encoding/json"
-	"log"
 )
 
 // {"id_":"ExampleId:1:686e7a53-750c-11eb-b54c-0242ac110006","rev_":1,"category_":"http://bpmn.io/schema/bpmn","name_":"ExampleName","key_":"ExampleId","version_":1,"deployment_id_":"685ee9f0-750c-11eb-b54c-0242ac110006","resource_name_":"test.bpmn","dgrm_resource_name_":"test.svg","has_start_form_key_":false,"suspension_state_":1,"tenant_id_":"user","version_tag_":null,"history_ttl_":null,"startable_":true}
@@ -41,13 +40,13 @@ func (this *Controller) NotifyProcessDefUpdate(extra string) {
 	element := ProcessDefInPg{}
 	err := json.Unmarshal([]byte(extra), &element)
 	if err != nil {
-		log.Println("ERROR: unable to unmarshal process def in NotifyProcessDefUpdate(): ", err)
+		this.config.GetLogger().Error("unable to unmarshal process def in NotifyProcessDefUpdate()", "error", err)
 		return
 	}
 
 	def, err := this.camunda.GetProcessDefinition(element.Id, UserId)
 	if err != nil {
-		log.Println("ERROR: unable to get process def in NotifyProcessDefUpdate(): ", err)
+		this.config.GetLogger().Warn("unable to get process def in NotifyProcessDefUpdate()", "error", err)
 		return
 	}
 	/*
@@ -76,7 +75,7 @@ func (this *Controller) NotifyProcessDefUpdate(extra string) {
 
 	err = this.backend.SendProcessDefinitionUpdate(def)
 	if err != nil {
-		log.Println("ERROR: unable to send process def update in NotifyProcessDefUpdate(): ", err)
+		this.config.GetLogger().Error("unable to send process def update in NotifyProcessDefUpdate()", "error", err)
 		return
 	}
 }
@@ -85,12 +84,12 @@ func (this *Controller) NotifyProcessDefDelete(extra string) {
 	element := ProcessDefInPg{}
 	err := json.Unmarshal([]byte(extra), &element)
 	if err != nil {
-		log.Println("ERROR: unable to unmarshal process def in NotifyProcessDefDelete(): ", err)
+		this.config.GetLogger().Error("unable to unmarshal process def in NotifyProcessDefDelete()", "error", err)
 		return
 	}
 	err = this.backend.SendProcessDefinitionDelete(element.Id)
 	if err != nil {
-		log.Println("ERROR: unable to send process def delete in NotifyProcessDefDelete(): ", err)
+		this.config.GetLogger().Error("unable to send process def delete in NotifyProcessDefDelete()", "error", err)
 		return
 	}
 }

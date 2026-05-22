@@ -18,11 +18,12 @@ package controller
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/controller/notification"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/metadata"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model/camundamodel"
 	"github.com/SENERGY-Platform/process-deployment/lib/model/deploymentmodel"
 	"github.com/SENERGY-Platform/service-commons/pkg/cache"
@@ -48,19 +49,19 @@ func (this *Controller) NotifyIncident(extra string) {
 	element := ProcessIncidentInPg{}
 	err := json.Unmarshal([]byte(extra), &element)
 	if err != nil {
-		log.Println("ERROR: unable to unmarshal process incident in NotifyIncident(): ", err)
+		this.config.GetLogger().Error("unable to unmarshal process incident in NotifyIncident()", "error", err)
 		return
 	}
 
 	def, err := this.camunda.GetProcessDefinition(element.ProcessDefinitionId, UserId)
 	if err != nil {
-		log.Println("WARNING: unable to get process def in NotifyIncident(): ", err)
+		this.config.GetLogger().Warn("unable to get process def in NotifyIncident()", "error", err)
 		def = camundamodel.ProcessDefinition{Name: "unknown"}
 	}
 
 	instance, err := this.camunda.GetHistoricProcessInstance(element.ProcessInstanceId, UserId)
 	if err != nil {
-		log.Println("WARNING: unable to get process instance in NotifyIncident(): ", err)
+		this.config.GetLogger().Warn("unable to get process instance in NotifyIncident()", "error", err)
 		instance = camundamodel.HistoricProcessInstance{}
 	}
 
@@ -77,20 +78,20 @@ func (this *Controller) NotifyIncident(extra string) {
 		BusinessKey:         instance.BusinessKey,
 	})
 	if err != nil {
-		log.Println("WARNING: unable to send incident:", err)
+		this.config.GetLogger().Warn("unable to send incident", "error", err)
 	}
 }
 
 func (this *Controller) sendPgIncident(incident ProcessIncidentInPg) {
 	def, err := this.camunda.GetProcessDefinition(incident.ProcessDefinitionId, UserId)
 	if err != nil {
-		log.Println("WARNING: unable to get process def in NotifyIncident(): ", err)
+		this.config.GetLogger().Warn("unable to get process def in NotifyIncident()", "error", err)
 		def = camundamodel.ProcessDefinition{Name: "unknown"}
 	}
 
 	instance, err := this.camunda.GetHistoricProcessInstance(incident.ProcessInstanceId, UserId)
 	if err != nil {
-		log.Println("WARNING: unable to get process instance in NotifyIncident(): ", err)
+		this.config.GetLogger().Warn("unable to get process instance in NotifyIncident()", "error", err)
 		instance = camundamodel.HistoricProcessInstance{}
 	}
 
@@ -107,14 +108,14 @@ func (this *Controller) sendPgIncident(incident ProcessIncidentInPg) {
 		BusinessKey:         instance.BusinessKey,
 	})
 	if err != nil {
-		log.Println("WARNING: unable to send incident:", err)
+		this.config.GetLogger().Warn("unable to send incident", "error", err)
 	}
 }
 
 func (this *Controller) SendCurrentIncidents() (count int, err error) {
 	incidents, err := this.camunda.GetIncidents(UserId)
 	if err != nil {
-		log.Printf("ERROR: unable to load current incidents: %s\n", err)
+		this.config.GetLogger().Error("unable to load current incidents", "error", err)
 		return count, err
 	}
 	for _, incident := range incidents {
@@ -135,7 +136,7 @@ func (this *Controller) DeployIncidentsHandlerForDeploymentId(camundaDeplId stri
 		return err
 	}
 	if len(definitions) == 0 {
-		log.Println("WARNING: no definitions for deployment found --> no incident handling deployed")
+		this.config.GetLogger().Warn("no definitions for deployment found --> no incident handling deployed", "deploymentId", camundaDeplId)
 	}
 	if this.incidentsHandler == nil {
 		this.incidentsHandler = map[string]OnIncident{}
@@ -153,10 +154,10 @@ func (this *Controller) DeployIncidentsHandlerForDeploymentId(camundaDeplId stri
 func (this *Controller) handleIncident(incident camundamodel.Incident) error {
 	handler, ok := this.incidentsHandler[incident.ProcessDefinitionId]
 	if !ok {
-		log.Printf("unhandled incident for %v", incident.DeploymentName)
+		this.config.GetLogger().Warn("unhandled incident for deployment", "deploymentId", incident.DeploymentName, "incident", incident)
 		return nil
 	}
-	log.Printf("handle incident for name=%v instance=%v businessKey=%v notify=%v, restart=%v", incident.DeploymentName, incident.ProcessInstanceId, incident.BusinessKey, handler.Notify, handler.Restart)
+	this.config.GetLogger().Info("incident handled", "name", incident.DeploymentName, "instance", incident.ProcessInstanceId, "businessKey", incident.BusinessKey, "restart", handler.Restart, "notify", handler.Notify, "error", incident.ErrorMessage)
 	if handler.Notify {
 		msg := notification.Message{
 			Title:   "Fog Process-Incident in " + incident.DeploymentName,
@@ -173,12 +174,15 @@ func (this *Controller) handleIncident(incident camundamodel.Incident) error {
 		return err
 	}
 	if handler.Restart {
-		if this.config.Debug {
-			log.Printf("restart process definitionsId=%v businessKey=%v", incident.ProcessDefinitionId, incident.BusinessKey)
-		}
-		err := this.camunda.StartProcess(incident.ProcessDefinitionId, incident.BusinessKey, UserId, nil)
+		this.config.GetLogger().Debug("restarting process", "definitionsId", incident.ProcessDefinitionId, "name", incident.DeploymentName, "instance", incident.ProcessInstanceId, "businessKey", incident.BusinessKey)
+		param, err := this.GetProcessStartParameters(incident)
 		if err != nil {
-			log.Printf("ERROR: unable to restart process %v \n %#v \n", err, incident)
+			this.config.GetLogger().Error("unable to get process parameters for incident", "error", err, "incident", fmt.Sprintf("%#v", incident))
+			return err
+		}
+		err = this.camunda.StartProcess(incident.ProcessDefinitionId, incident.BusinessKey, UserId, param)
+		if err != nil {
+			this.config.GetLogger().Error("unable to restart process", "error", err, "incident", fmt.Sprintf("%#v", incident))
 			if incident.TenantId != "" {
 				_ = notification.Send(this.config.NotificationUrl, notification.Message{
 					Title:   "Fog ERROR: unable to restart process after incident in: " + incident.DeploymentName,
@@ -200,4 +204,27 @@ func (this *Controller) HandleIncident(incident camundamodel.Incident) error {
 		return "", this.handleIncident(incident)
 	}, cache.NoValidation, 5*time.Minute)
 	return err
+}
+
+func (this *Controller) GetProcessStartParameters(incident camundamodel.Incident) (params map[string]interface{}, err error) {
+	params, err = this.GetStoredStartParameters(incident.BusinessKey)
+	if err == nil {
+		return params, nil
+	}
+	if !errors.Is(err, metadata.ErrNotFound) {
+		this.config.GetLogger().Warn("unable to get stored start parameters for incident", "businessKey", incident.BusinessKey, "error", err)
+	}
+	camundaParams, err := this.camunda.GetProcessParameters(incident.ProcessDefinitionId, UserId)
+	if err != nil {
+		this.config.GetLogger().Error("unable to get camunda process parameters", "error", err)
+		return nil, err
+	}
+	if len(camundaParams) > 0 {
+		return nil, fmt.Errorf("needed process start parameters not found")
+	}
+	return nil, nil //parameters are not needed --> error in GetStoredStartParameters is unimportant
+}
+
+func (this *Controller) GetStoredStartParameters(businessKey string) (params map[string]interface{}, err error) {
+	return this.metadata.GetInstanceParameter(businessKey)
 }

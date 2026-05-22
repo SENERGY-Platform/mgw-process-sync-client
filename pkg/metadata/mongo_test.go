@@ -18,10 +18,11 @@ package metadata
 
 import (
 	"context"
-	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
-	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/tests/docker"
 	"sync"
 	"testing"
+
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/tests/docker"
 )
 
 func TestMongoStorage(t *testing.T) {
@@ -48,5 +49,6 @@ func TestMongoStorage(t *testing.T) {
 		return
 	}
 
-	t.Run("test", MetadataTest(storage))
+	t.Run("metadata", MetadataTest(storage))
+	t.Run("parameter", ParameterTest(storage))
 }

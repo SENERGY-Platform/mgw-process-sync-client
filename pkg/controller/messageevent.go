@@ -18,13 +18,12 @@ package controller
 
 import (
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/metadata"
-	"log"
 )
 
 func (this *Controller) DeployConditionalEventOperators(metadata metadata.Metadata) error {
 	if this.metadata.IsPlaceholder() {
 		if len(metadata.DeploymentModel.EventDescriptions) > 0 {
-			log.Println("WARNING: no metadata storage configured --> no message event handling")
+			this.config.GetLogger().Warn("no metadata storage configured --> no message event handling", "deploymentId", metadata.CamundaDeploymentId)
 		}
 		return nil
 	}

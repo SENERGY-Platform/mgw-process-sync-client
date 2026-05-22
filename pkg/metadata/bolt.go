@@ -20,13 +20,14 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"time"
+
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
 	"go.etcd.io/bbolt"
-	"log"
-	"time"
 )
 
 var BBOLT_BUCKET_NAME = []byte("metadata")
+var BBOLT_PARAM_BUCKET_NAME = []byte("instance_parameters")
 
 func NewBoltStorage(ctx context.Context, config configuration.Config) (storage *Bolt, err error) {
 	storage = &Bolt{}
@@ -34,13 +35,23 @@ func NewBoltStorage(ctx context.Context, config configuration.Config) (storage *
 	if err == nil {
 		go func() {
 			<-ctx.Done()
-			log.Println("close bbolt", storage.db.Close())
+			config.GetLogger().Info("close bbolt", "result", storage.db.Close())
 		}()
 	}
 	err = storage.db.Update(func(tx *bbolt.Tx) error {
 		_, err = tx.CreateBucketIfNotExists(BBOLT_BUCKET_NAME)
 		return err
 	})
+	if err != nil {
+		return nil, err
+	}
+	err = storage.db.Update(func(tx *bbolt.Tx) error {
+		_, err = tx.CreateBucketIfNotExists(BBOLT_PARAM_BUCKET_NAME)
+		return err
+	})
+	if err != nil {
+		return nil, err
+	}
 	return
 }
 
@@ -149,4 +160,43 @@ func (this *Bolt) Read(deploymentId string) (result Metadata, err error) {
 
 func (this *Bolt) IsPlaceholder() bool {
 	return false
+}
+
+func (this *Bolt) RemoveInstanceParameter(businessKey string) error {
+	return this.db.Update(func(tx *bbolt.Tx) error {
+		return tx.Bucket(BBOLT_PARAM_BUCKET_NAME).Delete([]byte(businessKey))
+	})
+}
+
+func (this *Bolt) GetInstanceParameter(businessKey string) (result map[string]interface{}, err error) {
+	err = this.db.View(func(tx *bbolt.Tx) error {
+		temp := tx.Bucket(BBOLT_PARAM_BUCKET_NAME).Get([]byte(businessKey))
+		if temp == nil {
+			return ErrNotFound
+		}
+		return json.Unmarshal(temp, &result)
+	})
+	return
+}
+
+func (this *Bolt) StoreInstanceParameter(businessKey string, params map[string]interface{}) error {
+	return this.db.Update(func(tx *bbolt.Tx) error {
+		value, err := json.Marshal(params)
+		if err != nil {
+			return err
+		}
+		return tx.Bucket(BBOLT_PARAM_BUCKET_NAME).Put([]byte(businessKey), value)
+	})
+}
+
+func (this *Bolt) ListInstanceParameterBusinessKeys() (businessKeys []string, err error) {
+	err = this.db.View(func(tx *bbolt.Tx) error {
+		bucket := tx.Bucket(BBOLT_PARAM_BUCKET_NAME)
+		it := bucket.Cursor()
+		for k, _ := it.First(); k != nil; k, _ = it.Next() {
+			businessKeys = append(businessKeys, string(k))
+		}
+		return nil
+	})
+	return
 }

@@ -18,8 +18,9 @@ package metadata
 
 import (
 	"context"
-	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
 	"testing"
+
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
 )
 
 func TestBoltStorage(t *testing.T) {
@@ -37,5 +38,6 @@ func TestBoltStorage(t *testing.T) {
 		return
 	}
 
-	t.Run("test", MetadataTest(storage))
+	t.Run("metadata", MetadataTest(storage))
+	t.Run("parameter", ParameterTest(storage))
 }

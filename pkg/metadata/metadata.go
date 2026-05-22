@@ -18,24 +18,24 @@ package metadata
 
 import (
 	"context"
-	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
-	"log"
 	"strings"
+
+	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
 )
 
 func NewStorage(ctx context.Context, config configuration.Config) (storage Storage, err error) {
 	if config.DeploymentMetadataStorage == "" {
-		log.Println("WARNING: metadata storage not used -> disable deployment of message-events")
+		config.GetLogger().Warn("metadata storage not used -> disable deployment of message-events")
 		return VoidStorage{Debug: config.Debug}, nil
 	}
 	if strings.HasPrefix(config.DeploymentMetadataStorage, "mongodb://") {
-		log.Println("use mongodb for metadata storage")
+		config.GetLogger().Info("use mongodb for metadata storage")
 		return NewMongoStorage(ctx, config)
 	}
 	if strings.HasSuffix(config.DeploymentMetadataStorage, ".db") {
-		log.Println("use bolt for metadata storage")
+		config.GetLogger().Info("use bolt for metadata storage")
 		return NewBoltStorage(ctx, config)
 	}
-	log.Println("use badger for metadata storage")
+	config.GetLogger().Info("use badger for metadata storage")
 	return NewBadgerStorage(ctx, config)
 }

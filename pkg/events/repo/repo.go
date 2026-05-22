@@ -18,12 +18,13 @@ package repo
 
 import (
 	"context"
+	"log/slog"
+	"sync"
+
 	eventmodel "github.com/SENERGY-Platform/event-worker/pkg/model"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/configuration"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/metadata"
 	"github.com/SENERGY-Platform/mgw-process-sync-client/pkg/model"
-	"log"
-	"sync"
 )
 
 type EventRepo struct {
@@ -55,12 +56,12 @@ func addDeployment(events EventIndex, deployment metadata.Metadata) EventIndex {
 	for _, event := range deployment.DeploymentModel.EventDescriptions {
 		localDeviceId, ok := deployment.DeploymentModel.DeviceIdToLocalId[event.DeviceId]
 		if !ok {
-			log.Printf("warning: unable to get local device id for \"%v\" --> no event handler deployed\n", event.DeviceId)
+			slog.Warn("unable to get local device id for device --> no event handler deployed", "deviceId", event.DeviceId, "deploymentId", deployment.CamundaDeploymentId)
 			continue
 		}
 		localServiceId, ok := deployment.DeploymentModel.ServiceIdToLocalId[event.ServiceId]
 		if !ok {
-			log.Printf("warning: unable to get local service id for \"%v\" --> no event handler deployed\n", event.ServiceId)
+			slog.Warn("unable to get local service id for service --> no event handler deployed", "serviceId", event.ServiceId, "deploymentId", deployment.CamundaDeploymentId)
 			continue
 		}
 		event.DeploymentId = deployment.CamundaDeploymentId
