@@ -34,6 +34,12 @@ import (
 const UserId = model.UserId
 
 func New(config configuration.Config, ctx context.Context) (ctrl *Controller, err error) {
+	//handle camunda updates before anything reads from or writes to the camunda db
+	err = camunda.UpdateDatabaseSchema(config)
+	if err != nil {
+		return nil, err
+	}
+
 	c, err := cache.New(cache.Config{}) //if the worker is scaled, the l2 must be configured with a shared memcached
 	if err != nil {
 		return nil, err
