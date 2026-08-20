@@ -25,8 +25,8 @@ github.com/SENERGY-Platform/process-deployment v0.0.22 h1:FEin/++V5RiGz8iQHW3q8+
 github.com/SENERGY-Platform/process-deployment v0.0.22/go.mod h1:jYk8/QFADu8yQKOlosz79ucQhZcEK07blB2HeQMd+d4=
 github.com/SENERGY-Platform/process-history-cleanup v1.1.3 h1:eOPNpDgCpazY6VjCG0j/AVZoInmDk0st5JZSoBfsW1A=
 github.com/SENERGY-Platform/process-history-cleanup v1.1.3/go.mod h1:4NxxbpZVTjwLPZXuZ4aX1u8DaYUOP4eXwfvJHVUNFk4=
-github.com/SENERGY-Platform/process-sync v0.0.33 h1:gGDsKooakbVHvdhJYB59Ot56NQ5iUkLSkfjzkJ20bgk=
-github.com/SENERGY-Platform/process-sync v0.0.33/go.mod h1:ox0QzmcTIoz+1gld8Y0sYJciNjrMou4W3wwXwvXQOb4=
+github.com/SENERGY-Platform/process-sync v0.0.34 h1:iKg7NXgQhRgNdr/Sez/jzJpPAJ6m3F9PNNRzvQte10o=
+github.com/SENERGY-Platform/process-sync v0.0.34/go.mod h1:ox0QzmcTIoz+1gld8Y0sYJciNjrMou4W3wwXwvXQOb4=
 github.com/SENERGY-Platform/service-commons v0.0.0-20260507090252-155b04bb4c46 h1:ixK0PRFd4WvBPvBIAjT9p0D6F/XggR5kxovEJcEKv6U=
 github.com/SENERGY-Platform/service-commons v0.0.0-20260507090252-155b04bb4c46/go.mod h1:ZPgM4x+iVHVh4YfeUS9GVMMv3v9ieec566fhzNfERpc=
 github.com/armon/consul-api v0.0.0-20180202201655-eb2c6b5be1b6/go.mod h1:grANhF5doyWs3UAsr3K4I6qtAmlQcZDesFNEHPZAzj8=
