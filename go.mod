@@ -8,7 +8,7 @@ require (
 	github.com/SENERGY-Platform/process-deployment v0.0.22
 	github.com/SENERGY-Platform/process-history-cleanup v1.1.3
 	github.com/SENERGY-Platform/process-sync v0.0.34
-	github.com/SENERGY-Platform/service-commons v0.0.0-20260507090252-155b04bb4c46
+	github.com/SENERGY-Platform/service-commons v0.0.0-20260821114734-3e4578ac2358
 	github.com/dgraph-io/badger/v3 v3.2103.5
 	github.com/eclipse/paho.mqtt.golang v1.4.3
 	github.com/google/uuid v1.6.0
