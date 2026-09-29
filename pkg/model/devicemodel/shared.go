@@ -16,6 +16,8 @@
 
 package devicemodel
 
+import "github.com/SENERGY-Platform/models/go/models"
+
 type Device struct {
 	Id           string      `json:"id"`
 	LocalId      string      `json:"local_id"`
@@ -96,22 +98,24 @@ func (this *DeviceGroup) SetShortCriteria() {
 }
 
 type FilterCriteria struct {
-	FunctionId    string `json:"function_id"`
-	AspectId      string `json:"aspect_id"`
-	DeviceClassId string `json:"device_class_id"`
+	FunctionId    string   `json:"function_id"`
+	AspectId      string   `json:"aspect_id"` //deprecated: please use AspectIds
+	AspectIds     []string `json:"aspect_ids,omitempty"`
+	DeviceClassId string   `json:"device_class_id"`
 }
 
 func (this FilterCriteria) Short() string {
-	return this.FunctionId + "_" + this.AspectId + "_" + this.DeviceClassId
+	return this.FunctionId + "_" + models.AspectIdsShort(this.AspectId, this.AspectIds) + "_" + this.DeviceClassId
 }
 
 type DeviceGroupFilterCriteria struct {
 	Interaction   Interaction `json:"interaction"`
 	FunctionId    string      `json:"function_id"`
-	AspectId      string      `json:"aspect_id"`
+	AspectId      string      `json:"aspect_id"` //deprecated: please use AspectIds
+	AspectIds     []string    `json:"aspect_ids,omitempty"`
 	DeviceClassId string      `json:"device_class_id"`
 }
 
 func (this DeviceGroupFilterCriteria) Short() string {
-	return this.FunctionId + "_" + this.AspectId + "_" + this.DeviceClassId + "_" + string(this.Interaction)
+	return this.FunctionId + "_" + models.AspectIdsShort(this.AspectId, this.AspectIds) + "_" + this.DeviceClassId + "_" + string(this.Interaction)
 }

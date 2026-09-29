@@ -16,6 +16,8 @@
 
 package importmodel
 
+import "github.com/SENERGY-Platform/models/go/models"
+
 type ImportType struct {
 	Id             string                `json:"id"`
 	Name           string                `json:"name"`
@@ -62,10 +64,11 @@ type ImportConfig struct {
 }
 
 type ImportTypeFilterCriteria struct {
-	FunctionId string `json:"function_id"`
-	AspectId   string `json:"aspect_id"`
+	FunctionId string   `json:"function_id"`
+	AspectId   string   `json:"aspect_id"` //deprecated: please use AspectIds
+	AspectIds  []string `json:"aspect_ids,omitempty"`
 }
 
 func (this ImportTypeFilterCriteria) Short() string {
-	return this.AspectId + "_" + this.FunctionId
+	return models.AspectIdsShort(this.AspectId, this.AspectIds) + "_" + this.FunctionId
 }

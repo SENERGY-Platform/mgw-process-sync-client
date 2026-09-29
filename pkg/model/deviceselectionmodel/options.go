@@ -35,9 +35,10 @@ type FilterCriteriaAndSet []FilterCriteria
 type FilterCriteriaOrSet []FilterCriteria
 
 type FilterCriteria struct {
-	FunctionId    string `json:"function_id"`
-	DeviceClassId string `json:"device_class_id"`
-	AspectId      string `json:"aspect_id"`
+	FunctionId    string   `json:"function_id"`
+	DeviceClassId string   `json:"device_class_id"`
+	AspectId      string   `json:"aspect_id"` //deprecated: please use AspectIds
+	AspectIds     []string `json:"aspect_ids,omitempty"`
 }
 
 type BulkRequestElement struct {
@@ -59,21 +60,23 @@ type BulkResultElement struct {
 }
 
 type PathOption struct {
-	Path             string                 `json:"path"`
-	CharacteristicId string                 `json:"characteristicId"`
-	AspectNode       devicemodel.AspectNode `json:"aspectNode"`
-	FunctionId       string                 `json:"functionId"`
-	IsVoid           bool                   `json:"isVoid"`
-	Value            interface{}            `json:"value,omitempty"`
-	Type             string                 `json:"type,omitempty"`
-	Configurables    []Configurable         `json:"configurables,omitempty"`
+	Path             string                   `json:"path"`
+	CharacteristicId string                   `json:"characteristicId"`
+	AspectNode       devicemodel.AspectNode   `json:"aspectNode"` //deprecated: alias for a single element AspectNodes; holds the node with the alphabetically first id
+	AspectNodes      []devicemodel.AspectNode `json:"aspectNodes,omitempty"`
+	FunctionId       string                   `json:"functionId"`
+	IsVoid           bool                     `json:"isVoid"`
+	Value            interface{}              `json:"value,omitempty"`
+	Type             string                   `json:"type,omitempty"`
+	Configurables    []Configurable           `json:"configurables,omitempty"`
 }
 
 type Configurable struct {
-	Path             string                 `json:"path"`
-	CharacteristicId string                 `json:"characteristic_id"`
-	AspectNode       devicemodel.AspectNode `json:"aspect_node"`
-	FunctionId       string                 `json:"function_id"`
-	Value            interface{}            `json:"value,omitempty"`
-	Type             string                 `json:"type,omitempty"`
+	Path             string                   `json:"path"`
+	CharacteristicId string                   `json:"characteristic_id"`
+	AspectNode       devicemodel.AspectNode   `json:"aspect_node"` //deprecated: alias for a single element AspectNodes; holds the node with the alphabetically first id
+	AspectNodes      []devicemodel.AspectNode `json:"aspect_nodes,omitempty"`
+	FunctionId       string                   `json:"function_id"`
+	Value            interface{}              `json:"value,omitempty"`
+	Type             string                   `json:"type,omitempty"`
 }

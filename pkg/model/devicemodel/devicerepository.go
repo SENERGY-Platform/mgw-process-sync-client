@@ -27,16 +27,17 @@ type AspectNode struct {
 }
 
 type DeviceTypeCriteria struct {
-	DeviceTypeId          string `json:"device_type_id"`
-	ServiceId             string `json:"service_id"`
-	ContentVariableId     string `json:"content_variable_id"`
-	ContentVariablePath   string `json:"content_variable_path"`
-	FunctionId            string `json:"function_id"`
-	Interaction           string `json:"interaction"`
-	IsControllingFunction bool   `json:"controlling_function"`
-	DeviceClassId         string `json:"device_class_id"`
-	AspectId              string `json:"aspect_id"`
-	CharacteristicId      string `json:"characteristic_id"`
+	DeviceTypeId          string   `json:"device_type_id"`
+	ServiceId             string   `json:"service_id"`
+	ContentVariableId     string   `json:"content_variable_id"`
+	ContentVariablePath   string   `json:"content_variable_path"`
+	FunctionId            string   `json:"function_id"`
+	Interaction           string   `json:"interaction"`
+	IsControllingFunction bool     `json:"controlling_function"`
+	DeviceClassId         string   `json:"device_class_id"`
+	AspectId              string   `json:"aspect_id"` //deprecated: please use AspectIds
+	AspectIds             []string `json:"aspect_ids,omitempty"`
+	CharacteristicId      string   `json:"characteristic_id"`
 }
 
 type DeviceTypeSelectable struct {

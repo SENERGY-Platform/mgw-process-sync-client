@@ -51,4 +51,5 @@ func TestMongoStorage(t *testing.T) {
 
 	t.Run("metadata", MetadataTest(storage))
 	t.Run("parameter", ParameterTest(storage))
+	t.Run("aspects", AspectsTest(storage))
 }

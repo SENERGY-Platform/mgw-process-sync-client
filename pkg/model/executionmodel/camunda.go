@@ -30,7 +30,8 @@ type Task struct {
 
 	//optional modeling time (used to limit/filter device and service selection in deployment)
 	DeviceClass *devicemodel.DeviceClass `json:"device_class,omitempty"`
-	Aspect      *devicemodel.AspectNode  `json:"aspect,omitempty"`
+	Aspect      *devicemodel.AspectNode  `json:"aspect,omitempty"` //deprecated: please use Aspects
+	Aspects     []devicemodel.AspectNode `json:"aspects,omitempty"`
 
 	//deployment time
 	DeviceGroupId string `json:"device_group_id,omitempty"`

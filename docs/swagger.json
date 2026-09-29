@@ -42,7 +42,7 @@
                         }
                     },
                     "500": {
-                        "description": ""
+                        "description": "Internal Server Error"
                     }
                 }
             }
@@ -53,7 +53,14 @@
             "type": "object",
             "properties": {
                 "aspect_id": {
+                    "description": "deprecated: please use AspectIds",
                     "type": "string"
+                },
+                "aspect_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "characteristic_id": {
                     "description": "marshaller info",
@@ -90,7 +97,11 @@
                 },
                 "service_for_marshaller": {
                     "description": "set by event-manager\nmay be\n\t- the service from EventDesc.ConditionalEvent.Selection.SelectedServiceId\n\t- or an artificial service for EventDesc.ConditionalEvent.Selection.SelectedImportId",
-                    "$ref": "#/definitions/models.Service"
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/models.Service"
+                        }
+                    ]
                 },
                 "service_id": {
                     "type": "string"
@@ -136,7 +147,7 @@
                     "type": "string"
                 },
                 "serialization": {
-                    "type": "string"
+                    "$ref": "#/definitions/models.Serialization"
                 }
             }
         },
@@ -144,7 +155,14 @@
             "type": "object",
             "properties": {
                 "aspect_id": {
+                    "description": "deprecated: please use AspectIds",
                     "type": "string"
+                },
+                "aspect_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "characteristic_id": {
                     "type": "string"
@@ -161,6 +179,9 @@
                 "name": {
                     "type": "string"
                 },
+                "omit_empty": {
+                    "type": "boolean"
+                },
                 "serialization_options": {
                     "type": "array",
                     "items": {
@@ -174,13 +195,39 @@
                     }
                 },
                 "type": {
-                    "type": "string"
+                    "$ref": "#/definitions/models.Type"
                 },
                 "unit_reference": {
                     "type": "string"
                 },
                 "value": {}
             }
+        },
+        "models.Interaction": {
+            "type": "string",
+            "enum": [
+                "event",
+                "request",
+                "event+request"
+            ],
+            "x-enum-varnames": [
+                "EVENT",
+                "REQUEST",
+                "EVENT_AND_REQUEST"
+            ]
+        },
+        "models.Serialization": {
+            "type": "string",
+            "enum": [
+                "xml",
+                "json",
+                "plain-text"
+            ],
+            "x-enum-varnames": [
+                "XML",
+                "JSON",
+                "PlainText"
+            ]
         },
         "models.Service": {
             "type": "object",
@@ -204,7 +251,7 @@
                     }
                 },
                 "interaction": {
-                    "type": "string"
+                    "$ref": "#/definitions/models.Interaction"
                 },
                 "local_id": {
                     "type": "string"
@@ -225,6 +272,25 @@
                     "type": "string"
                 }
             }
+        },
+        "models.Type": {
+            "type": "string",
+            "enum": [
+                "https://schema.org/Text",
+                "https://schema.org/Integer",
+                "https://schema.org/Float",
+                "https://schema.org/Boolean",
+                "https://schema.org/ItemList",
+                "https://schema.org/StructuredValue"
+            ],
+            "x-enum-varnames": [
+                "String",
+                "Integer",
+                "Float",
+                "Boolean",
+                "List",
+                "Structure"
+            ]
         }
     }
 }
