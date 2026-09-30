@@ -111,8 +111,9 @@ func handleEnvironmentVars(config *Config) {
 				loggedEnvValue = "***"
 			}
 			fmt.Println("use environment variable: ", envName, " = ", loggedEnvValue)
-			if configValue.FieldByName(fieldName).Kind() == reflect.Int64 {
-				i, _ := strconv.ParseInt(envValue, 10, 64)
+			switch configValue.FieldByName(fieldName).Kind() {
+			case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+				i, _ := strconv.ParseInt(envValue, 10, configValue.FieldByName(fieldName).Type().Bits())
 				configValue.FieldByName(fieldName).SetInt(i)
 			}
 			if configValue.FieldByName(fieldName).Kind() == reflect.String {
