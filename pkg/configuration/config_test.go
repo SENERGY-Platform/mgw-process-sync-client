@@ -26,3 +26,12 @@ func TestEnvironmentVariableSetsIntField(t *testing.T) {
 		t.Fatalf("expected 42, got %v", config.HistoryCleanupBatchSize)
 	}
 }
+
+func TestEnvironmentVariableSetsInt64Field(t *testing.T) {
+	t.Setenv("INCIDENT_RESTART_LIMIT", "7")
+	config := Config{IncidentRestartLimit: 3}
+	handleEnvironmentVars(&config)
+	if config.IncidentRestartLimit != 7 {
+		t.Fatalf("expected 7, got %v", config.IncidentRestartLimit)
+	}
+}

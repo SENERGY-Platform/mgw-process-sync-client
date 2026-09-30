@@ -23,6 +23,7 @@ import (
 	"log"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"sync"
 	"testing"
 	"time"
@@ -38,6 +39,82 @@ import (
 
 // INSERT INTO public.act_ru_incident (id_, rev_, incident_timestamp_, incident_msg_, incident_type_, execution_id_, activity_id_, proc_inst_id_, proc_def_id_, cause_incident_id_, root_cause_incident_id_, configuration_, tenant_id_, job_def_id_) VALUES ('6da046d1-5580-11ef-9030-0242ac11000a', 1, '2024-08-08 12:19:15.517000', 'Unable to evaluate script while executing activity ”Task_0fi26gl” in the process definition with id ”script_err:1:631e00d6-5580-11ef-9030-0242ac11000a”:TypeError: Cannot read property "batz" from undefined in <eval> at line number 2', 'failedJob', '6614ab9a-5580-11ef-9030-0242ac11000a', 'IntermediateThrowEvent_1jxyivh', '6613e848-5580-11ef-9030-0242ac11000a', 'script_err:1:631e00d6-5580-11ef-9030-0242ac11000a', '6da046d1-5580-11ef-9030-0242ac11000a', '6da046d1-5580-11ef-9030-0242ac11000a', '66156eec-5580-11ef-9030-0242ac11000a', 'senergy', '631e27e7-5580-11ef-9030-0242ac11000a');
 func TestScriptError(t *testing.T) {
+	result := runScriptErrorProcess(t, scriptErrorScenario{restartLimit: 0, localRestart: true})
+	if len(result.notifications) < 2 {
+		t.Error("notification count should be greater than 2")
+	}
+	if len(result.incidents) < 2 {
+		t.Error("incident count should be greater than 2")
+	}
+	if result.deleteCount < 2 {
+		t.Error("deleteCount count should be greater than 2")
+	}
+}
+
+func TestScriptErrorStopsRestartingAtRestartLimit(t *testing.T) {
+	result := runScriptErrorProcess(t, scriptErrorScenario{restartLimit: 1, localRestart: true})
+	notifications := result.notifications
+	if len(notifications) != 2 {
+		t.Fatalf("expected one notification for the restarted and one for the finally stopped process, got %v: %#v", len(notifications), notifications)
+	}
+	if !strings.Contains(notifications[0], "process will be restarted") {
+		t.Errorf("expected first notification to announce the restart, got %v", notifications[0])
+	}
+	if !strings.Contains(notifications[1], "process will not be restarted") {
+		t.Errorf("expected last notification to announce the final stop, got %v", notifications[1])
+	}
+}
+
+// the process-sync warden restarts a process after an incident by sending a start command with the same business key
+func TestScriptErrorRejectsWardenStartAtRestartLimit(t *testing.T) {
+	result := runScriptErrorProcess(t, scriptErrorScenario{
+		restartLimit: 1,
+		localRestart: false,
+		businessKey:  "warden-bk",
+		afterwards: func(start func(businessKey string)) {
+			start("warden-bk") // second incident: limit reached
+			time.Sleep(20 * time.Second)
+			start("warden-bk") // rejected
+			time.Sleep(10 * time.Second)
+			start("fresh-bk") // unrelated to the blocked process
+			time.Sleep(20 * time.Second)
+		},
+	})
+	businessKeys := []string{}
+	for _, incident := range result.incidents {
+		wrapper := struct {
+			BusinessKey string `json:"business_key"`
+		}{}
+		err := json.Unmarshal([]byte(incident), &wrapper)
+		if err != nil {
+			t.Fatal(err)
+		}
+		businessKeys = append(businessKeys, wrapper.BusinessKey)
+	}
+	if strings.Join(businessKeys, ",") != "warden-bk,warden-bk,fresh-bk" {
+		t.Errorf("expected two incidents of the blocked and one of the fresh process, got %v", businessKeys)
+	}
+	if len(result.errors) != 1 || !strings.Contains(result.errors[0], "restart limit reached") || !strings.Contains(result.errors[0], "warden-bk") {
+		t.Errorf("expected one rejected start of warden-bk, got %#v", result.errors)
+	}
+}
+
+type scriptErrorScenario struct {
+	restartLimit int64
+	localRestart bool
+	businessKey  string
+	afterwards   func(start func(businessKey string)) // runs after the first minute, before the results are collected
+}
+
+type scriptErrorResult struct {
+	notifications []string
+	incidents     []string
+	errors        []string
+	deleteCount   int
+}
+
+// runScriptErrorProcess starts a process that fails on every start and collects what the sync client emits
+func runScriptErrorProcess(t *testing.T, scenario scriptErrorScenario) (result scriptErrorResult) {
 	ctx, cancel := context.WithCancel(context.Background())
 	wg := sync.WaitGroup{}
 
@@ -78,18 +155,16 @@ func TestScriptError(t *testing.T) {
 	config.MqttBroker = "tcp://" + mqttIp + ":1883"
 
 	config.DeploymentMetadataStorage = t.TempDir() + "/bolt.db"
+	config.IncidentRestartLimit = scenario.restartLimit
 
 	mux := sync.Mutex{}
-	incidentCount := 0
-	notificationCount := 0
-	deleteCount := 0
 
 	notificationTestServer := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 		msg, _ := io.ReadAll(request.Body)
 		t.Log("notification:", request.URL.String(), string(msg))
 		mux.Lock()
 		defer mux.Unlock()
-		notificationCount = notificationCount + 1
+		result.notifications = append(result.notifications, string(msg))
 	}))
 	config.NotificationUrl = notificationTestServer.URL
 
@@ -134,9 +209,11 @@ func TestScriptError(t *testing.T) {
 			deploymentId = wrapper.Id
 			t.Log("use deploymentId=", deploymentId)
 		case "processes/state/process-instance/delete":
-			deleteCount = deleteCount + 1
+			result.deleteCount = result.deleteCount + 1
 		case "processes/state/incident":
-			incidentCount = incidentCount + 1
+			result.incidents = append(result.incidents, string(msg.Payload()))
+		case "processes/state/error":
+			result.errors = append(result.errors, string(msg.Payload()))
 		}
 	})
 	if token.Wait() && token.Error() != nil {
@@ -158,7 +235,7 @@ func TestScriptError(t *testing.T) {
 				},
 				Executable: true,
 				IncidentHandling: &deploymentmodel.IncidentHandling{
-					Restart: true,
+					Restart: scenario.localRestart,
 					Notify:  true,
 				},
 			},
@@ -176,31 +253,39 @@ func TestScriptError(t *testing.T) {
 
 	time.Sleep(5 * time.Second)
 
-	t.Run("start process", func(t *testing.T) {
+	start := func(businessKey string) {
 		pl, err := json.Marshal(model.StartMessage{
 			DeploymentId: deploymentId,
+			BusinessKey:  businessKey,
 			Parameter:    map[string]interface{}{},
 		})
 		if err != nil {
 			t.Error(err)
 			return
 		}
-		token = mqttClient.Publish("processes/cmd/deployment/start", 2, false, pl)
+		token := mqttClient.Publish("processes/cmd/deployment/start", 2, false, pl)
 		if token.Wait() && token.Error() != nil {
 			t.Error(token.Error())
 			return
 		}
+	}
+
+	t.Run("start process", func(t *testing.T) {
+		start(scenario.businessKey)
 	})
 
 	time.Sleep(time.Minute)
 
-	if notificationCount < 2 {
-		t.Error("notification count should be greater than 2")
+	if scenario.afterwards != nil {
+		scenario.afterwards(start)
 	}
-	if incidentCount < 2 {
-		t.Error("incident count should be greater than 2")
-	}
-	if deleteCount < 2 {
-		t.Error("deleteCount count should be greater than 2")
+
+	mux.Lock()
+	defer mux.Unlock()
+	return scriptErrorResult{
+		notifications: append([]string{}, result.notifications...),
+		incidents:     append([]string{}, result.incidents...),
+		errors:        append([]string{}, result.errors...),
+		deleteCount:   result.deleteCount,
 	}
 }

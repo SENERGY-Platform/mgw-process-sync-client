@@ -152,20 +152,29 @@ func (this *Controller) DeployIncidentsHandlerForDeploymentId(camundaDeplId stri
 }
 
 func (this *Controller) handleIncident(incident camundamodel.Incident) error {
+	//count before the handler lookup: processes without local incident handling may still be restarted by the process-sync warden
+	restartLimitReached := this.restartLimit != nil && this.restartLimit.RecordIncident(incident)
+	if restartLimitReached {
+		this.config.GetLogger().Warn("restart limit reached; process will not be restarted", "name", incident.DeploymentName, "instance", incident.ProcessInstanceId, "businessKey", incident.BusinessKey, "limit", this.restartLimit.Limit(), "window", this.restartLimit.Window().String())
+	}
 	handler, ok := this.incidentsHandler[incident.ProcessDefinitionId]
 	if !ok {
 		this.config.GetLogger().Warn("unhandled incident for deployment", "deploymentId", incident.DeploymentName, "incident", incident)
 		return nil
 	}
-	this.config.GetLogger().Info("incident handled", "name", incident.DeploymentName, "instance", incident.ProcessInstanceId, "businessKey", incident.BusinessKey, "restart", handler.Restart, "notify", handler.Notify, "error", incident.ErrorMessage)
+	restart := handler.Restart && !restartLimitReached
+	this.config.GetLogger().Info("incident handled", "name", incident.DeploymentName, "instance", incident.ProcessInstanceId, "businessKey", incident.BusinessKey, "restart", restart, "notify", handler.Notify, "error", incident.ErrorMessage)
 	if handler.Notify {
 		msg := notification.Message{
 			Title:   "Fog Process-Incident in " + incident.DeploymentName,
 			Message: incident.ErrorMessage,
 			Topic:   notification.Topic,
 		}
-		if handler.Restart {
+		if restart {
 			msg.Message = msg.Message + "\n\nprocess will be restarted"
+		}
+		if restartLimitReached {
+			msg.Message = msg.Message + fmt.Sprintf("\n\nprocess will not be restarted: it was already restarted %v times within %v", this.restartLimit.Limit(), this.restartLimit.Window().String())
 		}
 		_ = notification.Send(this.config.NotificationUrl, msg)
 	}
@@ -173,7 +182,7 @@ func (this *Controller) handleIncident(incident camundamodel.Incident) error {
 	if err != nil {
 		return err
 	}
-	if handler.Restart {
+	if restart {
 		this.config.GetLogger().Debug("restarting process", "definitionsId", incident.ProcessDefinitionId, "name", incident.DeploymentName, "instance", incident.ProcessInstanceId, "businessKey", incident.BusinessKey)
 		param, err := this.GetProcessStartParameters(incident)
 		if err != nil {

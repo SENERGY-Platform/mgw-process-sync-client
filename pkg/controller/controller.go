@@ -44,7 +44,7 @@ func New(config configuration.Config, ctx context.Context) (ctrl *Controller, er
 	if err != nil {
 		return nil, err
 	}
-	ctrl = &Controller{config: config, incidentsHandler: map[string]OnIncident{}, handledIncidentsCache: c}
+	ctrl = &Controller{config: config, incidentsHandler: map[string]OnIncident{}, handledIncidentsCache: c, restartLimit: NewRestartLimit(config.IncidentRestartLimit, config.IncidentRestartWindow, config.GetLogger())}
 
 	ctrl.metadata, err = metadata.NewStorage(ctx, config)
 	if err != nil {
@@ -124,6 +124,7 @@ type Controller struct {
 	events                EventRepo
 	incidentsHandler      map[string]OnIncident
 	handledIncidentsCache *cache.Cache
+	restartLimit          *RestartLimit
 	mux                   sync.Mutex
 }
 

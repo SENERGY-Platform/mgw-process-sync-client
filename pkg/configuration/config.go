@@ -61,6 +61,9 @@ type Config struct {
 	NotificationUrlPlaceholder  string `json:"notification_url_placeholder"`
 	NotificationUrl             string `json:"notification_url"`
 
+	IncidentRestartLimit  int64  `json:"incident_restart_limit"`
+	IncidentRestartWindow string `json:"incident_restart_window"`
+
 	TaskTopicReplace map[string]string `json:"task_topic_replace"`
 
 	LogLevel string       `json:"log_level"`

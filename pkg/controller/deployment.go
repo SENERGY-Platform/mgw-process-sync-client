@@ -130,6 +130,12 @@ func (this *Controller) StartDeployment(id string, businessKey string, parameter
 	if len(definitions) == 0 {
 		return fmt.Errorf("no definition for deployment '%s' found", id)
 	}
+	//without business key a start can not be related to earlier instances and is always a fresh start
+	if businessKey != "" && this.restartLimit != nil && this.restartLimit.Blocked(definitions[0].Id, businessKey) {
+		this.config.GetLogger().Warn("reject start of process that reached the restart limit", "deploymentId", id, "businessKey", businessKey)
+		//keep the message free of changing values: the notifier drops duplicates only if they are identical
+		return fmt.Errorf("%w: the process was already restarted %v times within %v after incidents", ErrRestartLimitReached, this.restartLimit.Limit(), this.restartLimit.Window().String())
+	}
 	if businessKey != "" && len(parameter) > 0 {
 		err = this.metadata.StoreInstanceParameter(businessKey, parameter)
 		if err != nil {

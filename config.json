@@ -27,5 +27,9 @@
 
     "notification_url_placeholder": "{{__SENERGY_NOTIFICATION_URL_PLACEHOLDER}}",
 
+    "__COMMENT:incident_restart_limit": "restarts of a process (same process definition and business key) after incidents within incident_restart_window; after that the process is stopped and starts with this business key are rejected until the service restarts; 0 disables the limit",
+    "incident_restart_limit": 3,
+    "incident_restart_window": "1h",
+
     "task_topic_replace": {"optimistic": "pessimistic"}
 }
